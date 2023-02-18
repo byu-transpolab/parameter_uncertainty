@@ -8,17 +8,19 @@
     "dirty": false,
     "created": 1676497418317.0,
     "source_on_save": false,
-    "relative_order": 5,
+    "relative_order": 3,
     "properties": {
         "source_window_id": "",
-        "Source": "Source"
+        "Source": "Source",
+        "cursorPosition": "4,14",
+        "scrollLine": "0"
     },
     "folds": "",
-    "lastKnownWriteTime": 1676497173,
+    "lastKnownWriteTime": 1676701580,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1676497173,
+    "last_content_update": 1676701580360,
     "read_only": false,
     "read_only_alternatives": []
 }

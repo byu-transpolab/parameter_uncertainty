@@ -45,6 +45,7 @@
             "type": "book"
         },
         {
+            "URL": "https://CRAN.R-project.org/package=bookdown",
             "author": [
                 {
                     "family": "Xie",
@@ -55,11 +56,11 @@
             "issued": {
                 "date-parts": [
                     [
-                        2022
+                        2023
                     ]
                 ]
             },
-            "note": "https://github.com/rstudio/bookdown",
+            "note": "R package version 0.32",
             "title": "Bookdown: Authoring books and technical documents with r markdown",
             "title-short": "Bookdown",
             "type": "book"
@@ -76,11 +77,11 @@
             "issued": {
                 "date-parts": [
                     [
-                        2022
+                        2023
                     ]
                 ]
             },
-            "note": "R package version 1.39",
+            "note": "R package version 1.42",
             "title": "Knitr: A general-purpose package for dynamic report generation in r",
             "title-short": "Knitr",
             "type": "book"
@@ -133,11 +134,11 @@
             "issued": {
                 "date-parts": [
                     [
-                        2022
+                        2023
                     ]
                 ]
             },
-            "note": "R package version 2.14",
+            "note": "R package version 2.20",
             "title": "Rmarkdown: Dynamic documents for r",
             "title-short": "Rmarkdown",
             "type": "book"
@@ -189,7 +190,6 @@
             "type": "book"
         },
         {
-            "URL": "http://www.crcpress.com/product/isbn/9781466561595",
             "author": [
                 {
                     "family": "Xie",

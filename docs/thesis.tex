@@ -1,0 +1,271 @@
+\documentclass[fancy, masters,twoside]{byuthesis}
+% Class options are simple/fancy and masters/phd.
+% Leave options blank for defaults.
+% Defaults are simple for document style, and masters for degree type.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Custom options and packages %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Define path to figure files
+\graphicspath{{figures/}}
+
+% Define sequences of Latin text to fill space in example documents
+% (not needed for your thesis -- delete or comment out if you'd like)
+\usepackage{blindtext}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Define title page elements %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Thesis title for required BYU title page
+\title{Building a Thesis in \texttt{Bookdown} and LaTeX, which can have a\\
+Wrapped Title if Long}
+
+% On the custom title page, use the same title, but format as you like
+\customtitle{Building a Thesis in \texttt{Bookdown} and LaTeX, which can have a\\
+Wrapped Title if Long}
+
+% Your name goes here:
+\author{Natalie Gray}
+
+% This is the date of graduation
+\date{April 2021}
+
+% If your degree is not a PhD or MS, then you can overwrite the degree using
+\degree{Master of Science}
+
+% Your department
+\department{Department of Civil and Construction Engineering}
+
+% The names of your committee members
+\committeechair{Brigham Young}
+  \committeemember{Gregory S. Macfarlane, Chair}
+  \committeemember{Grant G. Schultz}
+  \committeemember{Daniel P. Ames}
+
+% Include any keywords you would like for your thesis/dissertation
+\keywords{sensitivity analysis, transportation demand model, transportation planning}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ---Bibliography source file--- %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ---Bibliography source file--- %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  Default is references.bib
+%
+\makepagestyle{myrefs}
+\makeevenhead{myrefs}%
+    {\normalfont\small\slshape\thepage}{}{\normalfont\small\slshape References}
+\makeoddhead{myrefs}%
+    {\normalfont\small\slshape References}{}{\normalfont\small\slshape\thepage}
+\bibliography{}
+
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newlength{\cslentryspacingunit} % times entry-spacing
+\setlength{\cslentryspacingunit}{\parskip}
+% for Pandoc 2.8 to 2.10.1
+\newenvironment{cslreferences}%
+  {}%
+  {\par}
+% For Pandoc 2.11+
+\newenvironment{CSLReferences}[2] % #1 hanging-ident, #2 entry spacing
+ {% don't indent paragraphs
+  \setlength{\parindent}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+  \let\oldpar\par
+  \def\par{\hangindent=\cslhangindent\oldpar}
+  \fi
+  % set entry spacing
+  \setlength{\parskip}{#2\cslentryspacingunit}
+ }%
+ {}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{#1\hfill\break}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{#1}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{#1}\break}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+% --- Begin Document --- %
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% --- Front matter (probably don't need to change)--- %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\frontmatter
+
+	\titlepage
+	\cleardoublepage
+
+	\customtitlepage
+	\cleardoublepage
+
+
+    \begin{abstract}
+  \textbf{\emph{NEED}} The abstract of a thesis should describe the
+  motivation, objective, overall results, and central findings of the thesis.
+  It may have multiple paragraphs if necessary.
+  \end{abstract}
+  	\cleardoublepage
+
+
+    \begin{acknowledgments}
+  \textbf{\emph{NEED}} Students should acknowledge funding sources. They may also use the
+  acknowledgment page to express appreciation for the committee members, friends
+  or family who provided assistance in research, writing or technical aspects of
+  the dissertation, thesis or selected project. Acknowledgements should be simple
+  and in good taste.
+  \end{acknowledgments}
+  	\cleardoublepage
+
+	\tableofcontents*
+	\cleardoublepage
+
+	\listoffigures
+	\cleardoublepage
+
+	\listoftables
+	\cleardoublepage
+
+	\input{nomenclature}
+	\cleardoublepage
+
+%%%%%%%%%%%%%%%%%%%%%
+% --- Main Body --- %
+%%%%%%%%%%%%%%%%%%%%%
+	\mainmatter
+
+\hypertarget{introduction}{%
+\chapter{Introduction}\label{introduction}}
+
+\hypertarget{problem-statement}{%
+\section{Problem Statement}\label{problem-statement}}
+
+\hypertarget{objectives}{%
+\section{Objectives}\label{objectives}}
+
+\hypertarget{literature-review}{%
+\chapter{Literature Review}\label{literature-review}}
+
+\hypertarget{overview}{%
+\section{Overview}\label{overview}}
+
+\hypertarget{types-of-uncertainty}{%
+\section{Types of Uncertainty}\label{types-of-uncertainty}}
+
+\hypertarget{model-uncertainty}{%
+\subsection{Model Uncertainty}\label{model-uncertainty}}
+
+\hypertarget{input-uncertainty}{%
+\subsection{Input Uncertainty}\label{input-uncertainty}}
+
+\hypertarget{parameter-uncertainty}{%
+\subsection{Parameter Uncertainty}\label{parameter-uncertainty}}
+
+\hypertarget{summary}{%
+\section{Summary}\label{summary}}
+
+\hypertarget{sampling-methods}{%
+\chapter{Sampling Methods}\label{sampling-methods}}
+
+\hypertarget{overview-1}{%
+\section{Overview}\label{overview-1}}
+
+\hypertarget{common-sampling-methods}{%
+\section{Common Sampling Methods}\label{common-sampling-methods}}
+
+\hypertarget{monte-carlo-sampling}{%
+\subsection{Monte Carlo Sampling}\label{monte-carlo-sampling}}
+
+\hypertarget{latin-hypercube-sampling}{%
+\subsection{Latin Hypercube Sampling}\label{latin-hypercube-sampling}}
+
+\hypertarget{method-comparison}{%
+\section{Method Comparison}\label{method-comparison}}
+
+\hypertarget{summary-1}{%
+\section{Summary}\label{summary-1}}
+
+\hypertarget{model-design-and-methodology}{%
+\chapter{Model Design and Methodology}\label{model-design-and-methodology}}
+
+\hypertarget{overview-2}{%
+\section{Overview}\label{overview-2}}
+
+\hypertarget{transportation-demand-model}{%
+\section{Transportation Demand Model}\label{transportation-demand-model}}
+
+\hypertarget{sensitivity-analysis}{%
+\section{Sensitivity Analysis}\label{sensitivity-analysis}}
+
+\hypertarget{summary-2}{%
+\section{Summary}\label{summary-2}}
+
+\hypertarget{sensitivity-analysis-results}{%
+\chapter{Sensitivity Analysis Results}\label{sensitivity-analysis-results}}
+
+\hypertarget{overview-3}{%
+\section{Overview}\label{overview-3}}
+
+\hypertarget{density-plots}{%
+\section{Density Plots}\label{density-plots}}
+
+\hypertarget{network-comparison}{%
+\section{Network Comparison}\label{network-comparison}}
+
+\hypertarget{summary-3}{%
+\section{Summary}\label{summary-3}}
+
+\hypertarget{conclusions}{%
+\chapter{Conclusions}\label{conclusions}}
+
+\hypertarget{overview-4}{%
+\section{Overview}\label{overview-4}}
+
+\hypertarget{problem-and-objective}{%
+\section{Problem and Objective}\label{problem-and-objective}}
+
+\hypertarget{limitations-and-further-research}{%
+\section{Limitations and Further Research}\label{limitations-and-further-research}}
+
+\hypertarget{summary-4}{%
+\section{Summary}\label{summary-4}}
+
+\hypertarget{references}{%
+\chapter*{References}\label{references}}
+\addcontentsline{toc}{chapter}{References}
+
+\pagestyle{myrefs}
+
+\hypertarget{refs}{}
+\begin{CSLReferences}{0}{0}
+\end{CSLReferences}
+
+\cleardoublepage
+\pagestyle{byu}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+% --- Bibliography --- %
+%%%%%%%%%%%%%%%%%%%%%%%%
+% printed automatically with CSL
+%
+%%%%%%%%%%%%%%%%%%%%%
+% --- Appendices --- %
+%%%%%%%%%%%%%%%%%%%%%
+
+
+\end{document}

@@ -8,10 +8,12 @@
     "dirty": false,
     "created": 1676497398392.0,
     "source_on_save": false,
-    "relative_order": 2,
+    "relative_order": 6,
     "properties": {
         "source_window_id": "",
-        "Source": "Source"
+        "Source": "Source",
+        "cursorPosition": "1,24",
+        "scrollLine": "0"
     },
     "folds": "",
     "lastKnownWriteTime": 1676497173,
