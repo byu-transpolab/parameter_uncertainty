@@ -261,6 +261,22 @@ pull_tibbles <- function(full_list, data_table){
     mutate(draw = as.numeric(draw))
 }
 
+cumvar <- function (x, sd = TRUE) {
+  x <- x - x[sample.int(length(x), 1)]  ## see Remark 2 below
+  n <- seq_along(x)
+  v <- (cumsum(x ^ 2) - cumsum(x) ^ 2 / n) / (n - 1)
+  if (sd) v <- sqrt(v)
+  v
+}
+
+process_stats <- function(meanlogsums){
+  meanlogsums %>%
+    group_by(type, draw) %>%
+    summarize(meanlogsum = mean(logsum)) %>%
+    mutate(cumvar = cumvar(meanlogsum)) %>%
+    mutate(cummean = cummean(meanlogsum))
+}
+
 tibbleplots <- function(mclogsum_tibble, dcutility_tibble, dclogsum_tibble, mcprobability_tibble, dcprobability_tibble){
   
   mclogsum_tibble_chart <- mclogsum_tibble %>%

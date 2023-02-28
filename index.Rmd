@@ -1,18 +1,16 @@
 ---
 title: |
-  | Building a Thesis in `Bookdown` and LaTeX, which can have a  
-  | Wrapped Title if Long
+  | Evaluating Parameter Uncertainty in Transportation Demand Models
 # Your thesis title should be inverted pyramid-shaped, with the longest
 # line on top and shorter lines below. Add a new line as tab-|-space-Words
-author: 'Natalie Gray'
+author: 'Natalie Mae Gray'
 # This is the date of graduation
 date: 'April 2023'
-committeechair: Brigham Young
+committeechair: Gregory S. Macfarlane
 committeemembers: 
-  - name: Gregory S. Macfarlane, Chair
   - name: Grant G. Schultz
   - name: Daniel P. Ames
-keywords: 'sensitivity analysis, transportation demand model, transportation planning'
+keywords: 'sensitivity analysis, transportation demand model, transportation planning, latin hypercube sampling, monte carlo simulation'
 # Class options are simple/fancy, masters/phd, and twoside (use twoside for printed thesis only)
 layout: 'fancy, masters,twoside' 
 # if you are using this for an honors thesis, you can leave off the degree in 
@@ -45,3 +43,8 @@ csl: apa.csl
 lot: true
 lof: true
 ---
+
+```{r, include = FALSE}
+some_packages <- c("tidyverse", "bookdown", "omxr", "nhts2017", "rgdal", "sf", "ggthemes", "lhs", "foreign", "imputeTS", "targets", "readxl", "knitr", "gridExtra", "ggspatial")
+lapply(some_packages, library, character.only=TRUE)
+```

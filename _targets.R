@@ -53,10 +53,18 @@ data_targets <- list(
   tar_target(hbo_mc_coeff_lists_100, generate_mc_coeff(HBO, mc_coeff, mc_const, 100)), 
   tar_target(nhb_mc_coeff_lists_100, generate_mc_coeff(NHB, mc_coeff, mc_const, 100)),
   
+  tar_target(hbw_mc_coeff_lists_400, generate_mc_coeff(HBW, mc_coeff, mc_const, 400)),
+  tar_target(hbo_mc_coeff_lists_400, generate_mc_coeff(HBO, mc_coeff, mc_const, 400)), 
+  tar_target(nhb_mc_coeff_lists_400, generate_mc_coeff(NHB, mc_coeff, mc_const, 400)),
+  
   # DC coeff
   tar_target(hbw_dc_coeff_lists_100, generate_dc_coeff(HBW, dc_coeff, 100)),
   tar_target(hbo_dc_coeff_lists_100, generate_dc_coeff(HBO, dc_coeff, 100)), 
   tar_target(nhb_dc_coeff_lists_100, generate_dc_coeff(NHB, dc_coeff, 100)),
+  
+  tar_target(hbw_dc_coeff_lists_400, generate_dc_coeff(HBW, dc_coeff, 400)),
+  tar_target(hbo_dc_coeff_lists_400, generate_dc_coeff(HBO, dc_coeff, 400)), 
+  tar_target(nhb_dc_coeff_lists_400, generate_dc_coeff(NHB, dc_coeff, 400)),
   
   #write out CSVs
 #  tar_target(write_mc_lists, mcparam_csv(hbw_mc_coeff_lists_100, hbo_mc_coeff_lists_100, nhb_mc_coeff_lists_100, mc_coeff)),
@@ -66,6 +74,10 @@ data_targets <- list(
   tar_target(hbw_full_loop_100, full_loop(skims, hbw_mc_coeff_lists_100, hbw_dc_coeff_lists_100, land_use, 100)),
   tar_target(hbo_full_loop_100, full_loop(skims, hbo_mc_coeff_lists_100, hbo_dc_coeff_lists_100, land_use, 100)),
   tar_target(nhb_full_loop_100, full_loop(skims, nhb_mc_coeff_lists_100, nhb_dc_coeff_lists_100, land_use, 100)),
+  
+  tar_target(hbw_full_loop_400, full_loop(skims, hbw_mc_coeff_lists_400, hbw_dc_coeff_lists_400, land_use, 400)),
+  tar_target(hbo_full_loop_400, full_loop(skims, hbo_mc_coeff_lists_400, hbo_dc_coeff_lists_400, land_use, 400)),
+  tar_target(nhb_full_loop_400, full_loop(skims, nhb_mc_coeff_lists_400, nhb_dc_coeff_lists_400, land_use, 400)),
 
   # pull tibbles
   tar_target(hbw_mclogsum_tibble,      pull_tibbles(hbw_full_loop_100, "ModeChoice_Logsum")),
@@ -85,6 +97,18 @@ data_targets <- list(
   tar_target(nhb_dclogsum_tibble,      pull_tibbles(nhb_full_loop_100, "Destination_Logsum")),
   tar_target(nhb_mcprobability_tibble, pull_tibbles(nhb_full_loop_100, "ModeChoice_Probability")),
   tar_target(nhb_dcprobability_tibble, pull_tibbles(nhb_full_loop_100, "Destination_Probability")),
+
+  tar_target(hbw_mclogsum_tibble_400,      pull_tibbles(hbw_full_loop_400, "ModeChoice_Logsum")),
+  tar_target(hbo_mclogsum_tibble_400,      pull_tibbles(hbo_full_loop_400, "ModeChoice_Logsum")),
+  tar_target(nhb_mclogsum_tibble_400,      pull_tibbles(nhb_full_loop_400, "ModeChoice_Logsum")),
+
+  tar_target(hbw_stats_100, process_stats(hbw_mclogsum_tibble)),
+  tar_target(hbo_stats_100, process_stats(hbo_mclogsum_tibble)),
+  tar_target(nhb_stats_100, process_stats(nhb_mclogsum_tibble)),
+
+  tar_target(hbw_stats_400, process_stats(hbw_mclogsum_tibble_400)),
+  tar_target(hbo_stats_400, process_stats(hbo_mclogsum_tibble_400)),
+  tar_target(nhb_stats_400, process_stats(nhb_mclogsum_tibble_400)),
   
   #trips
   tar_target(hbw_trips, total_trips(hbw_productions, hbw_dcprobability_tibble, hbw_mcprobability_tibble)),
@@ -100,7 +124,7 @@ data_targets <- list(
   tar_target(nhb_plots, tibbleplots(nhb_mclogsum_tibble, nhb_dcutility_tibble, nhb_dclogsum_tibble, nhb_mcprobability_tibble, nhb_dcprobability_tibble)),
 
   #network data
-  tar_target(networks , network_data("data/sensitivity_out")),
+  tar_target(networks, network_data("data/sensitivity_out")),
 
 
 

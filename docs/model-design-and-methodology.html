@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 3 Model Design and Methodology | thesis.knit</title>
+  <meta name="description" content="Evaluating Parameter Uncertainty in Transportation Demand Models" />
+  <meta name="generator" content="bookdown 0.32 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 3 Model Design and Methodology | thesis.knit" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 3 Model Design and Methodology | thesis.knit" />
+  
+  
+  
+
+<meta name="author" content="Natalie Mae Gray" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="literature-review.html"/>
+<link rel="next" href="sensitivity-analysis-results.html"/>
+<style type="text/css">
+p.abstract{
+  text-align: center;
+  font-weight: bold;
+}
+div.abstract{
+  margin: auto;
+  width: 90%;
+}
+</style>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A BYU Thesis in Bookdown</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="introduction.html"><a href="introduction.html#problem-statement"><i class="fa fa-check"></i><b>1.1</b> Problem Statement</a></li>
+<li class="chapter" data-level="1.2" data-path="introduction.html"><a href="introduction.html#objectives"><i class="fa fa-check"></i><b>1.2</b> Objectives</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="literature-review.html"><a href="literature-review.html"><i class="fa fa-check"></i><b>2</b> Literature Review</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="literature-review.html"><a href="literature-review.html#overview"><i class="fa fa-check"></i><b>2.1</b> Overview</a></li>
+<li class="chapter" data-level="2.2" data-path="literature-review.html"><a href="literature-review.html#types-of-uncertainty"><i class="fa fa-check"></i><b>2.2</b> Types of Uncertainty</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="literature-review.html"><a href="literature-review.html#input-uncertainty"><i class="fa fa-check"></i><b>2.2.1</b> Input Uncertainty</a></li>
+<li class="chapter" data-level="2.2.2" data-path="literature-review.html"><a href="literature-review.html#model-uncertainty"><i class="fa fa-check"></i><b>2.2.2</b> Model Uncertainty</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="literature-review.html"><a href="literature-review.html#sampling-methods"><i class="fa fa-check"></i><b>2.3</b> Sampling Methods</a></li>
+<li class="chapter" data-level="2.4" data-path="literature-review.html"><a href="literature-review.html#summary"><i class="fa fa-check"></i><b>2.4</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="model-design-and-methodology.html"><a href="model-design-and-methodology.html"><i class="fa fa-check"></i><b>3</b> Model Design and Methodology</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="model-design-and-methodology.html"><a href="model-design-and-methodology.html#overview-1"><i class="fa fa-check"></i><b>3.1</b> Overview</a></li>
+<li class="chapter" data-level="3.2" data-path="model-design-and-methodology.html"><a href="model-design-and-methodology.html#transportation-demand-model"><i class="fa fa-check"></i><b>3.2</b> Transportation Demand Model</a></li>
+<li class="chapter" data-level="3.3" data-path="model-design-and-methodology.html"><a href="model-design-and-methodology.html#parameter-sampling"><i class="fa fa-check"></i><b>3.3</b> Parameter Sampling</a></li>
+<li class="chapter" data-level="3.4" data-path="model-design-and-methodology.html"><a href="model-design-and-methodology.html#summary-1"><i class="fa fa-check"></i><b>3.4</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="sensitivity-analysis-results.html"><a href="sensitivity-analysis-results.html"><i class="fa fa-check"></i><b>4</b> Sensitivity Analysis Results</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="sensitivity-analysis-results.html"><a href="sensitivity-analysis-results.html#overview-2"><i class="fa fa-check"></i><b>4.1</b> Overview</a></li>
+<li class="chapter" data-level="4.2" data-path="sensitivity-analysis-results.html"><a href="sensitivity-analysis-results.html#sampling-findings"><i class="fa fa-check"></i><b>4.2</b> Sampling Findings</a></li>
+<li class="chapter" data-level="4.3" data-path="sensitivity-analysis-results.html"><a href="sensitivity-analysis-results.html#roanoke-valley-results"><i class="fa fa-check"></i><b>4.3</b> Roanoke Valley Results</a></li>
+<li class="chapter" data-level="4.4" data-path="sensitivity-analysis-results.html"><a href="sensitivity-analysis-results.html#summary-2"><i class="fa fa-check"></i><b>4.4</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="conclusions.html"><a href="conclusions.html"><i class="fa fa-check"></i><b>5</b> Conclusions</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="conclusions.html"><a href="conclusions.html#overview-3"><i class="fa fa-check"></i><b>5.1</b> Overview</a></li>
+<li class="chapter" data-level="5.2" data-path="conclusions.html"><a href="conclusions.html#problem-and-objective"><i class="fa fa-check"></i><b>5.2</b> Problem and Objective</a></li>
+<li class="chapter" data-level="5.3" data-path="conclusions.html"><a href="conclusions.html#limitations-and-further-research"><i class="fa fa-check"></i><b>5.3</b> Limitations and Further Research</a></li>
+<li class="chapter" data-level="5.4" data-path="conclusions.html"><a href="conclusions.html#summary-3"><i class="fa fa-check"></i><b>5.4</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./"><div class="line-block">Evaluating Parameter Uncertainty in Transportation Demand Models</div></a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="model-design-and-methodology" class="section level1 hasAnchor" number="3">
+<h1><span class="header-section-number">Chapter 3</span> Model Design and Methodology<a href="model-design-and-methodology.html#model-design-and-methodology" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="overview-1" class="section level2 hasAnchor" number="3.1">
+<h2><span class="header-section-number">3.1</span> Overview<a href="model-design-and-methodology.html#overview-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="transportation-demand-model" class="section level2 hasAnchor" number="3.2">
+<h2><span class="header-section-number">3.2</span> Transportation Demand Model<a href="model-design-and-methodology.html#transportation-demand-model" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>To examine the effects of parameter input sensitivity, we developed a trip-based travel model with four steps:</p>
+<ol style="list-style-type: decimal">
+<li>trip generation,</li>
+<li>trip distribution,</li>
+<li>mode choice, and</li>
+<li>destination choice.</li>
+</ol>
+<p>Trip generation, the first step, was conducted using socioeconomic (SE) data and household trip productions from Roanoke Valley Transportation Planning Organization <a href="https://github.com/xinwangvdot/rvtpo">RVTPO</a>. The trip productions were summarized by household sizes, vehicles, and workers, and the weighted mean of each trip purpose was taken. The three trip purposes used are Home Based Work (HBW), Home Based Other (HBO), and Non-Home Based (NHB). Trip attraction was skipped for this analysis.</p>
+<p>The second step, trip distribution, used distance and travel time skims from RVTPO. The skims were simplified to use auto, nonmotorized, and transit modes. Travel time for auto used the single occupancy vehicle peak time, nonmotorized travel time used the distance skim multiplied by a factor of average walking speed (3 mph), and transit time used the walk to bus peak time.</p>
+<p>Mode choice, the third step, calculates utilities for the three modes. These utilities were exponentiated, added together, and the natural log was taken to get a logsum value for every origin and destination pair. The utility equations for the mode choice model are as follows:</p>
+<p><span class="math display" id="eq:driveutil">\[\begin{equation}
+\mathrm{drive\_utility} = (\mathrm{coeff\_ivtt}*\mathrm{auto})+(\mathrm{coeff\_cost}*\mathrm{auto\_cost}*\mathrm{DIST})
+\tag{3.1}
+\end{equation}\]</span> <span class="math display" id="eq:nonmoutil">\[\begin{equation}
+\mathrm{nonmo\_utility} = (\mathrm{k\_nmot}+ 20 * (\mathrm{coeff\_walk1}*\mathrm{nonmotor}))
+\tag{3.2}
+\end{equation}\]</span> <span class="math display" id="eq:transutil">\[\begin{equation}
+\mathrm{trans\_utility} = \mathrm{k\_trn} + (\mathrm{coeff\_ivtt}*\mathrm{transit})
+\tag{3.3}
+\end{equation}\]</span></p>
+<p>The mode choice parameters (constants and coefficients) were obtained from the <a href="https://github.com/byu-transpolab/ustm_resiliency">USTM Resiliency Model</a>. These values are shown in Table <a href="model-design-and-methodology.html#tab:MCcoeff">3.1</a> and Table <a href="model-design-and-methodology.html#tab:MCconst">3.2</a>.</p>
+<table>
+<caption><span id="tab:MCcoeff">Table 3.1: </span>Mode Choice Coefficients</caption>
+<thead>
+<tr class="header">
+<th align="left">Name</th>
+<th align="right">HBW</th>
+<th align="right">HBO</th>
+<th align="right">NHB</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">CIVTT</td>
+<td align="right">-0.0450</td>
+<td align="right">-0.0350</td>
+<td align="right">-0.0400</td>
+</tr>
+<tr class="even">
+<td align="left">CCOST</td>
+<td align="right">-0.0016</td>
+<td align="right">-0.0016</td>
+<td align="right">-0.0016</td>
+</tr>
+<tr class="odd">
+<td align="left">CWALK1</td>
+<td align="right">-0.0900</td>
+<td align="right">-0.0700</td>
+<td align="right">-0.0800</td>
+</tr>
+<tr class="even">
+<td align="left">AUTOCOST</td>
+<td align="right">18.3000</td>
+<td align="right">18.3000</td>
+<td align="right">18.3000</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption><span id="tab:MCconst">Table 3.2: </span>Mode Choice Constants</caption>
+<thead>
+<tr class="header">
+<th align="left">Name</th>
+<th align="right">HBW</th>
+<th align="right">HBO</th>
+<th align="right">NHB</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">K_TRN</td>
+<td align="right">-0.5140</td>
+<td align="right">-0.9853</td>
+<td align="right">-1.3020</td>
+</tr>
+<tr class="even">
+<td align="left">K_NMOT</td>
+<td align="right">1.7602</td>
+<td align="right">0.5448</td>
+<td align="right">-0.5359</td>
+</tr>
+</tbody>
+</table>
+<p>The final step, destination choice, uses the mode choice logsum as the primary impedance, and a size term calculated using zonal employment. The destination choice utility is the impedance term added to the log of the size term. The destination choice parameters (constants and coefficients) were also obtained from the <a href="https://github.com/byu-transpolab/ustm_resiliency">USTM Resiliency Model</a>. These values are shown in Table <a href="model-design-and-methodology.html#tab:DCcoeff">3.3</a>.</p>
+<table>
+<caption><span id="tab:DCcoeff">Table 3.3: </span>Destination Choice Parameters</caption>
+<thead>
+<tr class="header">
+<th align="left">VAR</th>
+<th align="right">HBW</th>
+<th align="right">HBO</th>
+<th align="right">NHB</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">HH</td>
+<td align="right">0.000000</td>
+<td align="right">1.018700</td>
+<td align="right">0.2077000</td>
+</tr>
+<tr class="even">
+<td align="left">I(OTH_EMP + OFF_EMP)</td>
+<td align="right">0.000000</td>
+<td align="right">0.806400</td>
+<td align="right">0.5626000</td>
+</tr>
+<tr class="odd">
+<td align="left">OFF_EMP</td>
+<td align="right">0.458600</td>
+<td align="right">0.403200</td>
+<td align="right">0.2816000</td>
+</tr>
+<tr class="even">
+<td align="left">OTH_EMP</td>
+<td align="right">1.682700</td>
+<td align="right">0.403200</td>
+<td align="right">0.2816000</td>
+</tr>
+<tr class="odd">
+<td align="left">RET_EMP</td>
+<td align="right">0.608700</td>
+<td align="right">3.813800</td>
+<td align="right">5.1189000</td>
+</tr>
+<tr class="even">
+<td align="left">DISTCAP</td>
+<td align="right">70.000000</td>
+<td align="right">40.000000</td>
+<td align="right">40.0000000</td>
+</tr>
+<tr class="odd">
+<td align="left">CLSUM</td>
+<td align="right">1.000000</td>
+<td align="right">1.000000</td>
+<td align="right">1.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">CDIST</td>
+<td align="right">-0.080100</td>
+<td align="right">-0.172800</td>
+<td align="right">-0.1157000</td>
+</tr>
+<tr class="odd">
+<td align="left">CDISTSQ</td>
+<td align="right">0.002600</td>
+<td align="right">0.003400</td>
+<td align="right">0.0035000</td>
+</tr>
+<tr class="even">
+<td align="left">CDISTCUB</td>
+<td align="right">-0.000009</td>
+<td align="right">-0.000011</td>
+<td align="right">-0.0000133</td>
+</tr>
+</tbody>
+</table>
+<p>The four-step model gives data in terms of utilities and probabilities. This can be turned into production and attraction trips, and then a highway assignment can be applied using CUBE.</p>
+</div>
+<div id="parameter-sampling" class="section level2 hasAnchor" number="3.3">
+<h2><span class="header-section-number">3.3</span> Parameter Sampling<a href="model-design-and-methodology.html#parameter-sampling" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>With this four-step model, MC and LHS methods were used to determine the possible combinations of parameter variance. To identify a standard deviation for each parameter, a coefficient of variation was used. A set coefficient of variation of 0.10 was used for all six mode choice input parameters, and four of the destination choice parameters (HH, OFF_EMP, OTH_EMP, and RET_EMP). Literature had identified a coefficient of variation of 0.30, but for this analysis that caused an unrealistic value of time, and thus it was changed to be 0.10 <span class="citation">(Zhao &amp; Kockelman, 2002)</span>. The standard deviation was equal to 0.10 multiplied by the mean, where the mean values in this situation are the base scenario parameters (as identified in Table <a href="model-design-and-methodology.html#tab:MCcoeff">3.1</a>, Table <a href="model-design-and-methodology.html#tab:MCconst">3.2</a>, and Table <a href="model-design-and-methodology.html#tab:MCconst">3.2</a>).</p>
+<p>The MC random sampling uses the R function of <code>rnorm</code>. LHS uses the <code>lhs</code> package in R. Since this package only chooses variables on a zero to one scale, the values given use a function to put the random sampling on the right scale needed for the given parameter. The full code for both methods can be found in a public <a href="https://github.com/natmaegray/sensitivity_thesis">GitHub repository</a>. 100 and 400 draws of random samples for both methods are generated. With these generated parameters, the mode choice model step was run for every set of input parameters for each purpose. The mean logsum value for each run was determined to compare each continuous draw. This allowed us to see how many iterations of which sampling type would be sufficient to show a full range of possible outcomes.</p>
+</div>
+<div id="summary-1" class="section level2 hasAnchor" number="3.4">
+<h2><span class="header-section-number">3.4</span> Summary<a href="model-design-and-methodology.html#summary-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A standard four-step model was created in R to create trips, and evaluate sampling methodologies.</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="literature-review.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="sensitivity-analysis-results.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/03-methods.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["thesis.pdf", "thesis.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

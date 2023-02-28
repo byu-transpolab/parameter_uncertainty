@@ -1,27 +1,94 @@
 {
     "sources": [
         {
-            "URL": "http://yihui.org/knitr/",
             "author": [
                 {
-                    "family": "Xie",
-                    "given": "Yihui"
+                    "family": "Yang",
+                    "given": "Chao"
+                },
+                {
+                    "family": "Chen",
+                    "given": "Anthony"
+                },
+                {
+                    "family": "Xu",
+                    "given": "Xiangdong"
+                },
+                {
+                    "family": "Wong",
+                    "given": "SC"
                 }
             ],
-            "edition": "2nd",
-            "id": "xie2015",
+            "container-title": "Transportation Research Part B: Methodological",
+            "id": "yang2013sensitivity",
             "issued": {
                 "date-parts": [
                     [
-                        2015
+                        2013
                     ]
                 ]
             },
-            "note": "ISBN 978-1498716963",
-            "publisher": "Chapman; Hall/CRC",
-            "publisher-place": "Boca Raton, Florida",
-            "title": "Dynamic documents with R and knitr",
-            "type": "book"
+            "page": "225-244",
+            "publisher": "Elsevier",
+            "title": "Sensitivity-based uncertainty analysis of a combined travel demand model",
+            "type": "article-journal",
+            "volume": "57"
+        },
+        {
+            "author": [
+                {
+                    "family": "Zhao",
+                    "given": "Yong"
+                },
+                {
+                    "family": "Kockelman",
+                    "given": "Kara Maria"
+                }
+            ],
+            "container-title": "The Annals of regional science",
+            "id": "zhao2002propagation",
+            "issue": "1",
+            "issued": {
+                "date-parts": [
+                    [
+                        2002
+                    ]
+                ]
+            },
+            "page": "145-163",
+            "publisher": "Springer",
+            "title": "The propagation of uncertainty through travel demand models: An exploratory analysis",
+            "title-short": "The propagation of uncertainty through travel demand models",
+            "type": "article-journal",
+            "volume": "36"
+        },
+        {
+            "author": [
+                {
+                    "family": "Rasouli",
+                    "given": "Soora"
+                },
+                {
+                    "family": "Timmermans",
+                    "given": "Harry"
+                }
+            ],
+            "container-title": "Transportation letters",
+            "id": "rasouli2012uncertainty",
+            "issue": "1",
+            "issued": {
+                "date-parts": [
+                    [
+                        2012
+                    ]
+                ]
+            },
+            "page": "55-73",
+            "publisher": "Taylor & Francis",
+            "title": "Uncertainty in travel demand forecasting models: Literature review and research agenda",
+            "title-short": "Uncertainty in travel demand forecasting models",
+            "type": "article-journal",
+            "volume": "4"
         },
         {
             "URL": "https://www.R-project.org/",
