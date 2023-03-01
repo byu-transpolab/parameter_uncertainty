@@ -10,3 +10,11 @@
 
 # ignore the targets output folder
 _targets/*
+/.quarto/
+_book/
+
+
+# ignore latex cruft
+*.spl
+*.nlo
+*.aux

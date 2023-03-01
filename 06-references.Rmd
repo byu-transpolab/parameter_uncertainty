@@ -1,5 +1,0 @@
-# References {-}
-\pagestyle{myrefs}
-<div id="refs"></div>
-\cleardoublepage
-\pagestyle{byu}
