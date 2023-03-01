@@ -5,7 +5,7 @@ tab:MCcoeff
 tab:MCconst
 tab:DCcoeff
 fig:parameter100
-fig:parameter400
+fig:parameter600
 fig:hbwstats
 fig:hbostats
 fig:nhbstats

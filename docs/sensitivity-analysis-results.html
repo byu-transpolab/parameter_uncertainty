@@ -168,39 +168,39 @@ div.csl-indent {
 </div>
 <div id="sampling-findings" class="section level2 hasAnchor" number="4.2">
 <h2><span class="header-section-number">4.2</span> Sampling Findings<a href="sensitivity-analysis-results.html#sampling-findings" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>The parameters generated were compared for both sampling methods. Figure <a href="sensitivity-analysis-results.html#fig:parameter100">4.1</a> shows the distributions for the HBW parameters when using 100 draws, and Figure <a href="sensitivity-analysis-results.html#fig:parameter400">4.2</a> shows how that changes when using 400 draws. These distributions show that LHS gives normally distributed parameters with fewer draws than MC sampling. At 100 draws LHS shows a nearly perfect normal distribution, where there are some discrepancies for the MC generated parameters. Without looking at the mode choice results, these Figures show that LHS is likely to estimate the full variance of the results with much fewer draws.</p>
+<p>The parameters generated were compared for both sampling methods. Figure <a href="sensitivity-analysis-results.html#fig:parameter100">4.1</a> shows the distributions for the HBW parameters when using 100 draws, and Figure <a href="sensitivity-analysis-results.html#fig:parameter600">4.2</a> shows how that changes when using 600 draws. These distributions show that LHS gives normally distributed parameters with fewer draws than MC sampling. At 100 draws LHS shows a nearly perfect normal distribution, where there are some discrepancies for the MC generated parameters. Without looking at the mode choice results, these Figures show that LHS is likely to estimate the full variance of the results with much fewer draws.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:parameter100"></span>
 <img src="thesis_files/figure-html/parameter100-1.png" alt="HBW Distributions for Input Parameters with 100 Draws" width="75%" />
 <p class="caption">
 Figure 4.1: HBW Distributions for Input Parameters with 100 Draws
 </p>
 </div>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:parameter400"></span>
-<img src="thesis_files/figure-html/parameter400-1.png" alt="HBW Distributions for Input Parameters with 400 Draws" width="75%" />
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:parameter600"></span>
+<img src="thesis_files/figure-html/parameter600-1.png" alt="HBW Distributions for Input Parameters with 600 Draws" width="75%" />
 <p class="caption">
-Figure 4.2: HBW Distributions for Input Parameters with 400 Draws
+Figure 4.2: HBW Distributions for Input Parameters with 600 Draws
 </p>
 </div>
 <p>To determine if LHS is effective at a reasonable amount of iterations, the standard deviation was calculated for each additional draw. This value shows how much the mean mode choice logsum value for all zones can vary. When the standard deviation for the draws stabilizes, that shows that the amount of generated parameters has captured all of the possible variances of the results. This can be visualized for each purpose. The HBW results for the cumulative standard deviation are shown in <a href="sensitivity-analysis-results.html#fig:hbwstats">4.3</a>. The results for the other two purposes (HBO and NHB) are in <a href="sensitivity-analysis-results.html#fig:hbostats">4.4</a> and <a href="sensitivity-analysis-results.html#fig:nhbstats">4.5</a> respectively.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:hbwstats"></span>
-<img src="thesis_files/figure-html/hbwstats-1.png" alt="HBW Mean Logsum Standard Variation with 100 and 400 Draws" width="75%" />
+<img src="thesis_files/figure-html/hbwstats-1.png" alt="HBW Mean Logsum Standard Variation with 100 and 600 Draws" width="75%" />
 <p class="caption">
-Figure 4.3: HBW Mean Logsum Standard Variation with 100 and 400 Draws
+Figure 4.3: HBW Mean Logsum Standard Variation with 100 and 600 Draws
 </p>
 </div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:hbostats"></span>
-<img src="thesis_files/figure-html/hbostats-1.png" alt="HBO Mean Logsum Standard Variation with 100 and 400 Draws" width="75%" />
+<img src="thesis_files/figure-html/hbostats-1.png" alt="HBO Mean Logsum Standard Variation with 100 and 600 Draws" width="75%" />
 <p class="caption">
-Figure 4.4: HBO Mean Logsum Standard Variation with 100 and 400 Draws
+Figure 4.4: HBO Mean Logsum Standard Variation with 100 and 600 Draws
 </p>
 </div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:nhbstats"></span>
-<img src="thesis_files/figure-html/nhbstats-1.png" alt="NHB Mean Logsum Standard Variation with 100 and 400 Draws" width="75%" />
+<img src="thesis_files/figure-html/nhbstats-1.png" alt="NHB Mean Logsum Standard Variation with 100 and 600 Draws" width="75%" />
 <p class="caption">
-Figure 4.5: NHB Mean Logsum Standard Variation with 100 and 400 Draws
+Figure 4.5: NHB Mean Logsum Standard Variation with 100 and 600 Draws
 </p>
 </div>
-<p>For all three trip purposes, the LHS method had its standard deviation stabilized between 100 and 200 draws. The MC method had still not stabilized to the same extent after 400 draws. This shows us that Latin Hypercube Sampling greatly decreases the iterations needed to approximate random sampling methods. Since LHS captures the possible variance at a small enough amount of iterations, it can be used for large transportation demand models.</p>
+<p>For all three trip purposes, the LHS method had its standard deviation stabilized between 100 and 200 draws. The MC method had still not stabilized to the same extent after 600 draws. This shows us that Latin Hypercube Sampling greatly decreases the iterations needed to approximate random sampling methods. Since LHS captures the possible variance at a small enough amount of iterations, it can be used for large transportation demand models.</p>
 </div>
 <div id="roanoke-valley-results" class="section level2 hasAnchor" number="4.3">
 <h2><span class="header-section-number">4.3</span> Roanoke Valley Results<a href="sensitivity-analysis-results.html#roanoke-valley-results" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -218,7 +218,7 @@ Figure 4.6: Coefficient of Variation of Total Link Volume
 Figure 4.7: Total Volume Density for an Individual Link by Facility Type
 </p>
 </div>
-<p>Figure <a href="sensitivity-analysis-results.html#fig:networksd">4.8</a> displays both standard deviation, and the corresponding average volume amoung iterations on each link. This shows that there is a higher standard deviation on roads with high volumes, but a change in 400 vehicles on a road with 40,000 daily volume is minuscule. That is only a 1% variation in volume which is insignificant.</p>
+<p>Figure <a href="sensitivity-analysis-results.html#fig:networksd">4.8</a> displays both standard deviation, and the corresponding average volume amoung iterations on each link. This shows that there is a higher standard deviation on roads with high volumes, but a change in 600 vehicles on a road with 40,000 daily volume is minuscule. That is only a 1% variation in volume which is insignificant.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:networksd"></span>
 <img src="thesis_files/figure-html/networksd-1.png" alt="Standard Deviation of Total Volume" width="75%" />
 <p class="caption">

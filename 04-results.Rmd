@@ -14,7 +14,7 @@ base <- read.dbf("data/sensitivity_out/BASE_LOADED.DBF") %>%
 
 ## Sampling Findings
 
-The parameters generated were compared for both sampling methods. Figure \@ref(fig:parameter100) shows the distributions for the HBW parameters when using 100 draws, and Figure \@ref(fig:parameter400) shows how that changes when using 400 draws. These distributions show that LHS gives normally distributed parameters with fewer draws than MC sampling. At 100 draws LHS shows a nearly perfect normal distribution, where there are some discrepancies for the MC generated parameters. Without looking at the mode choice results, these Figures show that LHS is likely to estimate the full variance of the results with much fewer draws.
+The parameters generated were compared for both sampling methods. Figure \@ref(fig:parameter100) shows the distributions for the HBW parameters when using 100 draws, and Figure \@ref(fig:parameter600) shows how that changes when using 600 draws. These distributions show that LHS gives normally distributed parameters with fewer draws than MC sampling. At 100 draws LHS shows a nearly perfect normal distribution, where there are some discrepancies for the MC generated parameters. Without looking at the mode choice results, these Figures show that LHS is likely to estimate the full variance of the results with much fewer draws.
 
 ```{r parameter100, echo = FALSE, fig.align="center", results='asis', out.width = "75%", fig.cap = "HBW Distributions for Input Parameters with 100 Draws"}
 tar_load(hbw_mc_coeff_lists_100)
@@ -38,12 +38,12 @@ Z %>%
   facet_wrap(vars(name), scales = "free")
 ```
 
-```{r parameter400, echo = FALSE, fig.align="center", results='asis', out.width = "75%", fig.cap = "HBW Distributions for Input Parameters with 400 Draws"}
-tar_load(hbw_mc_coeff_lists_400)
-list400 <- hbw_mc_coeff_lists_400
+```{r parameter600, echo = FALSE, fig.align="center", results='asis', out.width = "75%", fig.cap = "HBW Distributions for Input Parameters with 600 Draws"}
+tar_load(hbw_mc_coeff_lists_600)
+list600 <- hbw_mc_coeff_lists_600
 
-Z <- bind_rows(list400) %>% 
-  mutate(method = c("base", rep("MC", 400), rep("LHS", 400))) %>%
+Z <- bind_rows(list600) %>% 
+  mutate(method = c("base", rep("MC", 600), rep("LHS", 600))) %>%
   mutate(vot = (ivtt/ccost) * (60/100)) %>%
   pivot_longer(cols = -c("method"))
 
@@ -62,12 +62,12 @@ Z %>%
 
 To determine if LHS is effective at a reasonable amount of iterations, the standard deviation was calculated for each additional draw. This value shows how much the mean mode choice logsum value for all zones can vary. When the standard deviation for the draws stabilizes, that shows that the amount of generated parameters has captured all of the possible variances of the results. This can be visualized for each purpose. The HBW results for the cumulative standard deviation are shown in \@ref(fig:hbwstats). The results for the other two purposes (HBO and NHB) are in \@ref(fig:hbostats) and \@ref(fig:nhbstats) respectively. 
 
-```{r hbwstats, warning = FALSE, echo = FALSE, message = FALSE, fig.align="center", out.width = "75%", results='asis', fig.cap = "HBW Mean Logsum Standard Variation with 100 and 400 Draws"}
+```{r hbwstats, warning = FALSE, echo = FALSE, message = FALSE, fig.align="center", out.width = "75%", results='asis', fig.cap = "HBW Mean Logsum Standard Variation with 100 and 600 Draws"}
 tar_load(hbw_stats_100)
-tar_load(hbw_stats_400)
-hbw_stats <- bind_rows(hbw_stats_100, hbw_stats_400, .id = "ndraws") %>%
+tar_load(hbw_stats_600)
+hbw_stats <- bind_rows(hbw_stats_100, hbw_stats_600, .id = "ndraws") %>%
   mutate(ndraws = case_when(ndraws == "1" ~ "100 Draws",
-                          ndraws == "2" ~ "400 Draws"))
+                          ndraws == "2" ~ "600 Draws"))
 
 hbw_stats %>%
   filter(type != "base") %>%
@@ -85,12 +85,12 @@ hbw_stats %>%
     facet_wrap(vars(ndraws), scales = "free_x")
 ```
 
-```{r hbostats, warning = FALSE, echo = FALSE, message = FALSE, fig.align="center", out.width = "75%", results='asis', fig.cap = "HBO Mean Logsum Standard Variation with 100 and 400 Draws"}
+```{r hbostats, warning = FALSE, echo = FALSE, message = FALSE, fig.align="center", out.width = "75%", results='asis', fig.cap = "HBO Mean Logsum Standard Variation with 100 and 600 Draws"}
 tar_load(hbo_stats_100)
-tar_load(hbo_stats_400)
-hbo_stats <- bind_rows(hbo_stats_100, hbo_stats_400, .id = "ndraws") %>%
+tar_load(hbo_stats_600)
+hbo_stats <- bind_rows(hbo_stats_100, hbo_stats_600, .id = "ndraws") %>%
   mutate(ndraws = case_when(ndraws == "1" ~ "100 Draws",
-                          ndraws == "2" ~ "400 Draws"))
+                          ndraws == "2" ~ "600 Draws"))
 
 hbo_stats %>%
   filter(type != "base") %>%
@@ -108,12 +108,12 @@ hbo_stats %>%
     facet_wrap(vars(ndraws), scales = "free_x")
 ```
 
-```{r nhbstats, warning = FALSE, echo = FALSE, message = FALSE, fig.align="center", out.width = "75%", results='asis', fig.cap = "NHB Mean Logsum Standard Variation with 100 and 400 Draws"}
+```{r nhbstats, warning = FALSE, echo = FALSE, message = FALSE, fig.align="center", out.width = "75%", results='asis', fig.cap = "NHB Mean Logsum Standard Variation with 100 and 600 Draws"}
 tar_load(nhb_stats_100)
-tar_load(nhb_stats_400)
-nhb_stats <- bind_rows(nhb_stats_100, nhb_stats_400, .id = "ndraws") %>%
+tar_load(nhb_stats_600)
+nhb_stats <- bind_rows(nhb_stats_100, nhb_stats_600, .id = "ndraws") %>%
   mutate(ndraws = case_when(ndraws == "1" ~ "100 Draws",
-                          ndraws == "2" ~ "400 Draws"))
+                          ndraws == "2" ~ "600 Draws"))
 
 nhb_stats %>%
   filter(type != "base") %>%
@@ -131,7 +131,7 @@ nhb_stats %>%
     facet_wrap(vars(ndraws), scales = "free_x")
 ```
 
-For all three trip purposes, the LHS method had its standard deviation stabilized between 100 and 200 draws. The MC method had still not stabilized to the same extent after 400 draws. This shows us that Latin Hypercube Sampling greatly decreases the iterations needed to approximate random sampling methods. Since LHS captures the possible variance at a small enough amount of iterations, it can be used for large transportation demand models.
+For all three trip purposes, the LHS method had its standard deviation stabilized between 100 and 200 draws. The MC method had still not stabilized to the same extent after 600 draws. This shows us that Latin Hypercube Sampling greatly decreases the iterations needed to approximate random sampling methods. Since LHS captures the possible variance at a small enough amount of iterations, it can be used for large transportation demand models.
 
 ## Roanoke Valley Results
 
@@ -190,7 +190,7 @@ density %>%
   labs(x = "Total Link Volume")
 ```
 
-Figure \@ref(fig:networksd) displays both standard deviation, and the corresponding average volume amoung iterations on each link. This shows that there is a higher standard deviation on roads with high volumes, but a change in 400 vehicles on a road with 40,000 daily volume is minuscule. That is only a 1% variation in volume which is insignificant.
+Figure \@ref(fig:networksd) displays both standard deviation, and the corresponding average volume amoung iterations on each link. This shows that there is a higher standard deviation on roads with high volumes, but a change in 600 vehicles on a road with 40,000 daily volume is minuscule. That is only a 1% variation in volume which is insignificant.
 
 ```{r networksd, warning = FALSE, echo = FALSE, message = FALSE, fig.align="center", out.width = "75%", results='hide', fig.keep='all', fig.cap = "Standard Deviation of Total Volume"}
 shape <- st_read("data/sensitivity_out/BASE_LOADED.shp", crs = 4326)

@@ -2,7 +2,7 @@ name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iterat
 book_targets|object|1eb1bc8d77111ded|||||||||||||||
 compute_all_mc|function|5116ec7305ec2787|||||||||||||||
 cumvar|function|d0bd0281098a6288|||||||||||||||
-data_targets|object|d75e05e0a551fd06|||||||||||||||
+data_targets|object|d25e25c0a455a14b|||||||||||||||
 dc_coeff|stem|93f66eb83f4868b6|2998cefd9ce57115|33c68ddb50ec6a1f|1394105057||t19329.1113677279s|e31411335ec9539f|533|rds|local|vector|||2.773||
 dc_coeff_file|stem|725781ae8b9ee08e|0b9ea47fc840f373|ef46db3751d8e999|-1720594686|data/DESTCHOICE_PARAMETERS.DBF|t19329.1113761013s|f671a400543030db|1714|file|local|vector|||2.783||
 dc_logsum|function|1a9e81193c9b8bf8|||||||||||||||
@@ -30,6 +30,7 @@ hbo_dcprobability_tibble|stem|09397d70dca08ec7|e157bd8c7f8baf5a|8e96e89391042474
 hbo_dcutility_tibble|stem|64988891eed0b411|3044c2f06293c6c4|8e96e89391042474|-2134982539||t19389.8091840053s|68f93a41f561b0b8|69213057|rds|local|vector|||3.383||
 hbo_full_loop_100|stem|f9040f7a7a463a9c|78669fbbef270332|68c3d8d76cb8506c|1671155273||t19389.8080857599s|e4b87b840970381d|505652003|rds|local|vector|||7.251||
 hbo_full_loop_400|stem|b83b2441d4513272|76dc4b226d02cf12|26badbec9f87480e|1434266946||t19415.9147797555s|4753830e6e69beb6|2015039670|rds|local|vector|||46.488||
+hbo_full_loop_600|stem|3afdcdcb22332942|656c980542e14743|7bc6061396765af3|-73333062||t19417.8895040228s|aa880319218d029e|3021272586|rds|local|vector|||36.577||
 hbo_mc_coeff_lists|stem|02884fd1a670a991|aff8da89b94b4590|00c59378a9512fd8|-563859959||t18969.7797465312s|3ec9dcbe2ceb81bd|1298|rds|local|vector|||0.037||
 hbo_mc_coeff_lists_100|stem|e146d6fc1fd6dec7|39e611a5ad74c01a|d1ba4cf02835b9ee|2071117481||t19329.1113683032s|3764bee4c186771f|8862|rds|local|vector|||2.972||
 hbo_mc_coeff_lists_400|stem|fc3e9cf3af7f9863|d1688b30029064d4|d1ba4cf02835b9ee|-2107284816||t19415.9112830829s|7819aea568c6b37b|34834|rds|local|vector|||0.025||
@@ -40,13 +41,14 @@ hbo_mc_logsummean_100|stem|ac7ad12b0243bf22|31830a60616ac646|99957272ec93ffb6|18
 hbo_mc_logsummean_600|stem|1111218c750d7b19|2c1d0e2f9a14c968|cfe5e59021ee3c66|-1029154226||t18970.2727905518s||11096|rds|local|vector|||2.81||Problem with mutate column nonmo_utility.34mℹ39m nonmo_utility  k_nmot  20  coeff_walk1  nonmotor.34mℹ39m nonmo_utility must be size 625 or 1, not 0.
 hbo_mclogsum_tibble|stem|44aa2512e88eeeb5|5c1a25812c0c7f5a|8e96e89391042474|-1566260454||t19389.8090744974s|da7bda3785116e58|243976366|rds|local|vector|||4.036||
 hbo_mclogsum_tibble_400|stem|674f6fedf90c6339|0781fff79c438f40|f6b5d9874a3c4af9|455244996||t19415.9247171595s|70e16c87822f5045|972261167|rds|local|vector|||31.611||
+hbo_mclogsum_tibble_600|stem|0bf5ff4ba0976397|6351e115f8c2fe68|38c79ccf537ffc34|1550131767||t19417.8949015074s|46cfd16b243d2d66|1457770976|rds|local|vector|||133.165||
 hbo_mcprobability_tibble|stem|ec5e6958740f346d|94f2ac01050c5f97|8e96e89391042474|1839426260||t19389.8092893334s|b59dca0109f29d43|51786864|rds|local|vector|||2.479||
 hbo_plots|stem|ee46dabd5f07d7f9|fc06331da87313dd|4681ec30565fda87|-1260869469||t19389.8109479669s|31abc9939dd8b5e9|748923773|rds|local|vector|||1.302|1m22mUsing size aesthetic for lines was deprecated in ggplot2 3.4.0.36mℹ39m Please use linewidth instead.|
 HBO_probability|stem|93ba97560d473745|9b3ee9995f3ab4dd|f3bd02dd01ac7258|1319865522||t18943.2852851589s|593027050c108e75|14178|rds|local|vector|||0.027||
 hbo_productions|stem|dfba9effee56c436|170275cef387e4c6|b7219d0c26c9a9c6|818407247||t19389.8723620509s|0d413ab035a94eec|2010|rds|local|vector|||0.052|1m22mUsing an external vector in selections was deprecated in tidyselect 1.1.0.36mℹ39m Please use all_of or any_of instead.   Was  data  selectpurp   Now  data  selectall_ofpurpSee httpstidyselect.rlib.orgreferencefaqexternalvector.html.|
 hbo_stats_100|stem|56cba1b4e01e4b47|bf65e99f9ab82a48|05c2446b9fb96982|-1235191311||t19415.9270197741s|d7795ac67a683ee6|5652|rds|local|vector|||0.695||
 hbo_stats_400|stem|d356e0d035df6053|e3780b932b3fe5be|afe8cdcc637c78b0|1658261836||t19415.9277763913s|6d466690f63fa7b2|21724|rds|local|vector|||3.049||
-hbo_stats_600|stem|6c09b238f2e34bbc|c351f81e51b14d2b|3af553beadf62eab|863274596||t19101.6551646863s|d3e831cc699a1f90|32245|rds|local|vector|||0.009||
+hbo_stats_600|stem|81620ae9eb0c270b|2fb7682aa8e63ac4|0dee8ccf6d287095|863274596||t19417.9029214373s|8c75fa9de5ce820a|32279|rds|local|vector|||4.353||
 hbo_trips|stem|0e5cd564d25d27d0|9cfe4191205edf1d|143cf41f8a730a4a|-68076218||t19389.904865739s|a67343b590e56426|46956866|rds|local|vector|||5.668|NAs introduced by coercion|
 HBW|stem|b9c7a30a8f7f2688|96645dfed4e18761|10cfb76db8dc7ba8|134663694||t19329.111367697s|9064907978062c20|56|rds|local|vector|||0.003||
 hbw__dclogsum_tibble|stem|c3fd16054b0e12dc|4aa68dbaa92ddb07|179287aa0565257d|-993624988||t19384.270883381s|e1398f6f925060c5|5377|rds|local|vector|||0.047||
@@ -92,7 +94,7 @@ hbw_mc_logsummean_100|stem|7e417316d2a673ef|c2102763033e53e3|0be5c68dae1b970f|63
 hbw_mc_logsummean_600|stem|ba3708eb3cbb214d|e324c19dab0d525a|a2b9b58b3925f54d|-2046780420||t19158.3410423942s|9115dde379758e2e|10921|rds|local|vector|||16.544||
 hbw_mclogsum_tibble|stem|675dbba83722e7f5|816594c58ae192bd|111ecf67790b8756|-1036224171||t19389.8102690244s|7c80dcec9af6d74b|244115712|rds|local|vector|||3.016||
 hbw_mclogsum_tibble_400|stem|4fe615eda44855b8|002a5a5a9d2f9692|a37c5c4da9364007|-885059376||t19415.9228668629s|01fc3e0aabc636f0|972785830|rds|local|vector|||42.537||
-hbw_mclogsum_tibble_600|stem||8966b30c40589231|e815f733d37421e5|-156298015||t19415.9065611793s||0|rds|local|vector|||147.545||vector memory exhausted limit reached
+hbw_mclogsum_tibble_600|stem|3cdc1cb4471549f8|8966b30c40589231|e815f733d37421e5|-156298015||t19417.902575736s|f14e1f553ce436af|1458564043|rds|local|vector|||49.213||
 hbw_mcprobability_tibble|stem|01232f3bc8e5d820|4ba9cc61a623b085|111ecf67790b8756|-117056727||t19389.8103790165s|69f931d72f7a8e8e|51721494|rds|local|vector|||2.709||
 HBW_mode|function|44bce22f8e4b1e2e|||||||||||||||
 hbw_plots|stem|75c2de034de89a18|9efd0dfedabe5da3|59835f7f41bea3de|-2124300247||t19389.8121165724s|d8f1659690b4bcdf|749969544|rds|local|vector|||4.482||
@@ -101,7 +103,7 @@ HBW_probability_base|stem|62e178e537cbd7ae|05f6c090fb4a02d4|4b3e2f09714bfc90|102
 hbw_productions|stem|6ef018b22710493d|9574a09c94ff6ed9|8a40c8866a0ee487|1129300643||t19389.8723623306s|c56086d98179462e|1975|rds|local|vector|||0.006||
 hbw_stats_100|stem|628ca5e4cec3ff37|700c6162a59041a2|0134e1e195bd9db5|1094700144||t19415.9269709161s|e685cd6549872275|5726|rds|local|vector|||0.806||
 hbw_stats_400|stem|59bad6f49d762d2e|b7d121250b19de7c|575482490be7ed1c|-970563483||t19415.927568783s|5751fcf2bf160e6c|22043|rds|local|vector|||2.077||
-hbw_stats_600|stem|92dffe3c48967dee|136da12cb267ed06|dba4f94bec899421|-1478145679||t19158.3410430317s|79880b0d734f1bcc|31468|rds|local|vector|||0.014||
+hbw_stats_600|stem|1ed5324236000917|f4a26a5d7f20de4f|fb63ce3005fbf870|-1478145679||t19417.9033002282s|e9b291cb95918a78|32672|rds|local|vector|||6.695||
 hbw_trips|stem|241d147578397190|744f1dc38ca1577b|ace74369fe4313f3|-348688111||t19389.9050632211s|3f97fa486a20d9be|46903198|rds|local|vector|||6.271|NAs introduced by coercion|
 hh|stem|da661111d4c42ecf|28b008e69bae9a51|dd45e5a0bf92c441|1638780415||t19329.1113721626s|7ab39f2fcede33f0|122941|rds|local|vector|||2.88||
 hh_clean|stem|0f99daf2b9b86664|d550f0aeffe75289|61b13ecab4a26039|657265020||t19329.1113721758s|4f9ec32c748fdc21|39392|rds|local|vector|||0.013||
@@ -136,6 +138,7 @@ nhb_dcprobability_tibble|stem|883c5f8e0cb9fa32|6f5bb9b454385d9d|3b35c620b1f9af0c
 nhb_dcutility_tibble|stem|84e955a7d1372ace|8a6b1f6b6cf3606f|3b35c620b1f9af0c|-236440456||t19389.8095378716s|f8ad1caea390e51f|69477127|rds|local|vector|||3.106||
 nhb_full_loop_100|stem|fd5d75e2cfc9af08|434bed3e5b3f3f4b|8e3bbd15108f1b14|359339717||t19389.8989629549s|b0951b32cc7626fa|506170834|rds|local|vector|||7.046||
 nhb_full_loop_400|stem|a86cdd474097be4a|c42eed4b33feffda|e4a16491eeaea591|-1407164157||t19415.918667852s|cc14698a6a18e9e7|2017227989|rds|local|vector|||28.235||
+nhb_full_loop_600|stem|a89fc496d4bb8ff9|67008efd8ec77038|5ecf3a925cdcd81c|2009466193||t19417.8921005074s|7f56023e126d2849|3024517050|rds|local|vector|||62.294||
 nhb_mc_coeff_lists|stem|6e06a417f016b292|035ca30b0d6d5716|d66c79415cc692e9|-106680328||t18969.7797468458s|8069128c041152d4|1301|rds|local|vector|||0.016||
 nhb_mc_coeff_lists_100|stem|35818dac1be48cb1|30d9a09c07765bb6|3dd9dea2a8485124|342450218||t19329.1113728604s|a0451c93c7089aae|8873|rds|local|vector|||0.027||
 nhb_mc_coeff_lists_400|stem|57643e270630967c|5de6455466bbf10c|3dd9dea2a8485124|1101346041||t19415.9112835276s|b4270eff4b305136|34807|rds|local|vector|||0.023||
@@ -146,13 +149,14 @@ nhb_mc_logsummean_100|stem|e8db711c30d19efc|4ccc6f3c12f9ced8|d54f722116647d43|-7
 nhb_mc_logsummean_600|stem|8d38b4e62d8c3c64|da56cc03f5a774fa|dc6f23037669b4b6|1142648640||t18970.2729928471s|94c5d63a79e8aa00|11184|rds|local|vector|||17.448||
 nhb_mclogsum_tibble|stem|0cf70eed0069503c|56dda198104f6323|3b35c620b1f9af0c|664566130||t19389.8097270831s|e949a08daa294fcb|244020332|rds|local|vector|||4.263||
 nhb_mclogsum_tibble_400|stem|5d587cf8bfc61c09|6978a0bb02d46ff1|30131b1a76520021|994760248||t19415.9269018784s|ad7fdb2cda7990c0|972499571|rds|local|vector|||32.799||
+nhb_mclogsum_tibble_600|stem|bb2f43b4b80ef2ab|fb64f6b0852230d3|bdf75a28b2ac4f14|-135636357||t19417.8982228427s|1b175529d7741155|1458107862|rds|local|vector|||81.471||
 nhb_mcprobability_tibble|stem|829fd2dccac38806|8293a56e79c4f0bb|3b35c620b1f9af0c|-1959450017||t19389.8098438673s|e666e67b91b29ced|51751130|rds|local|vector|||3.376||
 nhb_plots|stem|f3e38f507e07164f|5210d26a70754a56|3bef130a5dda017b|-981978373||t19410.9874951974s|f5e46768ad7f19c8|749521770|rds|local|vector|||1.243|1m22mUsing size aesthetic for lines was deprecated in ggplot2 3.4.0.36mℹ39m Please use linewidth instead.|
 NHB_probability|stem|31c691eb0a236b1a|ed0f055d9fd8afe0|99072491c16a8a88|-845840629||t18943.2852846926s|4772f9165e2e4a8e|14166|rds|local|vector|||1.586||
 nhb_productions|stem|e1c78b8073931f17|b4c6aa48259433f8|68e2c92f123803d7|309437509||t19389.8723622204s|cff692338c9a5749|1943|rds|local|vector|||0.011||
 nhb_stats_100|stem|f257beb8937252ea|d845c182ec736a84|b7261c2fcf426f3b|1211590434||t19415.9278239778s|86efcf55c58c44a9|5709|rds|local|vector|||0.517||
 nhb_stats_400|stem|d3b93897d3dab151|0bbe651b6bc184e1|bccb3816fa923b8d|-609566968||t19415.92805494s|afb1771d264574df|22054|rds|local|vector|||3.195||
-nhb_stats_600|stem|f55d1a1973ba3446|db6cccfa4a9de71c|611d943008ca3d25|-1097863319||t19101.6551656336s|78f71d15eca91e18|32445|rds|local|vector|||0.028||
+nhb_stats_600|stem|cc758c1d819aba8b|3a056892f1084b30|3cdda5b816b83f30|-1097863319||t19417.9032225826s|e771c1bd8c63af97|32803|rds|local|vector|||4.941||
 nhb_trips|stem|96c9a3c8550ee04f|89e20a3d34c43bd8|07eb43dd3f2ee710|1567609461||t19389.9046768339s|a8d1f812d7315667|46768830|rds|local|vector|||5.837|NAs introduced by coercion|
 nhts_2017|function|9c564469e6ee8263|||||||||||||||
 nhts_hh|stem|0f9fa4b634fbf94a|8a6ad3a733c6fb84|de7008f1747d0392|134170284||t19329.1113741467s|455b979040eeec87|5140445|rds|local|vector|||3.672||
