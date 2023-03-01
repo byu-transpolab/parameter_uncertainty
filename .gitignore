@@ -3,5 +3,10 @@
 .RData
 .Ruserdata
 
+# ignore local files with parameters
+.Renviron
+.Rproj.user/*
+
+
 # ignore the targets output folder
 _targets/*
