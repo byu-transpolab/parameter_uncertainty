@@ -11,6 +11,7 @@
 # ignore the targets output folder
 _targets/*
 *_cache/*
+*_files/*
 /.quarto/
 _book/
 

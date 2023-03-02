@@ -67,6 +67,12 @@ trips:
 5.  **Highway assignment** by multi-class static user equilibrium, with
     through freight and passenger trips preloaded in each period.
 
+The RVTPO model provides an ideal testing environment for this research
+because it uses an integrated mode and destination choice framework
+common in more advanced trip-based models. At the same time, its small
+size (approximately 215 zones) means the entire model runs in a few
+minutes allowing for efficient testing of multiple model runs.
+
 The total passenger trips $T$ traveling from zone $i$ to zone $j$ on the
 highway in a period $t$ is therefore
 
@@ -98,7 +104,7 @@ with $X_j$ representing the socioeconomic data in zone \$j\$.
 Additionally, both the mode choice and destination choice models include
 calibration components: a set of constants for each alternative in the
 mode choice model and a cubic polynomial in the destination choice
-model. These values are not presented in \@tbl-coeffs for simplicity and
+model. These values are not presented in @tbl-coeffs for simplicity and
 because we do not perturb them in the simulation analysis. The travel
 costs $C_{ij}$ in the mode choice model use a congested travel time skim
 from a calibrated version of the RVTPO model.
@@ -136,28 +142,44 @@ trips.
 
 ## Parameter Sampling
 
-With this four-step model, MC and LHS methods were used to determine the
-possible combinations of parameter variance. To identify a standard
-deviation for each parameter, a coefficient of variation was used. A set
-coefficient of variation of 0.10 was used for all six mode choice input
-parameters, and four of the destination choice parameters (HH, OFF_EMP,
-OTH_EMP, and RET_EMP). Literature had identified a coefficient of
-variation of 0.30, but for this analysis that caused an unrealistic
-value of time, and thus it was changed to be 0.10
-[@zhao2002propagation]. The standard deviation was equal to 0.10
-multiplied by the mean, where the mean values in this situation are the
-base scenario parameters (as identified in Table \@ref(tab:MCcoeff),
-Table \@ref(tab:MCconst), and Table \@ref(tab:MCconst)).
+Using the trip-based model described above, we sample new coefficients
+for the terms presented in @tbl-coeffs. Given that Latin hypercube
+sampling (LHS) has been shown to generate multidimensional parameter
+draws covering complex parameter spaces in an efficient pattern relative
+to Monte Carlo sampling [@helton2003], we apply LHS [@carnell2022] to
+the each coefficient assuming that the mean is as described in
+@tbl-coeffs and that each coefficient has a mean an inherent coefficient
+of variation of 0.1. This is smaller than the value of 0.3 that
+@zhao2002 assumed, but in our examinations the higher variation
+frequently led to unrealistic implied values of time in the mode choice
+model.
 
-The MC random sampling uses the R function of `rnorm`. LHS uses the
-`lhs` package in R. Since this package only chooses variables on a zero
-to one scale, the values given use a function to put the random sampling
-on the right scale needed for the given parameter. The full code for
-both methods can be found in a public [GitHub
-repository](https://github.com/natmaegray/sensitivity_thesis). 100 and
-400 draws of random samples for both methods are generated. With these
-generated parameters, the mode choice model step was run for every set
-of input parameters for each purpose. The mean logsum value for each run
-was determined to compare each continuous draw. This allowed us to see
-how many iterations of which sampling type would be sufficient to show a
-full range of possible outcomes.
+@fig-ndraws shows the cumulative standard deviation in the home-based
+work (HBW) mode choice logsum term as the number of LHS parameter draws
+increases, as well as a ribbon defining the 95% confidence interval of
+this estimate. As the number of draws increases, the estimate of the
+total variance stabilizes at around 100. As a consequence of this
+analysis, we select 100 as the number of draws for this analysis.
+
+```{r ndraws}
+#| label: fig-ndraws
+#| fig-cap: Cumulative standard deviation in mode choice logsum for HBW trips.
+tar_load(hbw_stats_400) 
+
+hbw_stats_400 %>%
+  filter(type != "base") %>%
+  filter(type != "MC") %>%
+  ggplot() +
+    aes(x = draw, y = cummean, 
+        ymin = cummean - 1.96*cumvar, 
+        ymax = cummean + 1.96*cumvar) +
+    geom_ribbon(alpha = 0.2, color = NA) +
+    geom_line(size = 0.5) +
+#    ylim(0.025, 0.15) +
+    labs(x = "Draw", 
+         y = "Cumulative Standard Deviation",
+         color = "method") +
+    scale_color_hue(direction = 1) +
+    theme_linedraw() +
+    theme(legend.position = "bottom") 
+```
