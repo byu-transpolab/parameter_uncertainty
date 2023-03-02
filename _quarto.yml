@@ -27,7 +27,6 @@ book:
   date: "1/3/2023"
   chapters:
     - index.qmd
-    - 02-literature.qmd
     - 03-methods.qmd
     - 04-results.qmd
     - 05-conclusions.qmd
