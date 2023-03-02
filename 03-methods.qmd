@@ -1,73 +1,163 @@
-# Model Design and Methodology
+# Methodology {#sec-methods}
 
 ```{r, include = FALSE}
-some_packages <- c("tidyverse", "bookdown", "omxr", "nhts2017", "rgdal", "sf", "ggthemes", "lhs", "foreign", "imputeTS", "targets", "readxl", "knitr", "gridExtra", "ggspatial")
-lapply(some_packages, library, character.only=TRUE)
+# load R libraries here; the `include` flag in the chunk options above tells
+# whether to print the results or not. Usually you don't want to print the
+# library statements, or any code on the pdf.
+# Main Packages ========
+# I use these in every doc
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+library(modelsummary)
+library(targets)
+options(dplyr.summarise.inform = FALSE)
+# Other packages ------
+# These sometimes get used, and sometimes don't.
+library(leaflet)
+library(sf)
+library(viridis)
+library(ggspatial)
+# Instructions and options =========
+# prints missing data in tables as blank space
+options(knitr.kable.NA = '') 
+# tells kableExtra to not load latex table packages in the chunk output
+options(kableExtra.latex.load_packages = FALSE) 
+# round and format numbers that get printed in the text of the article.
+inline_hook <- function(x) {
+  if (is.numeric(x)) {
+    format(x, digits = 3, big.mark = ",")
+  } else x
+}
+knitr::knit_hooks$set(inline = inline_hook)
+knitr::opts_chunk$set(echo = TRUE, cache = TRUE)
+# options for latex-only output
+if(knitr::is_latex_output()) {
+  knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+} 
+theme_set(theme_bw())
 ```
 
-## Overview
+This section first presents the design of the transportation forecasting
+model used in this research, followed by a discussion of the sampling
+methodology used to generate multiple alternative runs of the model.
 
 ## Transportation Demand Model
 
-To examine the effects of parameter input sensitivity, we developed a trip-based travel model with four steps:
+The Roanoke Valley Transportation Planning Organization (RVTPO)
+transportation demand model[^03-methods-1] is an advanced trip-based
+formulation with the following basic procedure for internal passenger
+trips:
 
-1.  trip generation,
-2.  trip distribution,
-3.  mode choice, and
-4.  destination choice.
+[^03-methods-1]: A fork of the RVTPO model is available on
+    [GitHub](https://github.com/gregmacfarlane/rvtpo), and is used with
+    permission for educational and research purposes.
 
-Trip generation, the first step, was conducted using socioeconomic (SE) data and household trip productions from Roanoke Valley Transportation Planning Organization [RVTPO](https://github.com/xinwangvdot/rvtpo). The trip productions were summarized by household sizes, vehicles, and workers, and the weighted mean of each trip purpose was taken. The three trip purposes used are Home Based Work (HBW), Home Based Other (HBO), and Non-Home Based (NHB). Trip attraction was skipped for this analysis.
+1.  **Trip production** by cross-classified trip rates varying by trip
+    purpose, household size, vehicle ownership, and number of workers.
+    These rates are multiplied by household socioeconomic data by zone.
+2.  **Mode choice** utility equations varying by purpose using highway,
+    non-motorized, and travel time skims.
+3.  **Destination choice** utility equations incorporating destination
+    size coefficients and using the mode choice logsum as an impedance
+    term.
+4.  **Time of Day** factors transform a daily matrix of trip productions
+    and attractions into period matrices of trips from origins to
+    destinations.
+5.  **Highway assignment** by multi-class static user equilibrium, with
+    through freight and passenger trips preloaded in each period.
 
-The second step, trip distribution, used distance and travel time skims from RVTPO. The skims were simplified to use auto, nonmotorized, and transit modes. Travel time for auto used the single occupancy vehicle peak time, nonmotorized travel time used the distance skim multiplied by a factor of average walking speed (3 mph), and transit time used the walk to bus peak time.
+The total passenger trips $T$ traveling from zone $i$ to zone $j$ on the
+highway in a period $t$ is therefore
 
-Mode choice, the third step, calculates utilities for the three modes. These utilities were exponentiated, added together, and the natural log was taken to get a logsum value for every origin and destination pair. The utility equations for the mode choice model are as follows:
+$$
+  T_{ijt} = P_i * \mathcal{P}_{\mathrm{car}}(\beta, C_{ijt}) * \mathcal{P}_{\mathrm{j}}(\gamma, A_j, MCLS_{ijt}) * \Delta_t
+$$ {#eq-overall}
 
-\begin{equation}
-\mathrm{drive\_utility} = (\mathrm{coeff\_ivtt}*\mathrm{auto})+(\mathrm{coeff\_cost}*\mathrm{auto\_cost}*\mathrm{DIST})
-(\#eq:driveutil)
-\end{equation} \begin{equation}
-\mathrm{nonmo\_utility} = (\mathrm{k\_nmot}+ 20 * (\mathrm{coeff\_walk1}*\mathrm{nonmotor}))
-(\#eq:nonmoutil)
-\end{equation} \begin{equation}
-\mathrm{trans\_utility} = \mathrm{k\_trn} + (\mathrm{coeff\_ivtt}*\mathrm{transit})
-(\#eq:transutil)
-\end{equation}
+where $P$ is the productions at zone $i$ ; $\mathcal{P}_{\mathrm{car}}$
+is the car mode choice probability determined by utility parameters
+$\beta$ and the travel costs $C$ between $i$ and $j$ at time period $t$
+; $\mathcal{P}_{j}$ is the destination choice probability of choosing
+destination $j$ given the utility parameters , $\gamma$ attractions $A$,
+and the impedance as the mode choice model logsum $MCLS_{ijt}$. A
+time-of-day and direction factor $\Delta$ finalizes the total assigned
+trips.
 
-The mode choice parameters (constants and coefficients) were obtained from the [USTM Resiliency Model](https://github.com/byu-transpolab/ustm_resiliency). These values are shown in Table \@ref(tab:MCcoeff) and Table \@ref(tab:MCconst).
+The two parameter vectors $\beta$ and $\gamma$ describe the mode choice
+model and destination choice model coefficients, respectively. Both
+models use a multinomial logit framework with coefficients varying by
+purpose, as given in @tbl-coeffs. In addition to these coefficients, the
+destination choice model utility equation includes the mode choice model
+log sum term with a coefficient of 1,
 
-```{r MCcoeff, echo = FALSE, results = 'axis', fig.cap = "Mode Choice Coefficients"}
+$$
+ U_{ij} = \gamma X_j + 1 * MCLS_{ij}
+$$ {#eq-destination}
+
+with $X_j$ representing the socioeconomic data in zone \$j\$.
+Additionally, both the mode choice and destination choice models include
+calibration components: a set of constants for each alternative in the
+mode choice model and a cubic polynomial in the destination choice
+model. These values are not presented in \@tbl-coeffs for simplicity and
+because we do not perturb them in the simulation analysis. The travel
+costs $C_{ij}$ in the mode choice model use a congested travel time skim
+from a calibrated version of the RVTPO model.
+
+```{r coeffs}
+#| label: tbl-coeffs
+#| tbl-cap: Choice Model Coefficients
 tar_load(mc_coeff)
-mc_coeff2 <- mc_coeff %>%
-  filter(Name %in% c("CIVTT", "CCOST", "CWALK1", "AUTOCOST"))
-
-kable(mc_coeff2[,2:5], caption = "Mode Choice Coefficients", booktabs = TRUE)
-```
-
-```{r MCconst, echo = FALSE, results = 'axis', fig.cap = "Mode Choice Constants"}
-tar_load(mc_const)
-mc_const2 <- mc_const %>%
-  filter(Name %in% c("K_TRN", "K_NMOT"))
-
-kable(mc_const2[,2:5], caption = "Mode Choice Constants", booktabs = TRUE)
-```
-
-The final step, destination choice, uses the mode choice logsum as the primary impedance, and a size term calculated using zonal employment. The destination choice utility is the impedance term added to the log of the size term. The destination choice parameters (constants and coefficients) were also obtained from the [USTM Resiliency Model](https://github.com/byu-transpolab/ustm_resiliency). These values are shown in Table \@ref(tab:DCcoeff).
-
-
-```{r DCcoeff, echo = FALSE, results = 'axis', fig.cap = "Destination Choice Parameters"}
 tar_load(dc_coeff)
 
-kable(dc_coeff[1:10,2:5], caption = "Destination Choice Parameters", booktabs = TRUE)
+coefficient_table <- bind_rows(
+  mc_coeff |> mutate(model = "Mode choice") |> 
+    select(Name, HBW, HBO, NHB) |> 
+    filter(Name %in% c("CIVTT", "CCOST", "CWALK1", "CWALK2")) |> 
+    mutate(Name = c("In-vehicle time", "Cost", "Walk < 1 mile", "Walk > 1 mile")),
+  dc_coeff |> mutate(model = "Destination choice") |> 
+    select(Name = VAR, HBW, HBO, NHB) |> 
+    filter(Name %in% c("HH", "I(OTH_EMP + OFF_EMP)", "OFF_EMP", "OTH_EMP",
+                       "RET_EMP")) |> 
+    mutate(Name = c("Households", "Other + Office", "Office", "Other", "Retail"))
+  )
+
+kbl(coefficient_table, booktabs = TRUE,
+    col.names = c("", "HBW", "HBO", "NHB"), digits = 4) %>%
+  kable_styling() %>%
+  pack_rows(index = c("Mode Choice" = 4, "Destination Choice" = 5))
 ```
 
-The four-step model gives data in terms of utilities and probabilities. This can be turned into production and attraction trips, and then a highway assignment can be applied using CUBE.
+In our application, we treat the trip production rates as fixed based on
+the existing RVTPO trip rates. Similarly, we hold the assignment
+procedures including volume-delay curves fixed. We also hold fixed all
+passenger trip purposes not included in @tbl-coeffs (school trips, for
+example), as well as internal commercial trips and all internal/external
+trips.
 
 ## Parameter Sampling
 
-With this four-step model, MC and LHS methods were used to determine the possible combinations of parameter variance. To identify a standard deviation for each parameter, a coefficient of variation was used. A set coefficient of variation of 0.10 was used for all six mode choice input parameters, and four of the destination choice parameters (HH, OFF_EMP, OTH_EMP, and RET_EMP). Literature had identified a coefficient of variation of 0.30, but for this analysis that caused an unrealistic value of time, and thus it was changed to be 0.10 [@zhao2002propagation]. The standard deviation was equal to 0.10 multiplied by the mean, where the mean values in this situation are the base scenario parameters (as identified in Table \@ref(tab:MCcoeff), Table \@ref(tab:MCconst), and Table \@ref(tab:MCconst)).
+With this four-step model, MC and LHS methods were used to determine the
+possible combinations of parameter variance. To identify a standard
+deviation for each parameter, a coefficient of variation was used. A set
+coefficient of variation of 0.10 was used for all six mode choice input
+parameters, and four of the destination choice parameters (HH, OFF_EMP,
+OTH_EMP, and RET_EMP). Literature had identified a coefficient of
+variation of 0.30, but for this analysis that caused an unrealistic
+value of time, and thus it was changed to be 0.10
+[@zhao2002propagation]. The standard deviation was equal to 0.10
+multiplied by the mean, where the mean values in this situation are the
+base scenario parameters (as identified in Table \@ref(tab:MCcoeff),
+Table \@ref(tab:MCconst), and Table \@ref(tab:MCconst)).
 
-The MC random sampling uses the R function of `rnorm`. LHS uses the `lhs` package in R. Since this package only chooses variables on a zero to one scale, the values given use a function to put the random sampling on the right scale needed for the given parameter. The full code for both methods can be found in a public [GitHub repository](https://github.com/natmaegray/sensitivity_thesis). 100 and 400 draws of random samples for both methods are generated. With these generated parameters, the mode choice model step was run for every set of input parameters for each purpose. The mean logsum value for each run was determined to compare each continuous draw. This allowed us to see how many iterations of which sampling type would be sufficient to show a full range of possible outcomes.
-
-## Summary
-
-A standard four-step model was created in R to create trips, and evaluate sampling methodologies. 
+The MC random sampling uses the R function of `rnorm`. LHS uses the
+`lhs` package in R. Since this package only chooses variables on a zero
+to one scale, the values given use a function to put the random sampling
+on the right scale needed for the given parameter. The full code for
+both methods can be found in a public [GitHub
+repository](https://github.com/natmaegray/sensitivity_thesis). 100 and
+400 draws of random samples for both methods are generated. With these
+generated parameters, the mode choice model step was run for every set
+of input parameters for each purpose. The mean logsum value for each run
+was determined to compare each continuous draw. This allowed us to see
+how many iterations of which sampling type would be sufficient to show a
+full range of possible outcomes.
