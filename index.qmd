@@ -27,8 +27,8 @@ differ from the "true" or "actual" value of $y$ [@rasouli2012]:
     play a major role in travel behavior may not be included due to lack
     of information, or the unobserved error components may have a
     different correlation than was assumed during model development. A
-    detailed description of specifying mode choice models in terms of
-    included parameters and nesting of error structures is given by @koppelman2006a.
+    detailed description of specifying mode choice model variables and
+    nesting of error structures is given by @koppelman2006a.
 3.  The parameter estimates $\hat{\beta}$ may have incorrect values.
     This may be because the parameters were estimated on an improperly
     specified model $f()$, or because the estimation dataset was

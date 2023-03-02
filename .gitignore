@@ -20,3 +20,4 @@ _book/
 *.spl
 *.nlo
 *.aux
+rosm.cache/
