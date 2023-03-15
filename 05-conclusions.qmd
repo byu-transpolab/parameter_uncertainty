@@ -1,10 +1,44 @@
-# Conclusions
+# Conclusions {#sec-conclusions}
 
-## Overview
+In general, this research has shown that statistical parameter
+uncertainty does not appear to be a significant factor in forecasting
+traffic volumes using transportation demand models. Any variation in
+mode and destination choice probabilities appears to be corrected by the
+limitations of the highway network assignment.
 
-## Problem and Objective
+There are several limitations that must be mentioned in this research,
+however. First, we did not attempt to address the statistical
+uncertainty in trip rate estimates; these may play a substantially
+larger role than destination and mode choice parameters, given that
+lower trip rates may lead to lower traffic volumes globally, which could
+not be "corrected" by the static user equilibrium assignment. And the
+assignment itself might have been aided in this case by the RVTPO's
+relatively simplistic highway network: if only two major interstates
+exist the number of realistic lowest cost path choices between regions
+is somewhat constrained. It may be that in a larger network with more
+path redundancies, the assignment may not have been as helpful in
+constraining the forecasted volumes.
 
-## Limitations and Further Research
+In this research we had only the estimates of the statistical
+coefficients, and therefore had to assume a coefficient of variation to
+derive variation in the sampling procedure. It would be better if model
+user and development documentation more regularly provided estimates of
+the standard errors of model parameters. Even better would be
+variance-covariance matrices for the estimated models, enabling
+researchers to ensure that covariance relationships between sampled
+parameters are maintained.
 
-## Summary
-
+Notwithstanding these limitations, statistical parameter variance is not
+likely the largest source of uncertainty in travel forecasting. Research
+on all sources of uncertainty is somewhat limited, but in many ways has
+been hampered by the burdensome computational requirements of many
+modern travel models [@voulgaris2019] . This research methodology
+benefited from a lightweight travel model that could be repeatedly
+re-run with dozens of resampled choice parameters. Better understanding
+the other sources of uncertainty --- model specification and input
+accuracy --- might also benefit from lightweight models constructed for
+transparency and flexibility rather than heavily constrained models
+emphasizing precise spatial detail and strict behavioral constraints.
+This might allow forecasts to be made with an ensemble approach @wu2021,
+identifying preferred policies as the consensus of multiple plausible
+model specifications.
