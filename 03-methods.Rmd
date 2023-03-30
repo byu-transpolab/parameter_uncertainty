@@ -1,11 +1,13 @@
 # Model Design and Methodology
 
 ```{r, include = FALSE}
-some_packages <- c("tidyverse", "bookdown", "omxr", "nhts2017", "rgdal", "sf", "ggthemes", "lhs", "foreign", "imputeTS", "targets", "readxl", "knitr", "gridExtra", "ggspatial")
+some_packages <- c("tidyverse", "bookdown", "omxr", "nhts2017", "rgdal", "sf", "ggthemes", "lhs", "foreign", "imputeTS", "targets", "readxl", "knitr", "gridExtra", "ggspatial", "kableExtra")
 lapply(some_packages, library, character.only=TRUE)
 ```
 
 ## Overview
+
+This section describes the process by which a transportation demand model has been created, and how each of the standard four steps were developed for the purposes of this analysis. It also includes the methods for how uncertainty would be evaluated. Two common methods of parameter sampling are Monte Carlo and Latin hypercube sampling. These methods are described and a decision is made for how to use them to evaluate model uncertainty.
 
 ## Transportation Demand Model
 
@@ -14,60 +16,233 @@ To examine the effects of parameter input sensitivity, we developed a trip-based
 1.  trip generation,
 2.  trip distribution,
 3.  mode choice, and
-4.  destination choice.
+4.  route assignment.
 
-Trip generation, the first step, was conducted using socioeconomic (SE) data and household trip productions from Roanoke Valley Transportation Planning Organization [RVTPO](https://github.com/xinwangvdot/rvtpo). The trip productions were summarized by household sizes, vehicles, and workers, and the weighted mean of each trip purpose was taken. The three trip purposes used are Home Based Work (HBW), Home Based Other (HBO), and Non-Home Based (NHB). Trip attraction was skipped for this analysis.
+These steps were developed from the Roanoke Valley Transportation Planning Organization [RVTPO](https://github.com/xinwangvdot/rvtpo) Model. The RVTPO model provides an ideal testing environment for this research because it uses an integrated mode and destination choice framework common in more advanced trip-based models. At the same time, its small size (approximately 215 zones) means the entire model runs in a few minutes allowing for efficient testing of multiple model runs. Each step of the model will be described in detail below. 
 
-The second step, trip distribution, used distance and travel time skims from RVTPO. The skims were simplified to use auto, nonmotorized, and transit modes. Travel time for auto used the single occupancy vehicle peak time, nonmotorized travel time used the distance skim multiplied by a factor of average walking speed (3 mph), and transit time used the walk to bus peak time.
+### Trip Generation
 
-Mode choice, the third step, calculates utilities for the three modes. These utilities were exponentiated, added together, and the natural log was taken to get a logsum value for every origin and destination pair. The utility equations for the mode choice model are as follows:
+Trip generation, the first step, determines how many trips are produced in each zone, and how many trips are attracted to each zone. Socioeconomic (SE) data and trip productions were obtained from RVTPO. The SE data included information by TAZ for the total population, number of households, total workers, and workers by employment type. The trip productions are organized by TAZ and trip purpose. The three trip purposes used are Home Based Work (HBW), Home Based Other (HBO), and Non-Home Based (NHB). These trips are held constant. For this analysis these files were extracted from the RVTPO model, and used for the subsequent steps.
 
-\begin{equation}
-\mathrm{drive\_utility} = (\mathrm{coeff\_ivtt}*\mathrm{auto})+(\mathrm{coeff\_cost}*\mathrm{auto\_cost}*\mathrm{DIST})
-(\#eq:driveutil)
-\end{equation} \begin{equation}
-\mathrm{nonmo\_utility} = (\mathrm{k\_nmot}+ 20 * (\mathrm{coeff\_walk1}*\mathrm{nonmotor}))
-(\#eq:nonmoutil)
-\end{equation} \begin{equation}
-\mathrm{trans\_utility} = \mathrm{k\_trn} + (\mathrm{coeff\_ivtt}*\mathrm{transit})
-(\#eq:transutil)
-\end{equation}
+### Trip Distribution
 
-The mode choice parameters (constants and coefficients) were obtained from the [USTM Resiliency Model](https://github.com/byu-transpolab/ustm_resiliency). These values are shown in Table \@ref(tab:MCcoeff) and Table \@ref(tab:MCconst).
+The second step, trip distribution, used distance and travel time skims from RVTPO. Skims are either the time or distance to travel between zone pairs. The skims were simplified to three modes of transportation: auto, non-motorized, and transit. Travel time for auto used the single occupancy vehicle peak time, non-motorized travel time used the distance skim multiplied by a factor of average walking speed (3 mph), and transit time used the walk to bus peak time. These skims are the main input for the next step of the model.
 
-```{r MCcoeff, echo = FALSE, results = 'axis', fig.cap = "Mode Choice Coefficients"}
+## Mode Choice
+
+Mode choice, the third step, estimates how many trips from $i$ to $j$ will happen on each available mode $k$. The mode by which a trip is made is determined by calculated utilities for the three modes. These utilities take inputs from parameter values and the time and distance skims previously described. The mode choice parameters (constants and coefficients) were obtained from the RVTPO model. These values are shown in Table \@ref(tab:choicecoeff).
+
+```{r choicecoeff, echo = FALSE, results = 'axis', fig.cap = "Choice Model Parameters"}
 tar_load(mc_coeff)
-mc_coeff2 <- mc_coeff %>%
-  filter(Name %in% c("CIVTT", "CCOST", "CWALK1", "AUTOCOST"))
-
-kable(mc_coeff2[,2:5], caption = "Mode Choice Coefficients", booktabs = TRUE)
-```
-
-```{r MCconst, echo = FALSE, results = 'axis', fig.cap = "Mode Choice Constants"}
 tar_load(mc_const)
-mc_const2 <- mc_const %>%
-  filter(Name %in% c("K_TRN", "K_NMOT"))
-
-kable(mc_const2[,2:5], caption = "Mode Choice Constants", booktabs = TRUE)
-```
-
-The final step, destination choice, uses the mode choice logsum as the primary impedance, and a size term calculated using zonal employment. The destination choice utility is the impedance term added to the log of the size term. The destination choice parameters (constants and coefficients) were also obtained from the [USTM Resiliency Model](https://github.com/byu-transpolab/ustm_resiliency). These values are shown in Table \@ref(tab:DCcoeff).
-
-
-```{r DCcoeff, echo = FALSE, results = 'axis', fig.cap = "Destination Choice Parameters"}
 tar_load(dc_coeff)
 
-kable(dc_coeff[1:10,2:5], caption = "Destination Choice Parameters", booktabs = TRUE)
+coefficient_table <- bind_rows(
+  mc_coeff |> mutate(model = "Mode choice") |> 
+    select(Name, HBW, HBO, NHB) |> 
+    filter(Name %in% c("CIVTT", "CCOST", "CWALK1", "AUTOCOST")) |> 
+    mutate(Name = c("In-vehicle travel time (minutes)", "Travel cost", "Walk distance", "Auto operating cost (cents/mile)")) |> 
+    mutate(variable = c("$\\beta_{ivtt}$", "$\\beta_{tc}$", "$\\beta_{wd}$", "$\\beta_{ac}$")),
+  mc_const |> mutate(model = "Mode choice") |> 
+    select(Name, HBW, HBO, NHB) |> 
+    filter(Name %in% c("K_TRN", "K_NMOT")) |> 
+    mutate(Name = c("Transit constant", "NonMotorized constant")) |> 
+    mutate(variable = c("$k_{trn}$", "$k_{nmot}$")) ,
+  dc_coeff |> mutate(model = "Destination choice") |> 
+    select(Name = VAR, HBW, HBO, NHB) |> 
+    filter(Name %in% c("HH", "I(OTH_EMP + OFF_EMP)", "OFF_EMP", "OTH_EMP","RET_EMP")) |> 
+    mutate(Name = c("Households", "Other + Office", "Office", "Other", "Retail")) |> 
+    mutate(variable = c("$\\gamma_{hh}$", "$\\gamma_{oth + off}$", "$\\gamma_{off}$", "$\\gamma_{oth}$", "$\\gamma_{ret}$"))
+  )%>%
+  select(c(Name, variable, HBW, HBO, NHB))
+kbl(coefficient_table, caption = "Choice Model Parameters", booktabs = TRUE,
+    col.names = c("", "Variable","HBW", "HBO", "NHB"), digits = 4, escape = FALSE) %>%
+  kable_styling() %>%
+  pack_rows(index = c("Mode Choice Coefficients" = 4, "Mode Choice Constants" = 2, "Destination Choice Parameters" = 5))
+
 ```
 
-The four-step model gives data in terms of utilities and probabilities. This can be turned into production and attraction trips, and then a highway assignment can be applied using CUBE.
+The utility equations for the mode choice model are as follows:
+\begin{equation}
+U_{auto} = \beta_{ivtt} * X_{auto} + \beta_{tc} * \beta_{ac} * X_{dist}
+(\#eq:driveutil)
+\end{equation} \begin{equation}
+U_{nmot} = k_{nmot} + 20 * \beta_{wd}*X_{nmot}
+(\#eq:nonmoutil)
+\end{equation} \begin{equation}
+U_{trn} = k_{trn} + \beta_{ivtt} * X_{trn}
+(\#eq:transutil)
+\end{equation}
+These utilities were exponentiated -- if the distance was greater than 2 miles, non-motorized travel was excluded -- then added together, and the natural log was taken to get a logsum value for every origin and destination pair, see Equation \@ref(eq:mcls).
+
+\begin{equation}
+MCLS_{ij} = \ln(\sum_{k \in K} e^{U_{ijk}})
+(\#eq:mcls)
+\end{equation}
+
+This logsum value is then used as the primary impedance for a destination choice model. Destination choice estimates travel patterns based on mode choice, trip generators (workers and households), and destination choice parameters. These parameter values are also shown in Table \@ref(tab:choicecoeff).The destination choice utility is the primary impedance (mode choice logsum value) plus the natural log of the size term, where the sized term is calculated as:
+\begin{equation}
+A_j = \gamma_{hh} * X_{hh} + \gamma_{off} * X_{off} + \gamma_{ret} * X_{ret} + \gamma_{oth} * X_{oth} + \gamma_{oth+off} * X_{oth+off}
+(\#eq:dcsizeterm)
+\end{equation}
+The destination choice utility is then transformed into a destination choice logsum value with Equation \@ref(eq:dcls).
+\begin{equation}
+DCLS = \sum_{j \in J} e^{\ln(A_j) + 1* MCLS_{ijk}}
+(\#eq:dcls)
+\end{equation}
+
+The probability of both the mode choice and destination choice are calculated using the exponentiated utility divided by the corresponding logsum. These probabilities in conjunction with the trip productions can calculate the number of production-attraction (PA) trips between each zone by each mode and purpose. The auto trips are calculated by multiplying the probability of the destination by PA pair, the productions for each origin, and the probability of an auto mode choice by PA pair. This results in PA auto trips. The same process is followed for the other two modes. These PA trips are the input for the final step.
+
+### Route Assignment
+
+The final step, route assignment, estimates the traffic flows that will occur on each highway link. This step was ran using Bentley's CUBE and the RVTPO model. The PA trips that came from the previous model step are converted into origin destination (OD) trips by multiplying the trips by corresponding time of day (TOD) factors. OD trips are calculated for each time period (AM, PM, MD, NT, and Daily). The OD trips, by time period, are then assigned to the highway network by the shortest path by time using free flow speed and with link capacity as a restriction. This results with traffic volumes for each link within the network. The total passenger trips $T$ traveling from zone $i$ to zone $j$ on the highway in a period $t$ is therefore
+\begin{equation}
+T_{ijt} = P_i * \mathcal{P}_{\mathrm{auto}}(\beta, C_{ijt}) * \mathcal{P}_j(\gamma, A_j, MCLS_{ijt}) * \Delta_t
+(\#eq:trips)
+\end{equation}
+where $P$ is the productions at zone $i$; $\mathcal{P}_{\mathrm{car}}$ is the car mode choice probability determined by utility parameters $\beta$ and the travel costs $C$ between $i$ and $j$ at time period $t$; $\mathcal{P}_{j}$ is the destination choice probability of choosing destination $j$ given the utility parameters $\gamma$, attractions $A$, and the impedance as the mode choice model logsum $MCLS_{ijt}$. A time-of-day and direction factor $\Delta$ finalizes the total assigned trips.
 
 ## Parameter Sampling
 
-With this four-step model, MC and LHS methods were used to determine the possible combinations of parameter variance. To identify a standard deviation for each parameter, a coefficient of variation was used. A set coefficient of variation of 0.10 was used for all six mode choice input parameters, and four of the destination choice parameters (HH, OFF_EMP, OTH_EMP, and RET_EMP). Literature had identified a coefficient of variation of 0.30, but for this analysis that caused an unrealistic value of time, and thus it was changed to be 0.10 [@zhao2002propagation]. The standard deviation was equal to 0.10 multiplied by the mean, where the mean values in this situation are the base scenario parameters (as identified in Table \@ref(tab:MCcoeff), Table \@ref(tab:MCconst), and Table \@ref(tab:MCconst)).
+There are two popular methods of value sampling, Monte Carlo simulation and Latin hypercube sampling. Monte Carlo simulation draws independently from multiple distributions, while Latin hypercube sampling makes draws that cover the parameter space more efficiently and can capture the joint distribution between two or more parameter values [@helton2003latin]. As a result, Latin hypercube sampling can reduce the number of draws needed to fully re-create the statistical variance in a model, but the amount of reduction is unknown and may not be universal to all problems [@yang2013sensitivity].
+
+With this four-step model, MC and LHS methods were used to determine the possible combinations of parameter variance. To identify a standard deviation for each parameter, a coefficient of variation was used. A set coefficient of variation of 0.10 was used for the four mode choice coefficients and the destination choice parameters. The mode choice constants were kept the same across all iterations. Literature had identified a coefficient of variation of 0.30, but for this analysis that caused an unrealistic value of time, and thus it was changed to be 0.10 [@zhao2002propagation]. The standard deviation was equal to 0.10 multiplied by the mean, where the mean values in this situation are the base scenario parameters (as identified in Table \@ref(tab:choicecoeff)).
 
 The MC random sampling uses the R function of `rnorm`. LHS uses the `lhs` package in R. Since this package only chooses variables on a zero to one scale, the values given use a function to put the random sampling on the right scale needed for the given parameter. The full code for both methods can be found in a public [GitHub repository](https://github.com/natmaegray/sensitivity_thesis). 100 and 600 draws of random samples for both methods are generated. With these generated parameters, the mode choice model step was run for every set of input parameters for each purpose. The mean logsum value for each run was determined to compare each continuous draw. This allowed us to see how many iterations of which sampling type would be sufficient to show a full range of possible outcomes.
 
+The parameters generated were compared for both sampling methods. Figure \@ref(fig:parameter100) shows the distributions for the HBW parameters when using 100 draws, and Figure \@ref(fig:parameter600) shows how that changes when using 600 draws. These distributions show that LHS gives normally distributed parameters with fewer draws than MC sampling. At 100 draws LHS shows a nearly perfect normal distribution, where there are some discrepancies for the MC generated parameters. Without looking at the mode choice results, these Figures show that LHS is likely to estimate the full variance of the results with much fewer draws.
+
+```{r parameter100, echo = FALSE, fig.align="center", results='asis', fig.cap = "HBW distributions for input parameters with 100 draws.",  out.width = "80%"}
+tar_load(hbw_mc_coeff_lists_100)
+list100 <- hbw_mc_coeff_lists_100
+
+Z <- bind_rows(list100) %>% 
+  mutate(method = c("base", rep("MC", 100), rep("LHS", 100))) %>% 
+  mutate(vot = (ivtt/ccost) * (60/100)) %>%
+  pivot_longer(cols = -c("method"))
+
+facet_names <- c('autocost' = "Auto operating cost",
+                 'ccost' = "Travel cost",
+                 "ivtt" = "In-vehicle travel time",
+                 "vot" = "Value of Time",
+                 "walk1" = "Walk distance")
+
+Z %>%
+  filter(!(method %in% "base")) %>%
+  filter(!(name %in% c("k_nmot", "k_trn", "walk2"))) %>%
+  ggplot() +
+  aes(x = value, color = method, fill = method) +
+  geom_density(alpha = 0.25) +
+  scale_fill_hue(direction = 1) +
+  labs(y = "Density",
+       x = "Value") +
+  theme_bw() +
+  theme(legend.position = "bottom") +
+  facet_wrap(vars(name), scales = "free", labeller = as_labeller(facet_names))
+```
+
+```{r parameter600, echo = FALSE, fig.align="center", results='asis', fig.cap = "HBW distributions for input parameters with 600 draws.",  out.width = "80%"}
+tar_load(hbw_mc_coeff_lists_600)
+list600 <- hbw_mc_coeff_lists_600
+
+Z <- bind_rows(list600) %>% 
+  mutate(method = c("base", rep("MC", 600), rep("LHS", 600))) %>%
+  mutate(vot = (ivtt/ccost) * (60/100)) %>%
+  pivot_longer(cols = -c("method"))
+
+facet_names <- c('autocost' = "Auto operating cost",
+                 'ccost' = "Travel cost",
+                 "ivtt" = "In-vehicle travel time",
+                 "vot" = "Value of Time",
+                 "walk1" = "Walk distance")
+
+Z %>%
+  filter(!(method %in% "base")) %>%
+    filter(!(name %in% c("k_nmot", "k_trn", "walk2"))) %>%
+  ggplot() +
+  aes(x = value, color = method, fill = method) +
+  geom_density(alpha = 0.25) +
+  scale_fill_hue(direction = 1) +
+  labs(y = "Density",
+       x = "Value") +
+  theme_bw() +
+  theme(legend.position = "bottom") +
+  facet_wrap(vars(name), scales = "free", labeller = as_labeller(facet_names))
+```
+
+To determine if LHS is effective at a reasonable amount of iterations, the standard deviation was calculated for each additional draw. This value shows how much the mean mode choice logsum value for all zones can vary. When the standard deviation for the draws stabilizes, that shows that the amount of generated parameters has captured all of the possible variances of the results. This can be visualized for each purpose. The HBW results for the cumulative standard deviation are shown in \@ref(fig:hbwstats). The results for the other two purposes (HBO and NHB) are in \@ref(fig:hbostats) and \@ref(fig:nhbstats) respectively. 
+
+```{r hbwstats, warning = FALSE, echo = FALSE, message = FALSE, fig.align="center", results='asis', fig.cap = "HBW mean logsum standard variation with 100 and 600 draws.",  out.width = "80%"}
+tar_load(hbw_stats_100)
+tar_load(hbw_stats_600)
+hbw_stats <- bind_rows(hbw_stats_100, hbw_stats_600, .id = "ndraws") %>%
+  mutate(ndraws = case_when(ndraws == "1" ~ "100 Draws",
+                          ndraws == "2" ~ "600 Draws"))
+
+hbw_stats %>%
+  filter(type != "base") %>%
+  ggplot() +
+    aes(x = draw, y = cummean, ymin = cummean - 1.96*cumvar, ymax = cummean + 1.96*cumvar, colour = type, fill = type, group = type) +
+    geom_ribbon(alpha = 0.2, colour = NA) +
+    geom_line(size = 0.5) +
+#    ylim(0.025, 0.15) +
+    labs(x = "Draw", 
+         y = "Cumulative Standard Deviation",
+         color = "method") +
+    scale_color_hue(direction = 1) +
+    theme_bw() +
+    theme(legend.position = "bottom") +
+    facet_wrap(vars(ndraws), scales = "free_x")
+```
+
+```{r hbostats, warning = FALSE, echo = FALSE, message = FALSE, fig.align="center", results='asis', fig.cap = "HBO mean logsum standard variation with 100 and 600 draws.",  out.width = "80%"}
+tar_load(hbo_stats_100)
+tar_load(hbo_stats_600)
+hbo_stats <- bind_rows(hbo_stats_100, hbo_stats_600, .id = "ndraws") %>%
+  mutate(ndraws = case_when(ndraws == "1" ~ "100 Draws",
+                          ndraws == "2" ~ "600 Draws"))
+
+hbo_stats %>%
+  filter(type != "base") %>%
+  ggplot() +
+    aes(x = draw, y = cummean, ymin = cummean - 1.96*cumvar, ymax = cummean + 1.96*cumvar, colour = type, fill = type, group = type) +
+    geom_ribbon(alpha = 0.2, colour = NA) +
+    geom_line(size = 0.5) +
+#    ylim(0.025, 0.15) +
+    labs(x = "Draw", 
+         y = "Cumulative Standard Deviation",
+         color = "method") +
+    scale_color_hue(direction = 1) +
+    theme_bw() +
+    theme(legend.position = "bottom") +
+    facet_wrap(vars(ndraws), scales = "free_x")
+```
+
+```{r nhbstats, warning = FALSE, echo = FALSE, message = FALSE, fig.align="center",  results='asis', fig.cap = "NHB mean logsum standard variation with 100 and 600 draws.", out.width = "80%"}
+tar_load(nhb_stats_100)
+tar_load(nhb_stats_600)
+nhb_stats <- bind_rows(nhb_stats_100, nhb_stats_600, .id = "ndraws") %>%
+  mutate(ndraws = case_when(ndraws == "1" ~ "100 Draws",
+                          ndraws == "2" ~ "600 Draws"))
+
+nhb_stats %>%
+  filter(type != "base") %>%
+  ggplot() +
+    aes(x = draw, y = cummean, ymin = cummean - 1.96*cumvar, ymax = cummean + 1.96*cumvar, colour = type, fill = type, group = type) +
+    geom_ribbon(alpha = 0.2, colour = NA) +
+    geom_line(size = 0.5) +
+#    ylim(0.025, 0.15) +
+    labs(x = "Draw", 
+         y = "Cumulative Standard Deviation",
+         color = "method") +
+    scale_color_hue(direction = 1) +
+    theme_bw() +
+    theme(legend.position = "bottom") +
+    facet_wrap(vars(ndraws), scales = "free_x")
+```
+
+For all three trip purposes, the LHS method had its standard deviation stabilized by 100 draws. The MC method had still not stabilized to the same extent after 600 draws. This shows us that Latin hypercube sampling greatly decreases the iterations needed to approximate random sampling methods. Since LHS captures the possible variance at a small enough amount of iterations, it can be used for large transportation demand models. From these results it was decided to use 100 LHS samples parameters to evaluate uncertainty within each step of the model.
+
 ## Summary
 
-A standard four-step model was created in R to create trips, and evaluate sampling methodologies. 
+A standard four-step model was created in R and CUBE to create trips, assign network volumes, and evaluate sampling methodologies. The four step model includes trip generation, trip distribution, mode and destination choice, and trip assignment. This model can be used to quantify and evaluate the uncertainty within the model using 100 draws of Latin hypercube sampling. 

@@ -1,144 +1,169 @@
 # Sensitivity Analysis Results
 
 ```{r , include = FALSE}
-some_packages <- c("tidyverse", "bookdown", "omxr", "nhts2017", "rgdal", "sf", "ggthemes", "lhs", "foreign", "imputeTS", "targets", "readxl", "knitr", "gridExtra", "ggspatial")
+some_packages <- c("tidyverse", "bookdown", "omxr", "nhts2017", "rgdal", "sf", "ggthemes", "lhs", "foreign", "imputeTS", "targets", "readxl", "knitr", "gridExtra", "ggspatial", "kableExtra")
 lapply(some_packages, library, character.only=TRUE)
-
-tar_load(networks)
-
-base <- read.dbf("data/sensitivity_out/BASE_LOADED.DBF") %>%
-  mutate(link = paste(A, B, sep = "_"))
 ```
 
 ## Overview
 
-## Sampling Findings
+Each of the 100 parameter draws was applied to the RVTPO model, generating mode choice utilities, destination choice utilities, and trip matrices for each draw. The resulting uncertainty can then be quantified using these outputs, using trips by mode and link volume.
 
-The parameters generated were compared for both sampling methods. Figure \@ref(fig:parameter100) shows the distributions for the HBW parameters when using 100 draws, and Figure \@ref(fig:parameter600) shows how that changes when using 600 draws. These distributions show that LHS gives normally distributed parameters with fewer draws than MC sampling. At 100 draws LHS shows a nearly perfect normal distribution, where there are some discrepancies for the MC generated parameters. Without looking at the mode choice results, these Figures show that LHS is likely to estimate the full variance of the results with much fewer draws.
+## Mode Choice Trips
 
-```{r parameter100, echo = FALSE, fig.align="center", results='asis', out.width = "75%", fig.cap = "HBW Distributions for Input Parameters with 100 Draws"}
-tar_load(hbw_mc_coeff_lists_100)
-list100 <- hbw_mc_coeff_lists_100
+Uncertainty can first be visualized by looking at how mode choices change. The total number of trips by purpose are fixed, but varies among mode type. Table \@ref(tab:MCtrips) lists the base trip amount by mode and purpose. It also lists the the average number of trips across all 100 iterations, with the corresponding standard deviation and coefficient of variation. For HBW there are 103,320 auto trips. Across all 100 iterations there is a mean value of 103,298 trips with a standard deviation of 527.07. This results in a coefficient of variation of 0.0052 or 0.52% variation in the number of auto trips. The other modes of transportation and purposes are included. The results listed in the table show that the variation of the output trips - by mode and purpose - are less than the input variation (as all COVs are smaller than 0.10). This confirms previous research that the outcome variance is less than or near the parameters variance [@zhao2002propagation; @clay2005univariate]. Another notable finding that can be seen in Table \@ref(tab:MCtrips) is that there is greater confidence in auto trips than non-motorized or transit trips. In all three purposes that were evaluated, the coefficient of variation in auto trips are lower than transit or non-motorized trips, meaning that there is greater confidence in the models accuracy to generate auto trips. The input parameter variability has a smaller effect on auto trips than on trips on the other modes. 
 
-Z <- bind_rows(list100) %>% 
-  mutate(method = c("base", rep("MC", 100), rep("LHS", 100))) %>% 
-  mutate(vot = (ivtt/ccost) * (60/100)) %>%
-  pivot_longer(cols = -c("method"))
+```{r MCtrips, warning = FALSE, echo = FALSE, message = FALSE, fig.align="center", results='asis'}
+tar_load(hbw_trips)
+tar_load(hbo_trips)
+tar_load(nhb_trips)
 
-Z %>%
-  filter(!(method %in% "base")) %>%
+hbw <- hbw_trips %>%
+  replace(is.na(.), 0) %>%
+  group_by(draw) %>%
+  summarise(HBW_Auto = sum(DA),
+            HBW_NonMotorized = sum(NOM),
+            HBW_Transit = sum(WLB))
+
+hbo <- hbo_trips %>%
+  replace(is.na(.), 0) %>%
+  group_by(draw) %>%
+  summarise(HBO_Auto = sum(DA),
+            HBO_NonMotorized = sum(NOM),
+            HBO_Transit = sum(WLB))
+
+nhb <- nhb_trips %>%
+  replace(is.na(.), 0) %>%
+  group_by(draw) %>%
+  summarise(NHB_Auto = sum(DA),
+            NHB_NonMotorized = sum(NOM),
+            NHB_Transit = sum(WLB))
+
+trip_table1 <- merge(hbw, hbo, by = "draw")
+trip_table2 <- merge(trip_table1, nhb, by = "draw") %>%
+  t() 
+         
+
+trips <- trip_table2[,2:101]
+base <- trip_table2[,1]
+mean <- apply(trips, 1, mean) 
+sd <- apply(trips, 1, sd) 
+
+table <- data.frame(base, mean, sd) %>%
+  mutate(cov = sd/mean) %>%
+  filter(base > 0)%>%
+  mutate(mode = c("Auto", "Non-Motorized", "Transit", "Auto", "Non-Motorized", "Transit", "Auto", "Non-Motorized", "Transit")) %>%
+  select(c("mode", "base", "mean", "sd", "cov")) 
+
+kable(table, caption = "Coefficient of Variation of Trips by Mode", booktabs = TRUE, 
+      col.names = c("", "Base", "Mean", "SD", "COV"), digits = c(0, 0, 0, 2, 4), row.names = F) %>%
+  kable_styling() %>%
+  pack_rows(index = c("HBW" = 3, "HBO" = 3, "NHB" = 3))
+```
+
+The variation among mode choices can be visualized graphically using a density of a scaled change in trips by mode. Figure \@ref(fig:modechoicetrips) shows density plots for HBW trips by mode for twelve zones -- the zones are divided into three volume categories: low is less than 200 trips per zone, mid is 200 to 700 trips per zone, and top is greater than 700 trips per zone -- and four zones are randomly selected from each volume category. Zones that do not have any transit accessibility have been excluded. Those zones have very high density in auto trips as with the ability to choose transit was removed, the choice to choose auto was more certain. The zones included in Figure \@ref(fig:modechoicetrips) all have greater certainty in auto trips, as the change in trips across all 100 iterations is relatively small. This reinforces the previous claim that the model has more confidence in auto trips than the other modes. It is also important to note that the modes are correlated to each other. In zones with a greater confidence in one mode, the other modes are more confident as well. Since the number of trips by origin zone are held constant, when there is an increase in trips on one mode there must be a decrease in trips on one or both of the other modes. Also, the distribution of non-motorized trips is similar for every zone. Suggesting that generally, the most uncertain mode is non-motorized trips, which is also verified using Table \@ref(tab:MCtrips).
+
+```{r modechoicetrips, warning = FALSE, echo = FALSE, message = FALSE, results='asis', fig.cap = "Trip desnity for coefficient of variation by mode for HBW trips.", fig.env= "sidewaysfigure", fig.align="center"}
+set.seed(1)
+
+tar_load(hbw_trips)
+
+hbw_mc <- hbw_trips
+
+hbw_mc[is.na(hbw_mc)] <- 0
+  
+hbw_mc2 <- hbw_mc %>%  
+group_by(origin, draw) %>%
+  summarize(Drive = sum(DA),
+            Transit = sum(WLB),
+            NonMotor = sum(NOM)) 
+
+hbw_base <- hbw_mc2 %>%
+  filter(draw == 0) %>%
+  select(-c("draw")) %>%
+  rename("baseDrive" = "Drive",
+         "baseTransit" = "Transit",
+         "baseNonMotor" = "NonMotor")
+
+hbw_transit_origins <- hbw_base %>%
+  group_by(origin) %>%
+  summarise(transtotal = sum(baseTransit)) %>%
+  filter(transtotal > 0) %>%
+  pull(origin) 
+
+hbw_mc3 <- hbw_mc2 %>%
+  filter(draw > 0) 
+
+merged <- merge(hbw_mc3, hbw_base, by = "origin") 
+
+hbw_mc_v <- merged %>%
+  mutate(dDrive = Drive - baseDrive,
+         dTransit = Transit - baseTransit,
+         dNonMotor = NonMotor - baseNonMotor) %>%
+  mutate(Auto = dDrive/baseDrive,
+         Transit = dTransit/baseTransit,
+         "Non-Motorized" = dNonMotor/baseNonMotor) %>%
+  select(c("origin", "draw", "Auto", "Non-Motorized", "Transit")) %>%
+  pivot_longer(cols = c("Auto", "Non-Motorized", "Transit"), names_to = "Mode", values_to = "scaleddiff") 
+
+low_ids <- hbw_base  %>%
+  filter(origin %in% c(hbw_transit_origins)) %>%
+  mutate(total = baseDrive + baseTransit + baseNonMotor) %>%
+  filter(total > 0 ) %>%
+  filter(total < 200) %>%
+  slice(1) %>%
+  ungroup() %>%
+  sample_n(4) %>%
+  pull(origin) 
+
+mid_ids <- hbw_base %>%
+    filter(origin %in% c(hbw_transit_origins)) %>%
+  mutate(total = baseDrive + baseTransit + baseNonMotor) %>%
+  filter(total > 201 ) %>%
+  filter(total < 700) %>%
+  slice(1) %>%
+  ungroup() %>%
+  sample_n(4) %>%
+  pull(origin) 
+
+top_ids <- hbw_base %>%
+    filter(origin %in% c(hbw_transit_origins)) %>%
+  mutate(total = baseDrive + baseTransit + baseNonMotor) %>%
+  filter(total > 701 ) %>%
+  slice(1) %>%
+  ungroup() %>%
+  sample_n(4) %>%
+  pull(origin) 
+
+these_ids <- c(low_ids, mid_ids, top_ids)
+
+hbw_mc_v %>%
+  filter(origin %in% these_ids) %>%
+  mutate(voltype = case_when(origin %in% low_ids ~ "low",
+                             origin %in% mid_ids ~ "mid",
+                             origin %in% top_ids ~ "top")) %>%
+  mutate(ID = paste(voltype, "vol. - Origin:", origin)) %>%
   ggplot() +
-  aes(x = value, color = method, fill = method) +
-  geom_density(alpha = 0.25) +
+  aes(x = scaleddiff, fill = Mode, color = Mode) +
+  geom_density(adjust = 1L, alpha = 0.1) +
   scale_fill_hue(direction = 1) +
-  labs(y = "Density",
-       x = "Value") +
-  theme_linedraw() +
-  theme(legend.position = "bottom") +
-  facet_wrap(vars(name), scales = "free")
+  theme_bw() +
+  labs(x = "Scaled Difference",
+       y = "Density") +
+  facet_wrap(vars(ID))
 ```
 
-```{r parameter600, echo = FALSE, fig.align="center", results='asis', out.width = "75%", fig.cap = "HBW Distributions for Input Parameters with 600 Draws"}
-tar_load(hbw_mc_coeff_lists_600)
-list600 <- hbw_mc_coeff_lists_600
 
-Z <- bind_rows(list600) %>% 
-  mutate(method = c("base", rep("MC", 600), rep("LHS", 600))) %>%
-  mutate(vot = (ivtt/ccost) * (60/100)) %>%
-  pivot_longer(cols = -c("method"))
+## Link Volume
 
-Z %>%
-  filter(!(method %in% "base")) %>%
-  ggplot() +
-  aes(x = value, color = method, fill = method) +
-  geom_density(alpha = 0.25) +
-  scale_fill_hue(direction = 1) +
-  labs(y = "Density",
-       x = "Value") +
-  theme_linedraw() +
-  theme(legend.position = "bottom") +
-  facet_wrap(vars(name), scales = "free")
-```
+Another way to visualize uncertainty is by looking at how assigned link volume varies across iterations. Figure \@ref(fig:networksd) displays variation in forecasted link volume spatially. This shows that the links with the highest standard deviation in forecasted volume are high-volume roads including freeways and principal arterials where the majority of traffic is internal to the study region. Although these links have the largest standard deviation, when compared to the total volume of the road, the variation is in reality very small. A standard deviation of 400 vehicles on a road with 40,000 total vehicles corresponds to a small variation (1%).
 
-To determine if LHS is effective at a reasonable amount of iterations, the standard deviation was calculated for each additional draw. This value shows how much the mean mode choice logsum value for all zones can vary. When the standard deviation for the draws stabilizes, that shows that the amount of generated parameters has captured all of the possible variances of the results. This can be visualized for each purpose. The HBW results for the cumulative standard deviation are shown in \@ref(fig:hbwstats). The results for the other two purposes (HBO and NHB) are in \@ref(fig:hbostats) and \@ref(fig:nhbstats) respectively. 
+```{r networksd, warning = FALSE, echo = FALSE, message = FALSE, fig.align="center", results='hide', fig.keep='all', fig.cap = "Standard deviation in forecasted volume.", fig.env= "sidewaysfigure"}
+tar_load(networks)
 
-```{r hbwstats, warning = FALSE, echo = FALSE, message = FALSE, fig.align="center", out.width = "75%", results='asis', fig.cap = "HBW Mean Logsum Standard Variation with 100 and 600 Draws"}
-tar_load(hbw_stats_100)
-tar_load(hbw_stats_600)
-hbw_stats <- bind_rows(hbw_stats_100, hbw_stats_600, .id = "ndraws") %>%
-  mutate(ndraws = case_when(ndraws == "1" ~ "100 Draws",
-                          ndraws == "2" ~ "600 Draws"))
+base <- read.dbf("data/sensitivity_out/BASE_LOADED.DBF") %>%
+  mutate(link = paste(A, B, sep = "_"))
 
-hbw_stats %>%
-  filter(type != "base") %>%
-  ggplot() +
-    aes(x = draw, y = cummean, ymin = cummean - 1.96*cumvar, ymax = cummean + 1.96*cumvar, colour = type, fill = type, group = type) +
-    geom_ribbon(alpha = 0.2, colour = NA) +
-    geom_line(size = 0.5) +
-#    ylim(0.025, 0.15) +
-    labs(x = "Draw", 
-         y = "Cumulative Standard Deviation",
-         color = "method") +
-    scale_color_hue(direction = 1) +
-    theme_linedraw() +
-    theme(legend.position = "bottom") +
-    facet_wrap(vars(ndraws), scales = "free_x")
-```
-
-```{r hbostats, warning = FALSE, echo = FALSE, message = FALSE, fig.align="center", out.width = "75%", results='asis', fig.cap = "HBO Mean Logsum Standard Variation with 100 and 600 Draws"}
-tar_load(hbo_stats_100)
-tar_load(hbo_stats_600)
-hbo_stats <- bind_rows(hbo_stats_100, hbo_stats_600, .id = "ndraws") %>%
-  mutate(ndraws = case_when(ndraws == "1" ~ "100 Draws",
-                          ndraws == "2" ~ "600 Draws"))
-
-hbo_stats %>%
-  filter(type != "base") %>%
-  ggplot() +
-    aes(x = draw, y = cummean, ymin = cummean - 1.96*cumvar, ymax = cummean + 1.96*cumvar, colour = type, fill = type, group = type) +
-    geom_ribbon(alpha = 0.2, colour = NA) +
-    geom_line(size = 0.5) +
-#    ylim(0.025, 0.15) +
-    labs(x = "Draw", 
-         y = "Cumulative Standard Deviation",
-         color = "method") +
-    scale_color_hue(direction = 1) +
-    theme_linedraw() +
-    theme(legend.position = "bottom") +
-    facet_wrap(vars(ndraws), scales = "free_x")
-```
-
-```{r nhbstats, warning = FALSE, echo = FALSE, message = FALSE, fig.align="center", out.width = "75%", results='asis', fig.cap = "NHB Mean Logsum Standard Variation with 100 and 600 Draws"}
-tar_load(nhb_stats_100)
-tar_load(nhb_stats_600)
-nhb_stats <- bind_rows(nhb_stats_100, nhb_stats_600, .id = "ndraws") %>%
-  mutate(ndraws = case_when(ndraws == "1" ~ "100 Draws",
-                          ndraws == "2" ~ "600 Draws"))
-
-nhb_stats %>%
-  filter(type != "base") %>%
-  ggplot() +
-    aes(x = draw, y = cummean, ymin = cummean - 1.96*cumvar, ymax = cummean + 1.96*cumvar, colour = type, fill = type, group = type) +
-    geom_ribbon(alpha = 0.2, colour = NA) +
-    geom_line(size = 0.5) +
-#    ylim(0.025, 0.15) +
-    labs(x = "Draw", 
-         y = "Cumulative Standard Deviation",
-         color = "method") +
-    scale_color_hue(direction = 1) +
-    theme_linedraw() +
-    theme(legend.position = "bottom") +
-    facet_wrap(vars(ndraws), scales = "free_x")
-```
-
-For all three trip purposes, the LHS method had its standard deviation stabilized between 100 and 200 draws. The MC method had still not stabilized to the same extent after 600 draws. This shows us that Latin Hypercube Sampling greatly decreases the iterations needed to approximate random sampling methods. Since LHS captures the possible variance at a small enough amount of iterations, it can be used for large transportation demand models.
-
-## Roanoke Valley Results
-
-A hundred iterations of Latin Hypercube sampling was created with the RVPTO data. Some ways this data can be analyzed to evaluate the range of results is with the highway assignment applied after the four-step model. The coefficient of variation among all iterations for every link in the transportation network can be calculated and compared. Figure \@ref(fig:totalvolume) shows, by facility type, how the total volume varies. It can be seen that the higher volume roads, have less variability, and the roads with low volume have more variability.
-
-```{r totalvolume, echo = FALSE, results = 'axis', fig.align="center", out.width = "75%", warning = FALSE, fig.cap = "Coefficient of Variation of Total Link Volume"}
-## Total Volume
 links_total <- networks %>%
   group_by(link) %>%
   summarize(sd = sd(TOTAL_VOL),
@@ -147,52 +172,17 @@ links_total <- networks %>%
 base_total <- merge(base, links_total, by = "link") %>%
   mutate(cov = sd/mean) %>%
   filter(FACTYPE < 11, mean >0 ) %>%
-  mutate(FacilityType = case_when(FACTYPE == 1 ~ "1, 2 - Freeway",
-                                  FACTYPE == 2 ~ "1, 2 - Freeway",
-                                  FACTYPE == 3 ~ "3, 4, 5 - Arterial",
-                                  FACTYPE == 4 ~ "3, 4, 5 - Arterial",
-                                  FACTYPE == 5 ~ "3, 4, 5 - Arterial",
-                                  FACTYPE == 6 ~ "6, 7 - Collector",
-                                  FACTYPE == 7 ~ "6, 7 - Collector",
-                                  FACTYPE == 8 ~ "8 - Local",
-                                  FACTYPE == 9 ~ "9, 10 - Ramp",
-                                  FACTYPE == 10 ~ "9, 10 - Ramp",))
+  mutate(FacilityType = case_when(FACTYPE == 1 ~ "Freeway",
+                                  FACTYPE == 2 ~ "Freeway",
+                                  FACTYPE == 3 ~ "Arterial",
+                                  FACTYPE == 4 ~ "Arterial",
+                                  FACTYPE == 5 ~ "Arterial",
+                                  FACTYPE == 6 ~ "Collector",
+                                  FACTYPE == 7 ~ "Collector",
+                                  FACTYPE == 8 ~ "Local",
+                                  FACTYPE == 9 ~ "Ramp",
+                                  FACTYPE == 10 ~ "Ramp",))
 
-ggplot(base_total) +
-  aes(x = TOTAL_VOL, y = cov, color = FacilityType) +
-  geom_point(shape = "circle", size = 1.5, alpha = 0.35) +
-  theme_linedraw() + scale_y_log10() +
-  labs(x = "Total Link Volume",
-       y = "log(Coefficient of Variation)",
-       color = "Facility Type")
-```
-
-Variation among a link can also be visualized with a density plot of the total volume across all iterations. In Figure \@ref(fig:densityplots) there are three links total volume shown each with different facility types. The green dashed lines are the links measured AAWDT value, and the red dashed lines are the base scenario total volume value. These plots show that across each facility type with an AAWDT value, the variance in total volume is within the range of uncertainty already expected within the model. Since the AAWDT is so different from the Total Volume value, the uncertainty lies more within the model, than within the change in parameter values.
-
-```{r densityplots, warning = FALSE, echo = FALSE, message = FALSE, fig.align="center", out.width = "75%", results='asis', fig.cap = "Total Volume Density for an Individual Link by Facility Type"}
-density <- networks %>%
-  filter(link %in% c("2496_2546", "3709_3701", "4575_4545")) %>%
-  mutate(NAME = case_when(link == "2496_2546" ~ "Freeway Link",
-                          link == "3709_3701" ~ "Arterial Link",
-                          link == "4575_4545" ~ "Local Link"))
-
-value <- density %>%
-  filter(fileName == "BASE")
-
-density %>%
- ggplot() +
-  aes(x = TOTAL_VOL) +
-  geom_density(adjust = 1L, fill = "gray") +
-  geom_vline(data = value, mapping = aes(xintercept = TOTAL_VOL), linetype = "dashed", color = "red") +
-  geom_vline(data = value, mapping = aes(xintercept = AAWDT), linetype = "dashed", color = "green") +
-  theme_linedraw() +
-  facet_wrap(~ NAME, scales = "free", ncol = 1) +
-  labs(x = "Total Link Volume")
-```
-
-Figure \@ref(fig:networksd) displays both standard deviation, and the corresponding average volume amoung iterations on each link. This shows that there is a higher standard deviation on roads with high volumes, but a change in 600 vehicles on a road with 40,000 daily volume is minuscule. That is only a 1% variation in volume which is insignificant.
-
-```{r networksd, warning = FALSE, echo = FALSE, message = FALSE, fig.align="center", out.width = "75%", results='hide', fig.keep='all', fig.cap = "Standard Deviation of Total Volume"}
 shape <- st_read("data/sensitivity_out/BASE_LOADED.shp", crs = 4326)
 
 modified_shp <- shape %>%
@@ -209,38 +199,106 @@ ggplot() +
   theme(legend.position = "left")
 ```
 
-Another way to  visualize changes among each iteration is to look at how mode choices change. Figure \@ref(fig:modechoicetrips) shows that for home based work trips by each origin, the variance among each mode is less than 20%, and that transit varies the most.
+The highway assignment results can be grouped by facility type to show how the coefficient of variation compares to link volume. Figure \@ref(fig:totalvolume) shows the coefficient of variation for the daily volume assigned to each network link, across the 100 draws, plotted against the mean forecasted link volume for each link. The results suggest that for high-volume roads such as major arterials and freeways, the coefficient of variation converges to approximately 0.01, or about 1% of the road’s total forecasted volume. For lower-volume links, the coefficient of variation is more widely distributed, with some local roads and small collectors having considerably higher values. Some links in the model show no variation at all; these are presumably links near the edges of the model region where the only traffic is to and from external zones, trips which were held constant in this framework. 
 
-```{r modechoicetrips, warning = FALSE, echo = FALSE, message = FALSE, fig.align="center", out.width = "75%", results='asis', fig.cap = "Origin Desnity for Coefficient of Variation by Mode for HBW Trips"}
-tar_load(hbw_trips)
+```{r totalvolume, echo = FALSE, warning = FALSE, fig.cap = "Coefficient of variation in daily volume links.", out.width = "80%", fig.align="center"}
+tar_load(networks)
 
-hbw_mc <- hbw_trips
+base <- read.dbf("data/sensitivity_out/BASE_LOADED.DBF") %>%
+  mutate(link = paste(A, B, sep = "_"))
 
-hbw_mc[is.na(hbw_mc)] <- 0
-  
-hbw_mc2 <- hbw_mc %>%  
-group_by(origin, draw) %>%
-  summarize(Drive = sum(DA),
-            Transit = sum(WLB),
-            NonMotor = sum(NOM))
+## Total Volume
+links_total <- networks %>%
+  group_by(link) %>%
+  summarize(sd = sd(TOTAL_VOL),
+            mean = mean(TOTAL_VOL))
 
-hbw_mc_cov <- hbw_mc2 %>%
-  group_by(origin) %>%
-  summarise(cov_Drive   =   sd(Drive)/mean(Drive),
-            cov_Transit =   sd(Transit)/mean(Transit),
-            cov_NonMotor =  sd(NonMotor)/mean(NonMotor)) %>%
-  pivot_longer(cols = c("cov_Drive", "cov_Transit", "cov_NonMotor"), names_to = "mode", values_to = "cov")
+base_total <- merge(base, links_total, by = "link") %>%
+  mutate(cov = sd/mean) %>%
+  filter(FACTYPE < 11, mean >0 ) %>%
+  mutate(FacilityType = case_when(FACTYPE == 1 ~ "Freeway",
+                                  FACTYPE == 2 ~ "Freeway",
+                                  FACTYPE == 3 ~ "Arterial",
+                                  FACTYPE == 4 ~ "Arterial",
+                                  FACTYPE == 5 ~ "Arterial",
+                                  FACTYPE == 6 ~ "Collector",
+                                  FACTYPE == 7 ~ "Collector",
+                                  FACTYPE == 8 ~ "Local",
+                                  FACTYPE == 9 ~ "Ramp",
+                                  FACTYPE == 10 ~ "Ramp",))
 
-hbw_mc_cov %>%
-ggplot() +
-  aes(x = cov, fill = mode, group = mode) +
-  geom_density(adjust = 1L, alpha = 0.5) +
-  scale_fill_hue(direction = 1) +
-  theme_linedraw() +
-  labs(x = "Coefficient of Variation",
-       y = "Density",
-       fill = "Mode")
+ggplot(base_total) +
+  aes(x = TOTAL_VOL, y = cov, color = FacilityType) +
+  geom_point(shape = "circle", size = 1.5, alpha = 0.35) +
+  theme_bw() + scale_y_log10() +
+  labs(x = "Total Link Volume",
+       y = "log(Coefficient of Variation)",
+       color = "Facility Type")
 ```
 
+Variation among a link can also be visualized with a density plot of the total volume across all iterations, as shown in Figure \@ref(fig:densityplots). In this plot, the density of forecasted volumes in three randomly selected links in each of the freeway, collector, and arterial functional types are plotted alongside the baseline forecast and the AAWDT measured by the Virginia Department of Transportation, and to which the model estimates were calibrated. In all cases, the error or uncertainty in the forecast is considerably narrower than the error inherent in the model construction, as evidenced by the fact that the AAWDT target value is well outside the bell curve created the statistically varied simulation forecasts. 
+
+As expected from using the base parameter values as the mean of the LHS parameter sampling, the base results are at or near the median of the statistical density for each link’s volume. But it is notable that the estimated volumes are not perfectly, normally distributed as might be naively expected. In this case, the combined effects of the mode and destination choice parameter sampling appear to be constrained by the geographic specificity of the RVTPO model network: even when the demand for trips changes between zone pairs, the realities of the highway capacity, volume-delay, and static user equilibrium procedures may be limiting the possibilities for forecasted highway volumes. 
+
+```{r densityplots, warning = FALSE, echo = FALSE, message = FALSE, fig.align="center", results='asis', fig.cap = "Density plot of forecasted volume on selected links, with default parameter results marked in red, and AAWDT values in green.", fig.env= "sidewaysfigure"}
+set.seed(109)
+
+tar_load(networks)
+
+freeway_links <- networks %>%
+  filter(AAWDT > 0) %>%
+  filter(FACTYPE < 3) %>%
+  group_by(link) %>%
+  slice(1) %>%
+  ungroup() %>%
+  sample_n(3) %>%
+  pull(link) 
+
+arterial_links <- networks %>%
+  filter(AAWDT > 0) %>%
+  filter(FACTYPE > 2) %>%
+  filter(FACTYPE < 6) %>%
+  group_by(link) %>%
+  slice(1) %>%
+  ungroup() %>%
+  sample_n(3) %>%
+  pull(link) 
+
+collector_links <- networks %>%
+  filter(AAWDT > 0) %>%
+  filter(FACTYPE > 5) %>%
+  group_by(link) %>%
+  slice(1) %>%
+  ungroup() %>%
+  sample_n(3) %>%
+  pull(link) 
+
+these_links <- c(freeway_links, arterial_links, collector_links )
+
+density <- networks %>%
+  filter(link %in% these_links)
+
+value <- density %>%
+  filter(fileName == "BASE")
+
+fac_density <- density %>%
+   mutate(FacilityType = case_when(FACTYPE == 1 ~ "Freeway",
+                                  FACTYPE == 2 ~ "Freeway",
+                                  FACTYPE == 3 ~ "Arterial",
+                                  FACTYPE == 4 ~ "Arterial",
+                                  FACTYPE == 5 ~ "Arterial",
+                                  FACTYPE == 6 ~ "Collector",
+                                  FACTYPE == 7 ~ "Collector"))
+
+ ggplot() +
+  geom_density(data = fac_density, mapping = aes(x = TOTAL_VOL, fill = FacilityType), alpha = 0.5) +
+  geom_vline(data = value, mapping = aes(xintercept = TOTAL_VOL), linetype = "dashed", color = "red") +
+  geom_vline(data = value, mapping = aes(xintercept = AAWDT), linetype = "dashed", color = "green") +
+  theme_bw() +
+  facet_wrap(vars(link), scales = "free") +
+  labs(x = "Total Link Volume")
+```
 
 ## Summary
+
+The uncertainty and variance present in the model results are overall smaller than the variability introduced to the model through the parameters. Auto trips are more certain than transit or non-motorized trips, regardless of the amount of trips in a given zone. When there is only two modes available auto trips are even more certain. Higher volume roads have greater certainty than lower volume ones. Also, uncertainty that exists within the first three steps of the model appears to be corrected by the limitations of the highway network assignment.
