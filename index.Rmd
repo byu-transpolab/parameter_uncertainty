@@ -1,6 +1,7 @@
 ---
 title: |
-  | Evaluating Parameter Uncertainty in Transportation Demand Models
+  | Evaluating Parameter Uncertainty in Transportation 
+  | Demand Models
 # Your thesis title should be inverted pyramid-shaped, with the longest
 # line on top and shorter lines below. Add a new line as tab-|-space-Words
 author: 'Natalie Mae Gray'

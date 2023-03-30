@@ -50,7 +50,9 @@ generate_mc_coeff <- function(purpose, mc_coeff, mc_const, ndraws){
                             "ccost" = coeff_cost, 
                             "autocost" = auto_cost, 
                             "walk1" = coeff_walk1,
-                            "walk2" = coeff_walk2)
+                            "walk2" = coeff_walk2,
+                            "k_nmot" = k_nmot,
+                            "k_trn" = k_trn)
 
   #rand
   rand_coeffs <-lapply(1:ndraws, function(i){
@@ -58,7 +60,9 @@ generate_mc_coeff <- function(purpose, mc_coeff, mc_const, ndraws){
          "ccost" = rnorm(1, coeff_cost,   abs(0.10*coeff_cost)), 
          "autocost" = rnorm(1, auto_cost, abs(0.10*auto_cost)), 
          "walk1" = rnorm(1, coeff_walk1,  abs(0.10*coeff_walk1)), 
-         "walk2" = rnorm(1, coeff_walk2,  abs(0.10*coeff_walk2)))
+         "walk2" = rnorm(1, coeff_walk2,  abs(0.10*coeff_walk2)),
+         "k_nmot" = k_nmot,
+         "k_trn" = k_trn)
     })
   
   
@@ -75,7 +79,9 @@ generate_mc_coeff <- function(purpose, mc_coeff, mc_const, ndraws){
          "ccost" = X[i,2], 
          "autocost" = X[i,3], 
          "walk1" = X[i,4],
-         "walk2" = X[i,5])
+         "walk2" = X[i,5],
+         "k_nmot" = k_nmot,
+         "k_trn" = k_trn)
     })
   
   mc_coeff_list <- list()
@@ -144,8 +150,8 @@ mc_logsum <- function(skims, coeff_list){
   auto_cost <- mc_coeffs$autocost
   coeff_walk1 <- mc_coeffs$walk1
   coeff_walk2 <- mc_coeffs$walk2
-  k_nmot <- 1.7602
-  k_trn <- -0.514
+  k_nmot <- mc_coeffs$k_nmot
+  k_trn <- mc_coeffs$k_trn
 
   mode_choice <- skims %>%
     mutate(drive_utility = (coeff_ivtt*auto)+(coeff_cost*auto_cost*DIST),
@@ -170,6 +176,7 @@ dc_utility <- function(mc_logsum, dc_coeffs, land_use, skims){
   c_off_emp  <- dc_coeffs$off_emp
   c_oth_emp  <- dc_coeffs$oth_emp
   c_ret_emp  <- dc_coeffs$ret_emp
+  c_off_oth_emp <- dc_coeffs$oth_off
   c_lsum     <- 1
   
   tothh   <- land_use$HH
@@ -178,7 +185,7 @@ dc_utility <- function(mc_logsum, dc_coeffs, land_use, skims){
   allemp  <- land_use$EMP
   
   sizeterm <- tibble(destination = 1:nrow(land_use),
-                     sizeterm = coeff_hh*tothh  + c_off_emp*offiemp + c_ret_emp*retemp + c_oth_emp*(allemp - offiemp - retemp)) %>%
+                     sizeterm = coeff_hh*tothh  + c_off_emp*offiemp + c_ret_emp*retemp + c_oth_emp*(allemp - offiemp - retemp) + c_off_oth_emp*(allemp - retemp))%>%
     mutate(log_sizeterm = ifelse(sizeterm > 0, log(sizeterm), 0))
   
   dc_utils <- mc_logsum %>%
@@ -346,6 +353,9 @@ total_trips <- function(productions, dc_probability, mc_probability){
 
 #write omx files - so you can use in cube
 omx_write <- function(hbw_tibble_file, hbo_tibble_file, nhb_tibble_file){
+  dir.create(file.path("~/Desktop/trips"))
+  dir.create(file.path("~/Desktop/trips/base"))
+  dir.create(file.path("~/Desktop/trips/base/Output"))
   folder <- "~/Desktop/trips"
   
   hbw_base_matrix <- hbw_tibble_file %>%
@@ -394,7 +404,7 @@ network_data <- function(folder){
     df$fileName <- str_extract(file, "(?<=data/sensitivity_out/).*(?=_LOADED.DBF)")
     return(df)
   }
-  
+
   combinedData <- files %>% 
     map_dfr(readDBF) %>%
     mutate(link = paste(A, B, sep = "_"))

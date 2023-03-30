@@ -116,15 +116,15 @@ data_targets <- list(
   tar_target(nhb_trips, total_trips(nhb_productions, nhb_dcprobability_tibble, nhb_mcprobability_tibble)),
 
   #write trips to omx
-  tar_target(omx_trips, omx_write(hbw_trips, hbo_trips, nhb_trips)),
+#  tar_target(omx_trips, omx_write(hbw_trips, hbo_trips, nhb_trips)),
 
-#  # plots by purpose
-#  tar_target(hbw_plots, tibbleplots(hbw_mclogsum_tibble, hbw_dcutility_tibble, hbw_dclogsum_tibble, hbw_mcprobability_tibble, hbw_dcprobability_tibble)),
-#  tar_target(hbo_plots, tibbleplots(hbo_mclogsum_tibble, hbo_dcutility_tibble, hbo_dclogsum_tibble, hbo_mcprobability_tibble, hbo_dcprobability_tibble)),
-#  tar_target(nhb_plots, tibbleplots(nhb_mclogsum_tibble, nhb_dcutility_tibble, nhb_dclogsum_tibble, nhb_mcprobability_tibble, nhb_dcprobability_tibble)),
-#
-#  #network data
-#  tar_target(networks, network_data("data/sensitivity_out")),
+  # plots by purpose
+  tar_target(hbw_plots, tibbleplots(hbw_mclogsum_tibble, hbw_dcutility_tibble, hbw_dclogsum_tibble, hbw_mcprobability_tibble, hbw_dcprobability_tibble)),
+  tar_target(hbo_plots, tibbleplots(hbo_mclogsum_tibble, hbo_dcutility_tibble, hbo_dclogsum_tibble, hbo_mcprobability_tibble, hbo_dcprobability_tibble)),
+  tar_target(nhb_plots, tibbleplots(nhb_mclogsum_tibble, nhb_dcutility_tibble, nhb_dclogsum_tibble, nhb_mcprobability_tibble, nhb_dcprobability_tibble)),
+
+  #network data
+  tar_target(networks, network_data("data/sensitivity_out")),
 
 
 
