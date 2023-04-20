@@ -53,7 +53,7 @@ data_targets <- list(
   tar_target(hbo_mc_coeff_lists_100, generate_mc_coeff(HBO, mc_coeff, mc_const, 100)), 
   tar_target(nhb_mc_coeff_lists_100, generate_mc_coeff(NHB, mc_coeff, mc_const, 100)),
   
-  tar_target(hbw_mc_coeff_lists_600, generate_mc_coeff(HBW, mc_coeff, mc_const, 600)),
+  tar_target(hbw_mc_coeff_list__600, generate_mc_coeff(HBW, mc_coeff, mc_const, 600)),
   tar_target(hbo_mc_coeff_lists_600, generate_mc_coeff(HBO, mc_coeff, mc_const, 600)), 
   tar_target(nhb_mc_coeff_lists_600, generate_mc_coeff(NHB, mc_coeff, mc_const, 600)),
   
@@ -75,7 +75,7 @@ data_targets <- list(
   tar_target(hbo_full_loop_100, full_loop(skims, hbo_mc_coeff_lists_100, hbo_dc_coeff_lists_100, land_use, 100)),
   tar_target(nhb_full_loop_100, full_loop(skims, nhb_mc_coeff_lists_100, nhb_dc_coeff_lists_100, land_use, 100)),
   
-  tar_target(hbw_full_loop_600, full_loop(skims, hbw_mc_coeff_lists_600, hbw_dc_coeff_lists_600, land_use, 600)),
+  tar_target(hbw_full_loop_600, full_loop(skims, hbw_mc_coeff_list__600, hbw_dc_coeff_lists_600, land_use, 600)),
   tar_target(hbo_full_loop_600, full_loop(skims, hbo_mc_coeff_lists_600, hbo_dc_coeff_lists_600, land_use, 600)),
   tar_target(nhb_full_loop_600, full_loop(skims, nhb_mc_coeff_lists_600, nhb_dc_coeff_lists_600, land_use, 600)),
 

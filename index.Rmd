@@ -6,7 +6,7 @@ title: |
 # line on top and shorter lines below. Add a new line as tab-|-space-Words
 author: 'Natalie Mae Gray'
 # This is the date of graduation
-date: 'April 2023'
+date: 'June 2023'
 committeechair: Gregory S. Macfarlane
 committeemembers: 
   - name: Grant G. Schultz
@@ -23,17 +23,13 @@ site: bookdown::bookdown_site
 
 # Note that a tab is needed on the line after the `|`.
 abstract: |
-  ***NEED*** The abstract of a thesis should describe the
-  motivation, objective, overall results, and central findings of the thesis.
-  It may have multiple paragraphs if necessary.
+  The inherent uncertainty in travel forecasting models — arising from errors in input data, parameter   estimation, or model formulation — is receiving increasing attention from the scholarly and practicing community. In this research, we investigate the variance in forecasted traffic volumes resulting from varying the mode and destination choice parameters in an advanced trip-based travel demand model. Using Latin hypercube sampling to construct several hundred combinations of parameters across the plausible parameter space, we introduce substantial changes to mode and destination choice logsums and probabilities. However, the aggregate effects of of these changes on forecasted traffic volumes is small, with a variance of approximately 1 percent on high-volume facilities.
 
   
 acknowledgments: |
-  ***NEED*** Students should acknowledge funding sources. They may also use the
-  acknowledgment page to express appreciation for the committee members, friends
-  or family who provided assistance in research, writing or technical aspects of
-  the dissertation, thesis or selected project. Acknowledgements should be simple
-  and in good taste.
+  I would like to extend my deepest appreciation to my Advisor, Dr. Gregory S. Macfarlane, whose guidance and support has been invaluable throughout this research. This project would not have been possibe without him. He inspired the research topic, funded the work, and encouraged me throughout the entire process. Dr. Macfarlane has been a key component to my academic success, and I am grateful for all that he has done to support my education and my personal life.
+  A huge thank you to the professors on my graduate committee, Dr. Grant G. Schultz and Dr. Daniel P. Ames for their efforts in this project as well. I would also like to express my thanks to each of the other professors I have had the privilege to learn from throughout my schooling.
+  I would like to also extend my sincere thanks to my family and friends who have supported me throughout my schooling. I could not have accomplished any of this without the support of my mom Stacy Gray, my husband Chase Gibbons, my siblings, my grandparents, my in-laws and the Pettys. I would also like to thank my friends and peers, Max Barnes, Sophie Tolman, Calvin Sandberg, Kayla Keiser, and Emma Stucki for their invaluable friendship, for their support, for their calming conversations, and for helping me to succeed in my goals and life endeavors thus far.
 
   
 # Specify the location of the bibliography below
