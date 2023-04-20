@@ -269,9 +269,10 @@ pull_tibbles <- function(full_list, data_table){
 }
 
 cumvar <- function (x, sd = TRUE) {
-  x <- x - x[sample.int(length(x), 1)]  ## see Remark 2 below
+  # x <- x - x[sample.int(length(x), 1)]  
   n <- seq_along(x)
-  v <- (cumsum(x ^ 2) - cumsum(x) ^ 2 / n) / (n - 1)
+  m <- cummean(x)
+  v <- cumsum((x - m)^ 2) / (n - 1)
   if (sd) v <- sqrt(v)
   v
 }
