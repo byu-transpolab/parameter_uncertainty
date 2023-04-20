@@ -7,30 +7,22 @@ lapply(some_packages, library, character.only=TRUE)
 
 ## Overview
 
-This section describes the process by which a transportation demand model has been created, and how each of the standard four steps were developed for the purposes of this analysis. It also includes the methods for how uncertainty would be evaluated. Two common methods of parameter sampling are Monte Carlo and Latin hypercube sampling. These methods are described and a decision is made for how to use them to evaluate model uncertainty.
+This section describes the process by which a transportation demand model has been created and developed for the purposes of this uncertainty analysis. A method for how to evaluate uncertainty was also described and a decision is made for how to use them to evaluate model uncertainty.
 
-## Transportation Demand Model
+## Model Design
 
-To examine the effects of parameter input sensitivity, we developed a trip-based travel model with four steps:
+To examine the effects of parameter input sensitivity, we developed a trip-based travel demand model. The model was developed from the Roanoke Valley Transportation Planning Organization [(RVTPO)](https://github.com/xinwangvdot/rvtpo) Model. The RVTPO model provides an ideal testing environment for this research because it uses an integrated mode and destination choice framework common in more advanced trip-based models. At the same time, its small size (approximately 215 zones) means the entire model runs in a few minutes allowing for efficient testing of multiple model runs. 
 
-1.  trip generation,
-2.  trip distribution,
-3.  mode choice, and
-4.  route assignment.
+The total passenger trips $T$ traveling from zone $i$ to zone $j$ on the highway in a period $t$ is
+\begin{equation}
+T_{ijt} = P_i * \mathcal{P}_{\mathrm{auto}}(\beta, C_{ijt}) * \mathcal{P}_j(\gamma, A_j, MCLS_{ijt}) * \Delta_t
+(\#eq:trips)
+\end{equation}
+where $P$ is the productions at zone $i$; $\mathcal{P}_{\mathrm{car}}$ is the car mode choice probability determined by utility parameters $\beta$ and the travel costs $C$ between $i$ and $j$ at time period $t$; $\mathcal{P}_{j}$ is the destination choice probability of choosing destination $j$ given the utility parameters $\gamma$, attractions $A$, and the impedance as the mode choice model logsum $MCLS_{ijt}$. A time-of-day and direction factor $\Delta$ finalizes the total assigned trips. 
 
-These steps were developed from the Roanoke Valley Transportation Planning Organization [RVTPO](https://github.com/xinwangvdot/rvtpo) Model. The RVTPO model provides an ideal testing environment for this research because it uses an integrated mode and destination choice framework common in more advanced trip-based models. At the same time, its small size (approximately 215 zones) means the entire model runs in a few minutes allowing for efficient testing of multiple model runs. Each step of the model will be described in detail below. 
+The productions $P_i$, and attractions $A_j$ were extracted from the RVTPO Model and held constant. The attractions are determined from the socioeconomic (SE) data. The SE data included information by TAZ for the total population, number of households, total workers, and workers by employment type. The trip productions are organized by TAZ and trip purpose. The trip purposes used in this model are Home Based Work (HBW), Home Based Other (HBO), Non-Home Based (NHB), Commercial Vehicles (CV), Internal-External (IXXI), and External-External (XX). Only the first three are analysed, but all of the purposes are assigned to the network. CV, IXXI, and XX trips were kept fixed for this analysis. 
 
-### Trip Generation
-
-Trip generation, the first step, determines how many trips are produced in each zone, and how many trips are attracted to each zone. Socioeconomic (SE) data and trip productions were obtained from RVTPO. The SE data included information by TAZ for the total population, number of households, total workers, and workers by employment type. The trip productions are organized by TAZ and trip purpose. The three trip purposes used are Home Based Work (HBW), Home Based Other (HBO), and Non-Home Based (NHB). These trips are held constant. For this analysis these files were extracted from the RVTPO model, and used for the subsequent steps.
-
-### Trip Distribution
-
-The second step, trip distribution, used distance and travel time skims from RVTPO. Skims are either the time or distance to travel between zone pairs. The skims were simplified to three modes of transportation: auto, non-motorized, and transit. Travel time for auto used the single occupancy vehicle peak time, non-motorized travel time used the distance skim multiplied by a factor of average walking speed (3 mph), and transit time used the walk to bus peak time. These skims are the main input for the next step of the model.
-
-## Mode Choice
-
-Mode choice, the third step, estimates how many trips from $i$ to $j$ will happen on each available mode $k$. The mode by which a trip is made is determined by calculated utilities for the three modes. These utilities take inputs from parameter values and the time and distance skims previously described. The mode choice parameters (constants and coefficients) were obtained from the RVTPO model. These values are shown in Table \@ref(tab:choicecoeff).
+The two parameter vectors $\beta$ and $\gamma$ describe the mode choice model and destination choice model coefficients, respectively. Mode choice estimates how many trips from $i$ to $j$ will happen on each available mode $k$.This model analyses three modes of transportation: auto, non-motorized, and transit. The mode by which a trip is made is determined by calculated utilities for the three modes. These utilities take inputs from parameter values and time and distance skims $X$. Skims are either the time or distance to travel between zone pairs. Travel time for auto used the single occupancy vehicle peak time, non-motorized travel time used the distance skim multiplied by a factor of average walking speed (3 mph), and transit time used the walk to bus peak time. The mode choice parameters (constants and coefficients) were also obtained from the RVTPO model. These values are shown in Table \@ref(tab:choicecoeff).
 
 ```{r choicecoeff, echo = FALSE, results = 'axis', fig.cap = "Choice Model Parameters"}
 tar_load(mc_coeff)
@@ -41,7 +33,7 @@ coefficient_table <- bind_rows(
   mc_coeff |> mutate(model = "Mode choice") |> 
     select(Name, HBW, HBO, NHB) |> 
     filter(Name %in% c("CIVTT", "CCOST", "CWALK1", "AUTOCOST")) |> 
-    mutate(Name = c("In-vehicle travel time (minutes)", "Travel cost", "Walk distance", "Auto operating cost (cents/mile)")) |> 
+    mutate(Name = c("In-vehicle travel time", "Travel cost", "Walk distance", "Auto operating cost (cents/mile)")) |> 
     mutate(variable = c("$\\beta_{ivtt}$", "$\\beta_{tc}$", "$\\beta_{wd}$", "$\\beta_{ac}$")),
   mc_const |> mutate(model = "Mode choice") |> 
     select(Name, HBW, HBO, NHB) |> 
@@ -82,37 +74,28 @@ MCLS_{ij} = \ln(\sum_{k \in K} e^{U_{ijk}})
 
 This logsum value is then used as the primary impedance for a destination choice model. Destination choice estimates travel patterns based on mode choice, trip generators (workers and households), and destination choice parameters. These parameter values are also shown in Table \@ref(tab:choicecoeff).The destination choice utility is the primary impedance (mode choice logsum value) plus the natural log of the size term, where the sized term is calculated as:
 \begin{equation}
-A_j = \gamma_{hh} * X_{hh} + \gamma_{off} * X_{off} + \gamma_{ret} * X_{ret} + \gamma_{oth} * X_{oth} + \gamma_{oth+off} * X_{oth+off}
+A_j = \gamma_{hh} * \mathrm{HH} + \gamma_{off} * \mathrm{OFF} + \gamma_{ret} * \mathrm{RET} + \gamma_{oth} * \mathrm{OTH} + \gamma_{oth+off} * \mathrm{OFFOTH}
 (\#eq:dcsizeterm)
 \end{equation}
-The destination choice utility is then transformed into a destination choice logsum value with Equation \@ref(eq:dcls).
+HH is the total households in zone $j$. OFF, RET, and OTH are the workers in zone $j$ by employment type office, retail, and other respectively. The destination choice utility is then transformed into a destination choice logsum value with Equation \@ref(eq:dcls).
 \begin{equation}
 DCLS = \sum_{j \in J} e^{\ln(A_j) + 1* MCLS_{ijk}}
 (\#eq:dcls)
 \end{equation}
 
-The probability of both the mode choice and destination choice are calculated using the exponentiated utility divided by the corresponding logsum. These probabilities in conjunction with the trip productions can calculate the number of production-attraction (PA) trips between each zone by each mode and purpose. The auto trips are calculated by multiplying the probability of the destination by PA pair, the productions for each origin, and the probability of an auto mode choice by PA pair. This results in PA auto trips. The same process is followed for the other two modes. These PA trips are the input for the final step.
+The probability of both the mode choice and destination choice are calculated using the exponentiated utility divided by the corresponding logsum. These probabilities in conjunction with the trip productions can calculate the number of production-attraction (PA) trips between each zone by each mode and purpose. The auto trips are calculated by multiplying the probability of the destination by PA pair, the productions for each origin, and the probability of an auto mode choice by PA pair. This results in PA auto trips. The same process is followed for the other two modes. These PA trips are converted into origin destination (OD) trips by multiplying the trips by corresponding time of day (TOD) factors (see Equation \@ref(eq:trips)). These trips are calculated using Bentley's CUBE and the RVTPO model. The trips, by time period, are assigned to the highway network by the shortest path by time using free flow speed and with link capacity as a restriction.
 
-### Route Assignment
+## Uncertainty Design
 
-The final step, route assignment, estimates the traffic flows that will occur on each highway link. This step was ran using Bentley's CUBE and the RVTPO model. The PA trips that came from the previous model step are converted into origin destination (OD) trips by multiplying the trips by corresponding time of day (TOD) factors. OD trips are calculated for each time period (AM, PM, MD, NT, and Daily). The OD trips, by time period, are then assigned to the highway network by the shortest path by time using free flow speed and with link capacity as a restriction. This results with traffic volumes for each link within the network. The total passenger trips $T$ traveling from zone $i$ to zone $j$ on the highway in a period $t$ is therefore
-\begin{equation}
-T_{ijt} = P_i * \mathcal{P}_{\mathrm{auto}}(\beta, C_{ijt}) * \mathcal{P}_j(\gamma, A_j, MCLS_{ijt}) * \Delta_t
-(\#eq:trips)
-\end{equation}
-where $P$ is the productions at zone $i$; $\mathcal{P}_{\mathrm{car}}$ is the car mode choice probability determined by utility parameters $\beta$ and the travel costs $C$ between $i$ and $j$ at time period $t$; $\mathcal{P}_{j}$ is the destination choice probability of choosing destination $j$ given the utility parameters $\gamma$, attractions $A$, and the impedance as the mode choice model logsum $MCLS_{ijt}$. A time-of-day and direction factor $\Delta$ finalizes the total assigned trips.
+Within the mode and destination models there exists uncertainty within the parameters in Table \@ref(tab:choicecoeff). Sampling methods can take the defined uncertainty and choose potential parameter values within the possible range. Two common methods for parameter sampling include, Monte Carlo (MCS) simulation and Latin hypercube sampling (LHS). MC simulation draws independently from multiple distributions, while LHS makes draws that cover the parameter space more efficiently and can capture the joint distribution between two or more parameter values [@helton2003latin]. As a result, LHS can reduce the number of draws needed to fully re-create the statistical variance in a model, but the amount of reduction is unknown and may not be universal to all problems [@yang2013sensitivity].
 
-## Parameter Sampling
-
-There are two popular methods of value sampling, Monte Carlo simulation and Latin hypercube sampling. Monte Carlo simulation draws independently from multiple distributions, while Latin hypercube sampling makes draws that cover the parameter space more efficiently and can capture the joint distribution between two or more parameter values [@helton2003latin]. As a result, Latin hypercube sampling can reduce the number of draws needed to fully re-create the statistical variance in a model, but the amount of reduction is unknown and may not be universal to all problems [@yang2013sensitivity].
-
-With this four-step model, MC and LHS methods were used to determine the possible combinations of parameter variance. To identify a standard deviation for each parameter, a coefficient of variation was used. A set coefficient of variation of 0.10 was used for the four mode choice coefficients and the destination choice parameters. The mode choice constants were kept the same across all iterations. Literature had identified a coefficient of variation of 0.30, but for this analysis that caused an unrealistic value of time, and thus it was changed to be 0.10 [@zhao2002propagation]. The standard deviation was equal to 0.10 multiplied by the mean, where the mean values in this situation are the base scenario parameters (as identified in Table \@ref(tab:choicecoeff)).
+With the trip-based model described above, MC and LHS methods were used to develop alternative parameter sets to evaluate uncertainty. To identify a standard deviation for each parameter, a coefficient of variation was used. A set coefficient of variation of 0.10 was used for the four mode choice coefficients and the destination choice parameters. The mode choice constants were kept the same across all iterations. Literature had identified a coefficient of variation of 0.30, but for this analysis that caused an unrealistic value of time, and thus it was changed to be 0.10 [@zhao2002propagation]. Value of time is a function of $\beta_{ivtt}$ and $\beta_{tc}$ (VOT = $\frac{\beta_{ivtt}}{\beta_{tc}}*\frac{60}{100}$). Using a $c_v$ of 0.30 the VOT range was from 2 to 32 $\$$/hr, whereas using a $c_v$ of 0.10 the range was 6 to 14 $\$$/hr. The latter seemed more rational and thus a $c_v$ of 0.10 was used for our analysis. The standard deviation was equal to 0.10 multiplied by the mean, where the mean values in this situation are the base scenario parameters (as identified in Table \@ref(tab:choicecoeff)).
 
 The MC random sampling uses the R function of `rnorm`. LHS uses the `lhs` package in R. Since this package only chooses variables on a zero to one scale, the values given use a function to put the random sampling on the right scale needed for the given parameter. The full code for both methods can be found in a public [GitHub repository](https://github.com/natmaegray/sensitivity_thesis). 100 and 600 draws of random samples for both methods are generated. With these generated parameters, the mode choice model step was run for every set of input parameters for each purpose. The mean logsum value for each run was determined to compare each continuous draw. This allowed us to see how many iterations of which sampling type would be sufficient to show a full range of possible outcomes.
 
-The parameters generated were compared for both sampling methods. Figure \@ref(fig:parameter100) shows the distributions for the HBW parameters when using 100 draws, and Figure \@ref(fig:parameter600) shows how that changes when using 600 draws. These distributions show that LHS gives normally distributed parameters with fewer draws than MC sampling. At 100 draws LHS shows a nearly perfect normal distribution, where there are some discrepancies for the MC generated parameters. Without looking at the mode choice results, these Figures show that LHS is likely to estimate the full variance of the results with much fewer draws.
+The parameters generated were compared for both sampling methods. Figure \@ref(fig:parameter100) shows the distributions for the HBW parameters when using 100 draws, and Figure \@ref(fig:parameter600) shows how that changes when using 600 draws. These distributions show that LHS gives normally distributed parameters with fewer draws than MC sampling: at 100 draws LHS shows a nearly perfect normal distribution, where there are some discrepancies for the MC generated parameters. These Figures show that LHS is likely to estimate the full variance of the results with much fewer draws.
 
-```{r parameter100, echo = FALSE, fig.align="center", results='asis', fig.cap = "HBW distributions for input parameters with 100 draws.",  out.width = "80%"}
+```{r parameter100, echo = FALSE, fig.align="center", results='asis', fig.cap = "Sampled mode and destination choice parameters for HBW trip purpose, 100 draws.",  out.width = "80%"}
 tar_load(hbw_mc_coeff_lists_100)
 list100 <- hbw_mc_coeff_lists_100
 
@@ -141,7 +124,7 @@ Z %>%
   facet_wrap(vars(name), scales = "free", labeller = as_labeller(facet_names))
 ```
 
-```{r parameter600, echo = FALSE, fig.align="center", results='asis', fig.cap = "HBW distributions for input parameters with 600 draws.",  out.width = "80%"}
+```{r parameter600, echo = FALSE, fig.align="center", results='asis', fig.cap = "Sampled mode and destination choice parameters for HBW trip purpose, 600 draws.",  out.width = "80%"}
 tar_load(hbw_mc_coeff_lists_600)
 list600 <- hbw_mc_coeff_lists_600
 
@@ -170,9 +153,19 @@ Z %>%
   facet_wrap(vars(name), scales = "free", labeller = as_labeller(facet_names))
 ```
 
-To determine if LHS is effective at a reasonable amount of iterations, the standard deviation was calculated for each additional draw. This value shows how much the mean mode choice logsum value for all zones can vary. When the standard deviation for the draws stabilizes, that shows that the amount of generated parameters has captured all of the possible variances of the results. This can be visualized for each purpose. The HBW results for the cumulative standard deviation are shown in \@ref(fig:hbwstats). The results for the other two purposes (HBO and NHB) are in \@ref(fig:hbostats) and \@ref(fig:nhbstats) respectively. 
+To determine if LHS is effective at a reasonable amount of iterations, the cumulative mean and the cumulative standard deviation of the mean mode choice logsum value (MMCLS) for every zone (see Equation \@ref(eq:mcls)) was calculated for each additional draw for both sampling methods. The MMCLS, $x$, was used as a measure of outcome possibilities as a single value to compare by across all iterations. The cumulative mean is calculated using Equation \@ref(eq:cmclsmean), and the cumulative standard deviation is calculated using Equation \@ref(eq:sdi).
+\begin{equation}
+m_i = \frac{x_1 + ... + x_i}{n}
+(\#eq:cmclsmean)
+\end{equation}
+\begin{equation}
+SD_i = \sqrt{\frac{\sum (x_i - m_i)^2 }{n-1}}
+(\#eq:sdi)
+\end{equation}
+The cumulative mean shows how the average mode choice logsum stabilizes across each iteration, and the cumulative standard deviation is used to show the 95% confidence interval of that mean. When the cumulative mean for the draws stabilizes, that shows that the amount of generated parameters has captured the possible variance of the results. This can be visualized for each purpose. The HBW results for the cumulative mean are shown in Figure \@ref(fig:hbwcm). The results for the other two purposes (HBO and NHB) are in Figure \@ref(fig:hbostats) and Figure \@ref(fig:nhbstats) respectively.
 
-```{r hbwstats, warning = FALSE, echo = FALSE, message = FALSE, fig.align="center", results='asis', fig.cap = "HBW mean logsum standard variation with 100 and 600 draws.",  out.width = "80%"}
+```{r hbwcm, warning = FALSE, echo = FALSE, message = FALSE, fig.align="center", results='asis', fig.cap = "HBW mean mode choice logsum cumulative mean with 100 and 600 draws and 95 percent CI bands.",  out.width = "80%"}
+
 tar_load(hbw_stats_100)
 tar_load(hbw_stats_600)
 hbw_stats <- bind_rows(hbw_stats_100, hbw_stats_600, .id = "ndraws") %>%
@@ -187,7 +180,7 @@ hbw_stats %>%
     geom_line(size = 0.5) +
 #    ylim(0.025, 0.15) +
     labs(x = "Draw", 
-         y = "Cumulative Standard Deviation",
+         y = "Cumulative Mean",
          color = "method") +
     scale_color_hue(direction = 1) +
     theme_bw() +
@@ -195,7 +188,7 @@ hbw_stats %>%
     facet_wrap(vars(ndraws), scales = "free_x")
 ```
 
-```{r hbostats, warning = FALSE, echo = FALSE, message = FALSE, fig.align="center", results='asis', fig.cap = "HBO mean logsum standard variation with 100 and 600 draws.",  out.width = "80%"}
+```{r hbostats, warning = FALSE, echo = FALSE, message = FALSE, fig.align="center", results='asis', fig.cap = "HBO mean mode choice logsum cumulative mean with 100 and 600 draws and 95 percent CI bands.",  out.width = "80%"}
 tar_load(hbo_stats_100)
 tar_load(hbo_stats_600)
 hbo_stats <- bind_rows(hbo_stats_100, hbo_stats_600, .id = "ndraws") %>%
@@ -210,7 +203,7 @@ hbo_stats %>%
     geom_line(size = 0.5) +
 #    ylim(0.025, 0.15) +
     labs(x = "Draw", 
-         y = "Cumulative Standard Deviation",
+         y = "Cumulative Mean",
          color = "method") +
     scale_color_hue(direction = 1) +
     theme_bw() +
@@ -218,7 +211,7 @@ hbo_stats %>%
     facet_wrap(vars(ndraws), scales = "free_x")
 ```
 
-```{r nhbstats, warning = FALSE, echo = FALSE, message = FALSE, fig.align="center",  results='asis', fig.cap = "NHB mean logsum standard variation with 100 and 600 draws.", out.width = "80%"}
+```{r nhbstats, warning = FALSE, echo = FALSE, message = FALSE, fig.align="center", results='asis', fig.cap = "NHB mean mode choice logsum cumulative mean with 100 and 600 draws and 95 percent CI bands.", out.width = "80%"}
 tar_load(nhb_stats_100)
 tar_load(nhb_stats_600)
 nhb_stats <- bind_rows(nhb_stats_100, nhb_stats_600, .id = "ndraws") %>%
@@ -233,7 +226,7 @@ nhb_stats %>%
     geom_line(size = 0.5) +
 #    ylim(0.025, 0.15) +
     labs(x = "Draw", 
-         y = "Cumulative Standard Deviation",
+         y = "Cumulative Mean",
          color = "method") +
     scale_color_hue(direction = 1) +
     theme_bw() +
@@ -241,8 +234,8 @@ nhb_stats %>%
     facet_wrap(vars(ndraws), scales = "free_x")
 ```
 
-For all three trip purposes, the LHS method had its standard deviation stabilized by 100 draws. The MC method had still not stabilized to the same extent after 600 draws. This shows us that Latin hypercube sampling greatly decreases the iterations needed to approximate random sampling methods. Since LHS captures the possible variance at a small enough amount of iterations, it can be used for large transportation demand models. From these results it was decided to use 100 LHS samples parameters to evaluate uncertainty within each step of the model.
+For all three trip purposes, both sampling methods had a stabilized mean by 100 draws. The LHS methods standard deviation ribbon was generally thinner than the MC method. From the narrowed cumulatove standard deviation, and that the parameter values are better normally distributed when using LHS, that method of sampling was used for the assignment analysis of the model. Since LHS captures the possible variance at a small enough amount of iterations, it can be used for large transportation demand models. From these results it was decided to use 100 LHS samples parameters to evaluate uncertainty within each step of the model.
 
 ## Summary
 
-A standard four-step model was created in R and CUBE to create trips, assign network volumes, and evaluate sampling methodologies. The four step model includes trip generation, trip distribution, mode and destination choice, and trip assignment. This model can be used to quantify and evaluate the uncertainty within the model using 100 draws of Latin hypercube sampling. 
+A trip-based model was created in R and CUBE to create trips, assign network volumes, and evaluate sampling methodologies. The four step model includes trip generation, trip distribution, mode and destination choice, and trip assignment. This model can be used to quantify and evaluate the uncertainty within the model using 100 draws of Latin hypercube sampling. 

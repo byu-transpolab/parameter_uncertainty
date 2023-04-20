@@ -1,17 +1,17 @@
 # Sensitivity Analysis Results
 
 ```{r , include = FALSE}
-some_packages <- c("tidyverse", "bookdown", "omxr", "nhts2017", "rgdal", "sf", "ggthemes", "lhs", "foreign", "imputeTS", "targets", "readxl", "knitr", "gridExtra", "ggspatial", "kableExtra")
+some_packages <- c("tidyverse", "bookdown", "omxr", "nhts2017", "rgdal", "sf", "ggthemes", "lhs", "foreign", "imputeTS", "targets", "readxl", "knitr", "gridExtra", "ggspatial", "kableExtra", "scales")
 lapply(some_packages, library, character.only=TRUE)
 ```
 
 ## Overview
 
-Each of the 100 parameter draws was applied to the RVTPO model, generating mode choice utilities, destination choice utilities, and trip matrices for each draw. The resulting uncertainty can then be quantified using these outputs, using trips by mode and link volume.
+Each of the 100 LHS parameter draws was applied to the RVTPO model, generating mode choice utilities, destination choice utilities, and trip matrices for each draw. The resulting uncertainty can then be quantified using the outputs from the trip-based model. This section will first look at the uncertainty of trips by mode, and how the mode split changes when the parameters vary. Then uncertainty will be quantified using the highway assigned trips, and how link volume changes across each draw. The results will then be summarized.
 
 ## Mode Choice Trips
 
-Uncertainty can first be visualized by looking at how mode choices change. The total number of trips by purpose are fixed, but varies among mode type. Table \@ref(tab:MCtrips) lists the base trip amount by mode and purpose. It also lists the the average number of trips across all 100 iterations, with the corresponding standard deviation and coefficient of variation. For HBW there are 103,320 auto trips. Across all 100 iterations there is a mean value of 103,298 trips with a standard deviation of 527.07. This results in a coefficient of variation of 0.0052 or 0.52% variation in the number of auto trips. The other modes of transportation and purposes are included. The results listed in the table show that the variation of the output trips - by mode and purpose - are less than the input variation (as all COVs are smaller than 0.10). This confirms previous research that the outcome variance is less than or near the parameters variance [@zhao2002propagation; @clay2005univariate]. Another notable finding that can be seen in Table \@ref(tab:MCtrips) is that there is greater confidence in auto trips than non-motorized or transit trips. In all three purposes that were evaluated, the coefficient of variation in auto trips are lower than transit or non-motorized trips, meaning that there is greater confidence in the models accuracy to generate auto trips. The input parameter variability has a smaller effect on auto trips than on trips on the other modes. 
+Uncertainty can be evaluated by looking at how mode choices change. The total number of trips by purpose are fixed, but the number of trips by each mode changes as a result of mode choice, combined with the availability of modes in the travel time skims. Table \@ref(tab:MCtrips) lists the base trip amount by mode and purpose. It also lists the the average number of trips across all 100 iterations, with the corresponding standard deviation and coefficient of variation. For HBW trips there are 103,320 auto trips. Across all 100 iterations there is a mean value of 103,298 trips with a standard deviation of 527.07. This results in a coefficient of variation of 0.0052 or 0.52% variation in the number of auto trips. The other modes of transportation are included and we see similar patterns in HBO and NHB. The results listed in the table show that the variation of the output trips - by mode and purpose - are less than the input variation (as all $c_v$'s are smaller than 0.10). This confirms previous research that the outcome variance is less than or near the parameters variance [@zhao2002propagation; @clay2005univariate]. In all three purposes that were evaluated, the coefficient of variation in auto trips are lower than transit or non-motorized trips, meaning that there is greater confidence in the models accuracy to generate auto trips. The input parameter variability has a smaller effect on auto trips than on trips on the other modes. 
 
 ```{r MCtrips, warning = FALSE, echo = FALSE, message = FALSE, fig.align="center", results='asis'}
 tar_load(hbw_trips)
@@ -56,14 +56,14 @@ table <- data.frame(base, mean, sd) %>%
   select(c("mode", "base", "mean", "sd", "cov")) 
 
 kable(table, caption = "Coefficient of Variation of Trips by Mode", booktabs = TRUE, 
-      col.names = c("", "Base", "Mean", "SD", "COV"), digits = c(0, 0, 0, 2, 4), row.names = F) %>%
+      col.names = c("", "Base", "Mean", "SD", "$c_v$"), digits = c(0, 0, 0, 2, 4), row.names = F, escape = FALSE) %>%
   kable_styling() %>%
   pack_rows(index = c("HBW" = 3, "HBO" = 3, "NHB" = 3))
 ```
 
-The variation among mode choices can be visualized graphically using a density of a scaled change in trips by mode. Figure \@ref(fig:modechoicetrips) shows density plots for HBW trips by mode for twelve zones -- the zones are divided into three volume categories: low is less than 200 trips per zone, mid is 200 to 700 trips per zone, and top is greater than 700 trips per zone -- and four zones are randomly selected from each volume category. Zones that do not have any transit accessibility have been excluded. Those zones have very high density in auto trips as with the ability to choose transit was removed, the choice to choose auto was more certain. The zones included in Figure \@ref(fig:modechoicetrips) all have greater certainty in auto trips, as the change in trips across all 100 iterations is relatively small. This reinforces the previous claim that the model has more confidence in auto trips than the other modes. It is also important to note that the modes are correlated to each other. In zones with a greater confidence in one mode, the other modes are more confident as well. Since the number of trips by origin zone are held constant, when there is an increase in trips on one mode there must be a decrease in trips on one or both of the other modes. Also, the distribution of non-motorized trips is similar for every zone. Suggesting that generally, the most uncertain mode is non-motorized trips, which is also verified using Table \@ref(tab:MCtrips).
+The variation among mode choices can be visualized graphically using a density of a scaled change in trips by mode. Figure \@ref(fig:modechoicetrips) shows density plots for HBW trips by mode for twelve zones -- the zones are divided into three volume categories: low is less than 200 trips per zone, mid is 200 to 700 trips per zone, and top is greater than 700 trips per zone -- and four zones are randomly selected from each volume category. Zones that do not have any transit accessibility have been excluded. Those zones have very high density in auto trips as with the ability to choose transit was removed, the choice to choose auto was more certain. The zones included in Figure \@ref(fig:modechoicetrips) all have greater certainty in auto trips, as the change in trips across all 100 iterations is relatively small. This reinforces the previous claim that the model has more confidence in auto trips than the other modes. It is also important to note that the modes are correlated to each other. In zones with a greater confidence in one mode, the other modes are more confident as well. Since the number of trips by origin zone are held constant, when there is an increase in trips on one mode there must be a decrease in trips on one or both of the other modes. Also, the distribution of non-motorized trips is similar for every zone. Suggesting that generally, the most varriable mode is non-motorized trips, which is also verified using Table \@ref(tab:MCtrips).
 
-```{r modechoicetrips, warning = FALSE, echo = FALSE, message = FALSE, results='asis', fig.cap = "Trip desnity for coefficient of variation by mode for HBW trips.", fig.env= "sidewaysfigure", fig.align="center"}
+```{r modechoicetrips, warning = FALSE, echo = FALSE, message = FALSE, results='asis', fig.cap = "Trip desnity for coefficient of variation by mode for HBW trips.", fig.env= "sidewaysfigure", fig.align="center", fig.width=9}
 set.seed(1)
 
 tar_load(hbw_trips)
@@ -156,9 +156,9 @@ hbw_mc_v %>%
 
 ## Link Volume
 
-Another way to visualize uncertainty is by looking at how assigned link volume varies across iterations. Figure \@ref(fig:networksd) displays variation in forecasted link volume spatially. This shows that the links with the highest standard deviation in forecasted volume are high-volume roads including freeways and principal arterials where the majority of traffic is internal to the study region. Although these links have the largest standard deviation, when compared to the total volume of the road, the variation is in reality very small. A standard deviation of 400 vehicles on a road with 40,000 total vehicles corresponds to a small variation (1%).
+Highway volumes are the most commonly used output of a travel model. Uncertainty can additionally be evaluated by looking at how assigned link volume varies across iterations. Figure \@ref(fig:networksd) displays variation in forecasted link volume spatially. This shows that the links with the highest standard deviation in forecasted volume are high-volume roads including freeways and principal arterials where the majority of traffic is internal to the study region. Although these links have the largest standard deviation, when compared to the total volume of the road, the variation is in reality very small. A standard deviation of 400 vehicles on a road with 40,000 total vehicles corresponds to a small variation (1%).
 
-```{r networksd, warning = FALSE, echo = FALSE, message = FALSE, fig.align="center", results='hide', fig.keep='all', fig.cap = "Standard deviation in forecasted volume.", fig.env= "sidewaysfigure"}
+```{r networksd, warning = FALSE, echo = FALSE, message = FALSE, fig.align="center", results='hide', fig.keep='all', fig.cap = "Standard deviation in daily forecasted volume.", fig.env= "sidewaysfigure"}
 tar_load(networks)
 
 base <- read.dbf("data/sensitivity_out/BASE_LOADED.DBF") %>%
@@ -240,7 +240,7 @@ Variation among a link can also be visualized with a density plot of the total v
 
 As expected from using the base parameter values as the mean of the LHS parameter sampling, the base results are at or near the median of the statistical density for each link’s volume. But it is notable that the estimated volumes are not perfectly, normally distributed as might be naively expected. In this case, the combined effects of the mode and destination choice parameter sampling appear to be constrained by the geographic specificity of the RVTPO model network: even when the demand for trips changes between zone pairs, the realities of the highway capacity, volume-delay, and static user equilibrium procedures may be limiting the possibilities for forecasted highway volumes. 
 
-```{r densityplots, warning = FALSE, echo = FALSE, message = FALSE, fig.align="center", results='asis', fig.cap = "Density plot of forecasted volume on selected links, with default parameter results marked in red, and AAWDT values in green.", fig.env= "sidewaysfigure"}
+```{r densityplots, warning = FALSE, echo = FALSE, message = FALSE, fig.align="center", results='asis', fig.cap = "Density plot of forecasted volume on selected links, with default parameter results marked in red, and AAWDT values in green.", fig.env= "sidewaysfigure", fig.width=9}
 set.seed(109)
 
 tar_load(networks)
@@ -265,7 +265,7 @@ arterial_links <- networks %>%
   pull(link) 
 
 collector_links <- networks %>%
-  filter(AAWDT > 0) %>%
+  filter(AAWDT > 0, TOTAL_VOL > 0) %>%
   filter(FACTYPE > 5) %>%
   group_by(link) %>%
   slice(1) %>%
@@ -296,9 +296,10 @@ fac_density <- density %>%
   geom_vline(data = value, mapping = aes(xintercept = AAWDT), linetype = "dashed", color = "green") +
   theme_bw() +
   facet_wrap(vars(link), scales = "free") +
-  labs(x = "Total Link Volume")
+   scale_x_continuous(labels = function(x) {x/1000}) +
+  labs(x = "Total Link Volume (in 1000s of Vehicles)")
 ```
 
 ## Summary
 
-The uncertainty and variance present in the model results are overall smaller than the variability introduced to the model through the parameters. Auto trips are more certain than transit or non-motorized trips, regardless of the amount of trips in a given zone. When there is only two modes available auto trips are even more certain. Higher volume roads have greater certainty than lower volume ones. Also, uncertainty that exists within the first three steps of the model appears to be corrected by the limitations of the highway network assignment.
+The uncertainty and variance present in the model results are overall smaller than the variability introduced to the model through the parameters. Auto trips are have less variance than transit or non-motorized trips, regardless of the amount of trips in a given zone. When there is only two modes available auto trips have even lower variance. Higher volume roads have greater certainty than lower volume ones. Also, uncertainty that exists within the first three steps of the model appears to be corrected by the limitations of the highway network assignment. Overall there is a variance of approximately 1 percent in the model outputs, when a 1 percent variance was used for the parameter estimates.

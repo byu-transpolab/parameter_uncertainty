@@ -1,8 +1,6 @@
 # Introduction
 
-## Problem Statement
-
-The inherent accuracy and uncertainty in travel forecasting models is receiving increasing attention from the scholarly and practicing community. Given that such models are used in the allocation of billions of dollars of infrastructure financing each year, the financial risks for inaccurate or imprecise forecasts are high [@flyvbjerg2005accurate; @voulgaris2019crystal; @wu2021ensemble]. 
+The inherent accuracy and uncertainty in travel forecasting models is receiving increasing attention from the scholarly and practicing community [@trbaep50_2023]. Given that such models are used in the allocation of billions of dollars of infrastructure financing each year, the financial risks for inaccurate or imprecise forecasts are high [@flyvbjerg2005accurate; @voulgaris2019crystal; @wu2021ensemble]. 
 
 Transportation demand forecasting models, like other mathematical-statistical models, might be abstracted to the following basic form,
 \begin{equation}
@@ -10,15 +8,13 @@ y = f(X, \beta)
 \end{equation}
 where $y$ is the variable being predicted based on input data $X$, moderated through a specific functional form $f()$ and parameters $\beta$. Three sources of error may lead a forecast value $\hat{y}$ to differ from the “true” or “actual” value of $y$ [@rasouli2012uncertainty]:
 
-1. The input data $X$ might contain errors, due to inaccuracies in the base year, or an inaccurate projection of land use, petroleum price, or other key input variable. This was the primary issue identified by [@hoque2021estimating] in a historical analysis of the accuracy of travel forecasts.
+1. The input data $X$ might contain errors, due to inaccuracies in the base year, or an inaccurate projection of land use, petroleum price, or other key input variable. This was the primary issue identified by @hoque2021estimating in a historical analysis of the accuracy of travel forecasts.
 
-2. The model form $f()$ may be improperly specified. Variables that play a major role in travel behavior may not be included due to lack of information, or the unobserved error components may have a different correlation than was assumed during model development. A detailed description of specifying mode choice model variables and nesting of error structures is given by @koppelman2006self.
+2. The model form $f()$ may be improperly specified. Variables that play a major role in travel behavior may not be included due to lack of information, or the unobserved error components may have a different correlation than was assumed during model estimation. A detailed description of specifying mode choice model variables and nesting of error structures is given by @koppelman2006self.
 
 3. The parameter estimates $\hat{\beta}$ may have incorrect values. This may be because the parameters were estimated on an improperly specified model $f()$, or because the estimation dataset was improperly weighted.
 
-Of these potential sources of error, only the third is addressed in classical statistics. The standard errors of the model parameter estimates in a theoretical perspective address the uncertainty question to a great degree. Yet even this source of uncertainty has been largely ignored in transportation forecasts, and model development documentation often elides these values completely [@national2012travel]. @zhao2002propagation examined the effects of this parameter uncertainty in a contrived 25 zone trip-based model, but a systemic analysis of this uncertainty in a practical model is not common.
-
-## Objectives 
+Of these potential sources of error, only the third is addressed in classical statistics. The standard errors of the model parameter estimates in a theoretical perspective address the uncertainty question to a great degree. Yet even this source of uncertainty has been largely ignored in transportation forecasts, and model development documentation often elides these values completely. [@national2012travel] @zhao2002propagation, @yang2013sensitivity, and @manzo2015uncertainty examined the effects of this parameter uncertainty in contrived trip-based models, but a systemic analysis of this uncertainty in a practical model is not common.
 
 In this research, we investigate the uncertainty in traffic forecasts resulting from plausible uncertainty in an advanced trip-based transportation demand model. Using a Latin hypercube sampling (LHS) methodology, we simulate one hundred potential parameter sets for a combined mode and destination choice model in Roanoke, Virginia, USA. We then assign the resulting trip matrices to the highway network for the region and evaluate the PM and daily assigned traffic volumes alongside the variation in implied impedance and accessibility.
 
