@@ -113,14 +113,13 @@ div.csl-indent {
 <li class="chapter" data-level="3.1" data-path="model-design-and-methodology.html"><a href="model-design-and-methodology.html#overview"><i class="fa fa-check"></i><b>3.1</b> Overview</a></li>
 <li class="chapter" data-level="3.2" data-path="model-design-and-methodology.html"><a href="model-design-and-methodology.html#model-design"><i class="fa fa-check"></i><b>3.2</b> Model Design</a></li>
 <li class="chapter" data-level="3.3" data-path="model-design-and-methodology.html"><a href="model-design-and-methodology.html#uncertainty-design"><i class="fa fa-check"></i><b>3.3</b> Uncertainty Design</a></li>
-<li class="chapter" data-level="3.4" data-path="model-design-and-methodology.html"><a href="model-design-and-methodology.html#summary"><i class="fa fa-check"></i><b>3.4</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="sensitivity-analysis-results.html"><a href="sensitivity-analysis-results.html"><i class="fa fa-check"></i><b>4</b> Sensitivity Analysis Results</a>
 <ul>
 <li class="chapter" data-level="4.1" data-path="sensitivity-analysis-results.html"><a href="sensitivity-analysis-results.html#overview-1"><i class="fa fa-check"></i><b>4.1</b> Overview</a></li>
 <li class="chapter" data-level="4.2" data-path="sensitivity-analysis-results.html"><a href="sensitivity-analysis-results.html#mode-choice-trips"><i class="fa fa-check"></i><b>4.2</b> Mode Choice Trips</a></li>
 <li class="chapter" data-level="4.3" data-path="sensitivity-analysis-results.html"><a href="sensitivity-analysis-results.html#link-volume"><i class="fa fa-check"></i><b>4.3</b> Link Volume</a></li>
-<li class="chapter" data-level="4.4" data-path="sensitivity-analysis-results.html"><a href="sensitivity-analysis-results.html#summary-1"><i class="fa fa-check"></i><b>4.4</b> Summary</a></li>
+<li class="chapter" data-level="4.4" data-path="sensitivity-analysis-results.html"><a href="sensitivity-analysis-results.html#summary"><i class="fa fa-check"></i><b>4.4</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="conclusions.html"><a href="conclusions.html"><i class="fa fa-check"></i><b>5</b> Conclusions</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
@@ -349,9 +348,9 @@ Transit
 </table>
 <p>The variation among mode choices can be visualized graphically using a density of a scaled change in trips by mode. Figure <a href="sensitivity-analysis-results.html#fig:modechoicetrips">4.1</a> shows density plots for HBW trips by mode for twelve zones – the zones are divided into three volume categories: low is less than 200 trips per zone, mid is 200 to 700 trips per zone, and top is greater than 700 trips per zone – and four zones are randomly selected from each volume category. Zones that do not have any transit accessibility have been excluded. Those zones have very high density in auto trips as with the ability to choose transit was removed, the choice to choose auto was more certain. The zones included in Figure <a href="sensitivity-analysis-results.html#fig:modechoicetrips">4.1</a> all have greater certainty in auto trips, as the change in trips across all 100 iterations is relatively small. This reinforces the previous claim that the model has more confidence in auto trips than the other modes. It is also important to note that the modes are correlated to each other. In zones with a greater confidence in one mode, the other modes are more confident as well. Since the number of trips by origin zone are held constant, when there is an increase in trips on one mode there must be a decrease in trips on one or both of the other modes. Also, the distribution of non-motorized trips is similar for every zone. Suggesting that generally, the most varriable mode is non-motorized trips, which is also verified using Table <a href="sensitivity-analysis-results.html#tab:MCtrips">4.1</a>.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:modechoicetrips"></span>
-<img src="uncertainty_thesis_files/figure-html/modechoicetrips-1.png" alt="Trip desnity for coefficient of variation by mode for HBW trips." width="864" />
+<img src="uncertainty_thesis_files/figure-html/modechoicetrips-1.png" alt="Trip density for coefficient of variation by mode for HBW trips." width="864" />
 <p class="caption">
-Figure 4.1: Trip desnity for coefficient of variation by mode for HBW trips.
+Figure 4.1: Trip density for coefficient of variation by mode for HBW trips.
 </p>
 </div>
 </div>
@@ -366,9 +365,9 @@ Figure 4.2: Standard deviation in daily forecasted volume.
 </div>
 <p>The highway assignment results can be grouped by facility type to show how the coefficient of variation compares to link volume. Figure <a href="sensitivity-analysis-results.html#fig:totalvolume">4.3</a> shows the coefficient of variation for the daily volume assigned to each network link, across the 100 draws, plotted against the mean forecasted link volume for each link. The results suggest that for high-volume roads such as major arterials and freeways, the coefficient of variation converges to approximately 0.01, or about 1% of the road’s total forecasted volume. For lower-volume links, the coefficient of variation is more widely distributed, with some local roads and small collectors having considerably higher values. Some links in the model show no variation at all; these are presumably links near the edges of the model region where the only traffic is to and from external zones, trips which were held constant in this framework.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:totalvolume"></span>
-<img src="uncertainty_thesis_files/figure-html/totalvolume-1.png" alt="Coefficient of variation in daily volume links." width="80%" />
+<img src="uncertainty_thesis_files/figure-html/totalvolume-1.png" alt="Coefficient of variation in daily link volume by facility type." width="80%" />
 <p class="caption">
-Figure 4.3: Coefficient of variation in daily volume links.
+Figure 4.3: Coefficient of variation in daily link volume by facility type.
 </p>
 </div>
 <p>Variation among a link can also be visualized with a density plot of the total volume across all iterations, as shown in Figure <a href="sensitivity-analysis-results.html#fig:densityplots">4.4</a>. In this plot, the density of forecasted volumes in three randomly selected links in each of the freeway, collector, and arterial functional types are plotted alongside the baseline forecast and the AAWDT measured by the Virginia Department of Transportation, and to which the model estimates were calibrated. In all cases, the error or uncertainty in the forecast is considerably narrower than the error inherent in the model construction, as evidenced by the fact that the AAWDT target value is well outside the bell curve created the statistically varied simulation forecasts.</p>
@@ -380,8 +379,8 @@ Figure 4.4: Density plot of forecasted volume on selected links, with default pa
 </p>
 </div>
 </div>
-<div id="summary-1" class="section level2 hasAnchor" number="4.4">
-<h2><span class="header-section-number">4.4</span> Summary<a href="sensitivity-analysis-results.html#summary-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="summary" class="section level2 hasAnchor" number="4.4">
+<h2><span class="header-section-number">4.4</span> Summary<a href="sensitivity-analysis-results.html#summary" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>The uncertainty and variance present in the model results are overall smaller than the variability introduced to the model through the parameters. Auto trips are have less variance than transit or non-motorized trips, regardless of the amount of trips in a given zone. When there is only two modes available auto trips have even lower variance. Higher volume roads have greater certainty than lower volume ones. Also, uncertainty that exists within the first three steps of the model appears to be corrected by the limitations of the highway network assignment. Overall there is a variance of approximately 1 percent in the model outputs, when a 1 percent variance was used for the parameter estimates.</p>
 
 </div>
