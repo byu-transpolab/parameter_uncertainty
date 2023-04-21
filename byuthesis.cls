@@ -297,7 +297,7 @@
 %\makeevenfoot{byu}%
 %    {\normalfont\small\slshape\thepage}{}{}
 \makeevenhead{byu}%
-    {\normalfont\small\slshape\thepage}{}{\normalfont\small\slshape{\chaptername \itshape\thechapter}}
+    {\normalfont\small\slshape\thepage}{}{\normalfont\small\slshape{\chaptername\space \itshape\thechapter}}
 
 \pagestyle{byu}
 \appto\mainmatter{\pagestyle{byu}}
