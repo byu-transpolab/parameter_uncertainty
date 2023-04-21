@@ -63,7 +63,7 @@ kable(table, caption = "Coefficient of Variation of Trips by Mode", booktabs = T
 
 The variation among mode choices can be visualized graphically using a density of a scaled change in trips by mode. Figure \@ref(fig:modechoicetrips) shows density plots for HBW trips by mode for twelve zones -- the zones are divided into three volume categories: low is less than 200 trips per zone, mid is 200 to 700 trips per zone, and top is greater than 700 trips per zone -- and four zones are randomly selected from each volume category. Zones that do not have any transit accessibility have been excluded. Those zones have very high density in auto trips as with the ability to choose transit was removed, the choice to choose auto was more certain. The zones included in Figure \@ref(fig:modechoicetrips) all have greater certainty in auto trips, as the change in trips across all 100 iterations is relatively small. This reinforces the previous claim that the model has more confidence in auto trips than the other modes. It is also important to note that the modes are correlated to each other. In zones with a greater confidence in one mode, the other modes are more confident as well. Since the number of trips by origin zone are held constant, when there is an increase in trips on one mode there must be a decrease in trips on one or both of the other modes. Also, the distribution of non-motorized trips is similar for every zone. Suggesting that generally, the most varriable mode is non-motorized trips, which is also verified using Table \@ref(tab:MCtrips).
 
-```{r modechoicetrips, warning = FALSE, echo = FALSE, message = FALSE, results='asis', fig.cap = "Trip desnity for coefficient of variation by mode for HBW trips.", fig.env= "sidewaysfigure", fig.align="center", fig.width=9}
+```{r modechoicetrips, warning = FALSE, echo = FALSE, message = FALSE, results='asis', fig.cap = "Trip density for coefficient of variation by mode for HBW trips.", fig.env= "sidewaysfigure", fig.align="center", fig.width=9}
 set.seed(1)
 
 tar_load(hbw_trips)
@@ -201,7 +201,7 @@ ggplot() +
 
 The highway assignment results can be grouped by facility type to show how the coefficient of variation compares to link volume. Figure \@ref(fig:totalvolume) shows the coefficient of variation for the daily volume assigned to each network link, across the 100 draws, plotted against the mean forecasted link volume for each link. The results suggest that for high-volume roads such as major arterials and freeways, the coefficient of variation converges to approximately 0.01, or about 1% of the road’s total forecasted volume. For lower-volume links, the coefficient of variation is more widely distributed, with some local roads and small collectors having considerably higher values. Some links in the model show no variation at all; these are presumably links near the edges of the model region where the only traffic is to and from external zones, trips which were held constant in this framework. 
 
-```{r totalvolume, echo = FALSE, warning = FALSE, fig.cap = "Coefficient of variation in daily volume links.", out.width = "80%", fig.align="center"}
+```{r totalvolume, echo = FALSE, warning = FALSE, fig.cap = "Coefficient of variation in daily link volume by facility type.", out.width = "80%", fig.align="center"}
 tar_load(networks)
 
 base <- read.dbf("data/sensitivity_out/BASE_LOADED.DBF") %>%
@@ -297,7 +297,8 @@ fac_density <- density %>%
   theme_bw() +
   facet_wrap(vars(link), scales = "free") +
    scale_x_continuous(labels = function(x) {x/1000}) +
-  labs(x = "Total Link Volume (in 1000s of Vehicles)")
+  labs(x = "Total Link Volume (in 1000s of Vehicles)",
+       y = "Density")
 ```
 
 ## Summary
