@@ -24,7 +24,7 @@ The productions $P_i$, and attractions $A_j$ were extracted from the RVTPO Model
 
 The two parameter vectors $\beta$ and $\gamma$ describe the mode choice model and destination choice model coefficients, respectively. Mode choice estimates how many trips from $i$ to $j$ will happen on each available mode $k$.This model analyses three modes of transportation: auto, non-motorized, and transit. The mode by which a trip is made is determined by calculated utilities for the three modes. These utilities take inputs from parameter values and time and distance skims $X$. Skims are either the time or distance to travel between zone pairs. Travel time for auto used the single occupancy vehicle peak time, non-motorized travel time used the distance skim multiplied by a factor of average walking speed (3 mph), and transit time used the walk to bus peak time. The mode choice parameters (constants and coefficients) were also obtained from the RVTPO model. These values are shown in Table \@ref(tab:choicecoeff).
 
-```{r choicecoeff, echo = FALSE, results = 'axis', fig.cap = "Choice Model Parameters"}
+```{r choicecoeff, echo = FALSE, fig.cap = "Choice Model Parameters"}
 tar_load(mc_coeff)
 tar_load(mc_const)
 tar_load(dc_coeff)
@@ -47,9 +47,9 @@ coefficient_table <- bind_rows(
     mutate(variable = c("$\\gamma_{hh}$", "$\\gamma_{oth + off}$", "$\\gamma_{off}$", "$\\gamma_{oth}$", "$\\gamma_{ret}$"))
   )%>%
   select(c(Name, variable, HBW, HBO, NHB))
-kbl(coefficient_table, caption = "Choice Model Parameters", booktabs = TRUE,
+kbl(coefficient_table, caption = "Choice Model Parameters", booktabs = TRUE, 
     col.names = c("", "Variable","HBW", "HBO", "NHB"), digits = 4, escape = FALSE) %>%
-  kable_styling() %>%
+  kable_styling(latex_options = "scale_down") %>%
   pack_rows(index = c("Mode Choice Coefficients" = 4, "Mode Choice Constants" = 2, "Destination Choice Parameters" = 5))
 
 ```
@@ -65,14 +65,14 @@ U_{nmot} = k_{nmot} + 20 * \beta_{wd}*X_{nmot}
 U_{trn} = k_{trn} + \beta_{ivtt} * X_{trn}
 (\#eq:transutil)
 \end{equation}
-These utilities were exponentiated -- if the distance was greater than 2 miles, non-motorized travel was excluded -- then added together, and the natural log was taken to get a logsum value for every origin and destination pair, see Equation \@ref(eq:mcls).
-
+These utilities are used to calculate the MCLS by: 
 \begin{equation}
 MCLS_{ij} = \ln(\sum_{k \in K} e^{U_{ijk}})
 (\#eq:mcls)
 \end{equation}
+If the distance was greater than 2 miles, non-motorized travel was excluded.
 
-This logsum value is then used as the primary impedance for a destination choice model. Destination choice estimates travel patterns based on mode choice, trip generators (workers and households), and destination choice parameters. These parameter values are also shown in Table \@ref(tab:choicecoeff).The destination choice utility is the primary impedance (mode choice logsum value) plus the natural log of the size term, where the sized term is calculated as:
+This logsum value is then used as the primary impedance for a destination choice model [@ben1985discrete]. Destination choice estimates travel patterns based on mode choice, trip generators (workers and households), and destination choice parameters. These parameter values are also shown in Table \@ref(tab:choicecoeff).The destination choice utility is the primary impedance (mode choice logsum value) plus the natural log of the size term, where the sized term is calculated as:
 \begin{equation}
 A_j = \gamma_{hh} * \mathrm{HH} + \gamma_{off} * \mathrm{OFF} + \gamma_{ret} * \mathrm{RET} + \gamma_{oth} * \mathrm{OTH} + \gamma_{oth+off} * \mathrm{OFFOTH}
 (\#eq:dcsizeterm)
@@ -83,13 +83,13 @@ DCLS = \sum_{j \in J} e^{\ln(A_j) + 1* MCLS_{ijk}}
 (\#eq:dcls)
 \end{equation}
 
-The probability of both the mode choice and destination choice are calculated using the exponentiated utility divided by the corresponding logsum. These probabilities in conjunction with the trip productions can calculate the number of production-attraction (PA) trips between each zone by each mode and purpose. The auto trips are calculated by multiplying the probability of the destination by PA pair, the productions for each origin, and the probability of an auto mode choice by PA pair. This results in PA auto trips. The same process is followed for the other two modes. These PA trips are converted into origin destination (OD) trips by multiplying the trips by corresponding time of day (TOD) factors (see Equation \@ref(eq:trips)). These trips are calculated using Bentley's CUBE and the RVTPO model. The trips, by time period, are assigned to the highway network by the shortest path by time using free flow speed and with link capacity as a restriction.
+The probability of both the mode choice and destination choice are calculated using the exponentiated utility divided by the corresponding logsum. These probabilities in conjunction with the trip productions can calculate the number of production-attraction (PA) trips between each zone by each mode and purpose. The auto trips are calculated by multiplying the probability of the destination by PA pair, the productions for each origin, and the probability of an auto mode choice by PA pair. This results in PA auto trips. The same process is followed for the other two modes. These PA trips are converted into origin destination (OD) trips by multiplying the trips by corresponding time of day factors (see Equation \@ref(eq:trips)). These trips are calculated using Bentley's CUBE and the RVTPO model. The trips, by time period, are assigned to the highway network by the shortest path by time using free flow speed and with link capacity as a restriction.
 
 ## Uncertainty Design
 
 Within the mode and destination models there exists uncertainty within the parameters in Table \@ref(tab:choicecoeff). Sampling methods can take the defined uncertainty and choose potential parameter values within the possible range. Two common methods for parameter sampling include, Monte Carlo (MCS) simulation and Latin hypercube sampling (LHS). MC simulation draws independently from multiple distributions, while LHS makes draws that cover the parameter space more efficiently and can capture the joint distribution between two or more parameter values [@helton2003latin]. As a result, LHS can reduce the number of draws needed to fully re-create the statistical variance in a model, but the amount of reduction is unknown and may not be universal to all problems [@yang2013sensitivity].
 
-With the trip-based model described above, MC and LHS methods were used to develop alternative parameter sets to evaluate uncertainty. To identify a standard deviation for each parameter, a coefficient of variation was used. A set coefficient of variation of 0.10 was used for the four mode choice coefficients and the destination choice parameters. The mode choice constants were kept the same across all iterations. Literature had identified a coefficient of variation of 0.30, but for this analysis that caused an unrealistic value of time, and thus it was changed to be 0.10 [@zhao2002propagation]. Value of time is a function of $\beta_{ivtt}$ and $\beta_{tc}$ (VOT = $\frac{\beta_{ivtt}}{\beta_{tc}}*\frac{60}{100}$). Using a $c_v$ of 0.30 the VOT range was from 2 to 32 $\$$/hr, whereas using a $c_v$ of 0.10 the range was 6 to 14 $\$$/hr. The latter seemed more rational and thus a $c_v$ of 0.10 was used for our analysis. The standard deviation was equal to 0.10 multiplied by the mean, where the mean values in this situation are the base scenario parameters (as identified in Table \@ref(tab:choicecoeff)).
+With the trip-based model described above, MC and LHS methods were used to develop alternative parameter sets to evaluate uncertainty. To identify a standard deviation for each parameter, a coefficient of variation was used. A set coefficient of variation of 0.10 was used for the four mode choice coefficients and the destination choice parameters. The mode choice constants were kept the same across all iterations. Literature had identified a coefficient of variation of 0.30, but for this analysis that caused an unrealistic value of time, and thus it was changed to be 0.10 [@zhao2002propagation]. Value of time is a ratio in units of money per time that should be compared to the regional wage rate. Using a $c_v$ of 0.30 the value of time range was from 2 to 32 $\$$/hr, whereas using a $c_v$ of 0.10 the range was 6 to 14 $\$$/hr. The latter seemed more rational because it is related to wage rates and thus a $c_v$ of 0.10 was used for our analysis. The standard deviation was equal to 0.10 multiplied by the mean, where the mean values in this situation are the base scenario parameters (as identified in Table \@ref(tab:choicecoeff)).
 
 The MC random sampling uses the R function of `rnorm`. LHS uses the `lhs` package in R. Since this package only chooses variables on a zero to one scale, the values given use a function to put the random sampling on the right scale needed for the given parameter. The full code for both methods can be found in a public [GitHub repository](https://github.com/natmaegray/sensitivity_thesis). 100 and 600 draws of random samples for both methods are generated. With these generated parameters, the mode choice model step was run for every set of input parameters for each purpose. The mean logsum value for each run was determined to compare each continuous draw. This allowed us to see how many iterations of which sampling type would be sufficient to show a full range of possible outcomes.
 
@@ -153,13 +153,13 @@ Z %>%
   facet_wrap(vars(name), scales = "free", labeller = as_labeller(facet_names))
 ```
 
-To determine if LHS is effective at a reasonable amount of iterations, the cumulative mean and the cumulative standard deviation of the mean mode choice logsum value (MMCLS) for every zone (see Equation \@ref(eq:mcls)) was calculated for each additional draw for both sampling methods. The MMCLS, $x$, was used as a measure of outcome possibilities as a single value to compare by across all iterations. The cumulative mean is calculated using Equation \@ref(eq:cmclsmean), and the cumulative standard deviation is calculated using Equation \@ref(eq:sdi).
+To determine if LHS is effective at a reasonable amount of iterations, the cumulative mean and the cumulative standard deviation of the mean mode choice logsum value for every zone (see Equation \@ref(eq:mcls)) was calculated for each additional draw for both sampling methods. The mean MCLS, $x$, was used as a measure of outcome possibilities as a single value to compare by across all iterations. The cumulative mean is calculated using Equation \@ref(eq:cmclsmean), and the cumulative standard deviation is calculated using Equation \@ref(eq:sdi).
 \begin{equation}
-m_i = \frac{x_1 + ... + x_i}{n}
+\mu_i = \frac{x_1 + ... + x_i}{n}
 (\#eq:cmclsmean)
 \end{equation}
 \begin{equation}
-SD_i = \sqrt{\frac{\sum (x_i - m_i)^2 }{n-1}}
+SD_i = \sqrt{\frac{\sum (x_i - \mu_i)^2 }{n-1}}
 (\#eq:sdi)
 \end{equation}
 The cumulative mean shows how the average mode choice logsum stabilizes across each iteration, and the cumulative standard deviation is used to show the 95% confidence interval of that mean. When the cumulative mean for the draws stabilizes, that shows that the amount of generated parameters has captured the possible variance of the results. This can be visualized for each purpose. The HBW results for the cumulative mean are shown in Figure \@ref(fig:hbwcm). The results for the other two purposes (HBO and NHB) are in Figure \@ref(fig:hbostats) and Figure \@ref(fig:nhbstats) respectively.
@@ -234,8 +234,4 @@ nhb_stats %>%
     facet_wrap(vars(ndraws), scales = "free_x")
 ```
 
-For all three trip purposes, both sampling methods had a stabilized mean by 100 draws. The LHS methods standard deviation ribbon was generally thinner than the MC method. From the narrowed cumulatove standard deviation, and that the parameter values are better normally distributed when using LHS, that method of sampling was used for the assignment analysis of the model. Since LHS captures the possible variance at a small enough amount of iterations, it can be used for large transportation demand models. From these results it was decided to use 100 LHS samples parameters to evaluate uncertainty within each step of the model.
-
-## Summary
-
-A trip-based model was created in R and CUBE to create trips, assign network volumes, and evaluate sampling methodologies. The four step model includes trip generation, trip distribution, mode and destination choice, and trip assignment. This model can be used to quantify and evaluate the uncertainty within the model using 100 draws of Latin hypercube sampling. 
+For all three trip purposes, both sampling methods had a stabilized mean by 100 draws. The LHS methods standard deviation ribbon was generally thinner than the MC method. From the narrowed cumulatove standard deviation, and that the parameter values are better normally distributed when using LHS, that method of sampling was used for the assignment analysis of the model. Since LHS captures the possible variance at a small enough amount of iterations, it can be used for large transportation demand models. From these results it was decided to use 100 LHS samples parameters to evaluate uncertainty within each step of the model. The next chapter includes the results of applying these sampled parameters to the travel demand model.
