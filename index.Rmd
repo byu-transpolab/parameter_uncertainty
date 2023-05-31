@@ -13,7 +13,7 @@ committeemembers:
   - name: Daniel P. Ames
 keywords: 'sensitivity analysis, transportation demand model, transportation planning, latin hypercube sampling, monte carlo simulation'
 # Class options are simple/fancy, masters/phd, and twoside (use twoside for printed thesis only)
-layout: 'fancy, masters, twoside' 
+layout: 'fancy, masters' 
 # if you are using this for an honors thesis, you can leave off the degree in 
 # layout and specify a degree below
 degree: Master of Science
@@ -36,6 +36,9 @@ acknowledgments: |
   
 # Specify the location of the bibliography below
 bibliography: [book.bib, packages.bib]
+nocite:
+  - '@trbaep50_2023'
+  - '@national2012travel'
 bibheadname: "References"
 # Download your specific csl file from https://www.zotero.org/styles and refer to it in the line below.
 csl: apa.csl
