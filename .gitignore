@@ -10,3 +10,4 @@
 
 # ignore the targets output folder
 _targets/*
+rosm.cache/
