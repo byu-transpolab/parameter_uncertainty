@@ -12,7 +12,7 @@ bookdown::gitbook:
   config:
     toc:
       before: |
-        <li><a href="./">A BYU Thesis in Bookdown</a></li>
+        <li><a href="./">Evaluating Parameter Uncertainty in TDMs</a></li>
       after: |
         <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
     edit: https://github.com/USERNAME/REPO/edit/BRANCH/%s

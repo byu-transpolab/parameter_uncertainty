@@ -196,8 +196,8 @@
 
 % Table of contents formatting (and LoF and LoT)
 \renewcommand{\contentsname}{Table of Contents}
-\renewcommand{\listfigurename}{List of Figures\;\;}	% hack to get spacing in ToC between name and number right
-\renewcommand{\listtablename}{List of Tables\;\;}	% hack to get spacing in ToC between name and number right
+\renewcommand{\listfigurename}{List of Figures}	
+\renewcommand{\listtablename}{List of Tables}	
 
 %% change title style for toc, lof, lot
 % Bold face, size LARGE titles
@@ -297,7 +297,7 @@
 %\makeevenfoot{byu}%
 %    {\normalfont\small\slshape\thepage}{}{}
 \makeevenhead{byu}%
-    {\normalfont\small\slshape\thepage}{}{\normalfont\small\slshape{\chaptername \itshape\thechapter}}
+    {\normalfont\small\slshape\thepage}{}{\normalfont\small\slshape{\chaptername\space \itshape\thechapter}}
 
 \pagestyle{byu}
 \appto\mainmatter{\pagestyle{byu}}
@@ -376,7 +376,7 @@
 		\setlrmarginsandblock{1.75in}{1.75in}{*}
 		\checkandfixthelayout
 	\fi
-	\pdfbookmark{TITLE PAGE}{titlepage}
+	\pdfbookmark{Title Page}{titlepage}
 	\pagestyle{empty}
 	\begin{Spacing}{2.0}
 		\begin{center}
@@ -446,7 +446,7 @@
 % ------------ abstract ------------------
 \renewenvironment{abstract}{%
 	\cleardoublepage
-	\pdfbookmark[0]{ABSTRACT}{abstract}
+	\pdfbookmark[0]{Abstract}{abstract}
 	\setlength{\parskip}{\baselineskip}
 	\vspace*{35pt}	% spacing set to match chapter header spacing
 	\begin{flushleft}
@@ -471,7 +471,7 @@
 % ---------- acknowledgments ------------
 \newenvironment{acknowledgments}{%
 	\cleardoublepage
-	\pdfbookmark[0]{ACKNOWLEDGMENTS}{acknowledgments}
+	\pdfbookmark[0]{Acknowledgments}{acknowledgments}
 	\setlength{\parskip}{\baselineskip}
 	\vspace*{35pt}	% spacing set to match chapter header spacing
 	\begin{flushleft}

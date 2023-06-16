@@ -1,4 +1,4 @@
-book_filename: "thesis"
+book_filename: "uncertainty_thesis"
 delete_merged_file: true
 output_dir: "docs"
 language:
