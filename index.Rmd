@@ -13,7 +13,7 @@ committeemembers:
   - name: Daniel P. Ames
 keywords: 'sensitivity analysis, transportation demand model, transportation planning, latin hypercube sampling, monte carlo simulation'
 # Class options are simple/fancy, masters/phd, and twoside (use twoside for printed thesis only)
-layout: 'fancy, masters' 
+layout: 'fancy, masters, twoside' 
 # if you are using this for an honors thesis, you can leave off the degree in 
 # layout and specify a degree below
 degree: Master of Science

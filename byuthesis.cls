@@ -58,6 +58,9 @@
 %%%% Monospace fonts for \ttfamily (such as for displaying computer code or computer commands)
 \RequirePackage[scaled=0.85]{beramono}
 
+%%% Helvetica Font
+\RequirePackage{helvet}
+
 %% This font is not part of the standard LaTeX package and requires installation on your computer
 % I like this font more than beramono, however (TWM)
 %\RequirePackage{inconsolata}
