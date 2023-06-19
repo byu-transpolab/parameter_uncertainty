@@ -1,0 +1,63 @@
+project:
+  type: book
+
+# This defines the .qmd files that are in your document
+book:
+  title: "Evaluating the Impacts of Parameter Uncertainty in Transportation Demand Models"
+  author:
+    - name: Gregory S. Macfarlane
+      orcid: 0000-0003-3999-7584
+      email: gregmacfarlane@gmail.com
+      affiliations:
+        - name: Civil and Construction Engineering Department, Brigham Young University
+          address: 430 EB
+          city: Provo
+          state: UT
+          postal-code: 84602
+    # to add additional authors, simply add another -name: tag 
+    - name: Natalie Mae Gray
+      email: nmgray@byu.edu
+      affiliations:
+        - name: Civil and Construction Engineering Department, Brigham Young University
+          address: 430 EB
+          city: Provo
+          state: UT
+          postal-code: 84602
+  date: "7/3/2023"
+  chapters:
+    - index.qmd
+    - 01-intro.qmd
+    - 02-literature.qmd
+    - 03-methods.qmd
+    - 04-results.qmd
+    - 05-conclusions.qmd
+    - 06-references.qmd
+  abstract: | 
+    The inherent uncertainty in travel forecasting models — arising from errors 
+    in input data, parameter   estimation, or model formulation — is receiving 
+    increasing attention from the scholarly and practicing community. 
+    In this research, we investigate the variance in forecasted traffic volumes 
+    resulting from varying the mode and destination choice parameters in an 
+    advanced trip-based travel demand model. Using Latin hypercube sampling to 
+    construct several hundred combinations of parameters across the plausible 
+    parameter space, we introduce substantial changes to mode and destination 
+    choice logsums and probabilities. However, the aggregate effects of of these 
+    changes on forecasted traffic volumes is small, with a variance of 
+    approximately 1 percent on high-volume facilities. Thus, parameter 
+    uncertainty does not appear to be a significant factor in forecasting 
+    traffic volumes using transportation demand models.
+    
+bibliography: book.bib
+
+format:
+  html:
+    theme: cosmo
+  elsevier-pdf:
+    include-in-header: 
+      - packages.tex
+    journal:
+      name: TRB Annual Meeting
+      cite-style: authoryear
+    keep-tex: true
+    top-level-division: section
+    toc: false
