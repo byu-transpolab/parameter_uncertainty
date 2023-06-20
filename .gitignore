@@ -2,23 +2,19 @@
 .Rhistory
 .RData
 .Ruserdata
-
 # ignore local files with parameters
 .Renviron
 .Rproj.user/*
-
-
 # ignore the targets output folder
 _targets/*
 *_cache/*
 *_files/*
 /.quarto/
 _book/
-
-
 # ignore latex cruft
 *.spl
 *.nlo
 *.aux
 rosm.cache/
 rosm.cache/
+.DS_Store
