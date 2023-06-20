@@ -1,13 +1,15 @@
 # Literature Review
 
-```{r, include = FALSE}
+```{r packages, include = FALSE}
 some_packages <- c("tidyverse", "bookdown", "omxr", "nhts2017", "rgdal", "sf", "ggthemes", "lhs", "foreign", "imputeTS", "targets", "readxl", "knitr", "gridExtra", "ggspatial", "kableExtra")
 lapply(some_packages, library, character.only=TRUE)
 ```
 
 Uncertainty has been examined in various ways over the last two decades, and is becoming increasingly important for researchers. This review looks at why uncertainty is important to evaluate in transportation demand models, and research that has been done to evaluate uncertainty. @rasouli2012uncertainty has an extensive literature review on this topic. An overview of the literature and which source of uncertainty they evaluate can be found in Table \@ref(tab:authors). 
 
-```{r authors, echo = FALSE, results = 'axis', fig.cap = "Studies of Forecasting Uncertainty"}
+```{r authors, echo = FALSE, results = 'axis'}
+#| label: tbl-authors
+#| tbl-cap: Studies of Forecasting Uncertainty
 authors_source <- tibble("Reference" = c("@rodier2002uncertain", 
                                          '@zhao2002propagation', 
                                          '@clay2005univariate', 

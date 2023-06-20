@@ -53,8 +53,8 @@ format:
   html:
     theme: cosmo
   elsevier-pdf:
-    include-in-header: 
-      - packages.tex
+    include-in-header:
+      - file: packages.tex
     journal:
       name: TRB Annual Meeting
       cite-style: authoryear

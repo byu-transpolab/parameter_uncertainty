@@ -1,7 +1,8 @@
-# Model Design and Methodology
+# Model Design and Methodology {#sec-methods}
 
-```{r, include = FALSE}
-some_packages <- c("tidyverse", "bookdown", "omxr", "nhts2017", "rgdal", "sf", "ggthemes", "lhs", "foreign", "imputeTS", "targets", "readxl", "knitr", "gridExtra", "ggspatial", "kableExtra")
+```{r packages, include = FALSE}
+some_packages <- c("tidyverse", "bookdown", "omxr", "nhts2017", "rgdal", "sf", 
+                   "ggthemes", "lhs", "foreign", "imputeTS", "targets", "readxl", "knitr", "gridExtra", "ggspatial", "kableExtra")
 lapply(some_packages, library, character.only=TRUE)
 ```
 
@@ -20,9 +21,11 @@ where $P$ is the productions at zone $i$; $\mathcal{P}_{\mathrm{car}}$ is the ca
 
 The productions $P_i$, and attractions $A_j$ were extracted from the RVTPO Model and held constant. The attractions are determined from the socioeconomic (SE) data. The SE data included information by TAZ for the total population, number of households, total workers, and workers by employment type. The trip productions are organized by TAZ and trip purpose. The trip purposes used in this model are Home Based Work (HBW), Home Based Other (HBO), Non-Home Based (NHB), Commercial Vehicles (CV), Internal-External (IXXI), and External-External (XX). Only the first three are analysed, but all of the purposes are assigned to the network. CV, IXXI, and XX trips were kept fixed for this analysis. 
 
-The two parameter vectors $\beta$ and $\gamma$ describe the mode choice model and destination choice model coefficients, respectively. Mode choice estimates how many trips from $i$ to $j$ will happen on each available mode $k$.This model analyses three modes of transportation: auto, non-motorized, and transit. The mode by which a trip is made is determined by calculated utilities for the three modes. These utilities take inputs from parameter values and time and distance skims $X$. Skims are either the time or distance to travel between zone pairs. Travel time for auto used the single occupancy vehicle peak time, non-motorized travel time used the distance skim multiplied by a factor of average walking speed (3 mph), and transit time used the walk to bus peak time. The mode choice parameters (constants and coefficients) were also obtained from the RVTPO model. These values are shown in Table \@ref(tab:choicecoeff).
+The two parameter vectors $\beta$ and $\gamma$ describe the mode choice model and destination choice model coefficients, respectively. Mode choice estimates how many trips from $i$ to $j$ will happen on each available mode $k$.This model analyses three modes of transportation: auto, non-motorized, and transit. The mode by which a trip is made is determined by calculated utilities for the three modes. These utilities take inputs from parameter values and time and distance skims $X$. Skims are either the time or distance to travel between zone pairs. Travel time for auto used the single occupancy vehicle peak time, non-motorized travel time used the distance skim multiplied by a factor of average walking speed (3 mph), and transit time used the walk to bus peak time. The mode choice parameters (constants and coefficients) were also obtained from the RVTPO model. These values are shown in @tbl-choicecoeff.
 
-```{r choicecoeff, echo = FALSE, fig.cap = "Choice Model Parameters"}
+```{r choicecoeff, echo = FALSE}
+#| label: tbl-choicecoeff
+#| tbl.cap: Choice model parameters"
 tar_load(mc_coeff)
 tar_load(mc_const)
 tar_load(dc_coeff)
@@ -93,7 +96,9 @@ The MC random sampling uses the R function of `rnorm`. LHS uses the `lhs` packag
 
 The parameters generated were compared for both sampling methods. Figure \@ref(fig:parameter100) shows the distributions for the HBW parameters when using 100 draws, and Figure \@ref(fig:parameter600) shows how that changes when using 600 draws. These distributions show that LHS gives normally distributed parameters with fewer draws than MC sampling: at 100 draws LHS shows a nearly perfect normal distribution, where there are some discrepancies for the MC generated parameters. These Figures show that LHS is likely to estimate the full variance of the results with much fewer draws.
 
-```{r parameter100, echo = FALSE, fig.align="center", results='asis', fig.cap = "Sampled mode and destination choice parameters for HBW trip purpose, 100 draws.",  out.width = "80%"}
+```{r parameter100, echo = FALSE, fig.align="center", results='asis', out.width = "80%"}
+#| label: fig-parameter100
+#| fig.cap: Sampled mode and destination choice parameters for HBW trip purpose, 100 draws.
 tar_load(hbw_mc_coeff_lists_100)
 list100 <- hbw_mc_coeff_lists_100
 
@@ -122,7 +127,9 @@ Z %>%
   facet_wrap(vars(name), scales = "free", labeller = as_labeller(facet_names))
 ```
 
-```{r parameter600, echo = FALSE, fig.align="center", results='asis', fig.cap = "Sampled mode and destination choice parameters for HBW trip purpose, 600 draws.",  out.width = "80%"}
+```{r parameter600, echo = FALSE, fig.align="center", results='asis',  out.width = "80%"}
+#| label: fig-parameter600
+#| fig.cap: Sampled mode and destination choice parameters for HBW trip purpose, 600 draws.
 tar_load(hbw_mc_coeff_lists_600)
 list600 <- hbw_mc_coeff_lists_600
 
@@ -162,10 +169,11 @@ SD_i = \sqrt{\frac{\sum (x_i - \mu_i)^2 }{n-1}}.
 (\#eq:sdi)
 \end{equation}
 
-The cumulative mean shows how the average MCLS stabilizes across each iteration, and the cumulative standard deviation is used to show the 95% confidence interval of that mean. When the cumulative mean for the draws stabilizes, that shows that the amount of generated parameters has captured the possible variance of the results. This can be visualized for each purpose. The HBW results for the cumulative mean are shown in Figure \@ref(fig:hbwcm). The results for the other two purposes (HBO and NHB) are shown in Figure \@ref(fig:hbostats) and Figure \@ref(fig:nhbstats) respectively.
+The cumulative mean shows how the average MCLS stabilizes across each iteration, and the cumulative standard deviation is used to show the 95% confidence interval of that mean. When the cumulative mean for the draws stabilizes, that shows that the amount of generated parameters has captured the possible variance of the results. This can be visualized for each purpose. The HBW results for the cumulative mean are shown in Figure \@ref(fig:hbwcm). The results for the other two purposes (HBO and NHB) are shown in @fig-hbostats and @fig-nhbstats, respectively.
 
-```{r hbwcm, warning = FALSE, echo = FALSE, message = FALSE, fig.align="center", results='asis', fig.cap = "HBW average mode choice logsum cumulative mean with 100 and 600 draws and 95 percent CI bands.",  out.width = "80%"}
-
+```{r hbwcm, warning = FALSE, echo = FALSE, message = FALSE, fig.align="center", results='asis', out.width = "80%"}
+#| label: fig-hbwcm
+#| fig.cap: HBW average mode choice logsum cumulative mean with 100 and 600 draws and 95 percent CI bands.
 tar_load(hbw_stats_100)
 tar_load(hbw_stats_600)
 hbw_stats <- bind_rows(hbw_stats_100, hbw_stats_600, .id = "ndraws") %>%
@@ -188,7 +196,9 @@ hbw_stats %>%
     facet_wrap(vars(ndraws), scales = "free_x")
 ```
 
-```{r hbostats, warning = FALSE, echo = FALSE, message = FALSE, fig.align="center", results='asis', fig.cap = "HBO average mode choice logsum cumulative mean with 100 and 600 draws and 95 percent CI bands.",  out.width = "80%"}
+```{r hbostats, warning = FALSE, echo = FALSE, message = FALSE, fig.align="center", results='asis',  out.width = "80%"}
+#| label: fig-hbostats
+#| fig.cap: HBO average mode choice logsum cumulative mean with 100 and 600 draws and 95 percent CI bands.
 tar_load(hbo_stats_100)
 tar_load(hbo_stats_600)
 hbo_stats <- bind_rows(hbo_stats_100, hbo_stats_600, .id = "ndraws") %>%
@@ -211,7 +221,9 @@ hbo_stats %>%
     facet_wrap(vars(ndraws), scales = "free_x")
 ```
 
-```{r nhbstats, warning = FALSE, echo = FALSE, message = FALSE, fig.align="center", results='asis', fig.cap = "NHB average mode choice logsum cumulative mean with 100 and 600 draws and 95 percent CI bands.", out.width = "80%"}
+```{r nhbstats, warning = FALSE, echo = FALSE, message = FALSE, fig.align="center", results='asis', out.width = "80%"}
+#| label: fig-nhbstats
+#| fig.cap: NHB average mode choice logsum cumulative mean with 100 and 600 draws and 95 percent CI bands.
 tar_load(nhb_stats_100)
 tar_load(nhb_stats_600)
 nhb_stats <- bind_rows(nhb_stats_100, nhb_stats_600, .id = "ndraws") %>%
