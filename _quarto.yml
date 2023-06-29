@@ -52,12 +52,14 @@ bibliography: book.bib
 format:
   html:
     theme: cosmo
-  elsevier-pdf:
+  trb-pdf:
+    wordcount: 6513
+    tablecount: 3
     include-in-header:
       - file: packages.tex
-    journal:
-      name: TRB Annual Meeting
-      cite-style: authoryear
     keep-tex: true
     top-level-division: section
     toc: false
+    
+execute: 
+  cache: true
