@@ -16,14 +16,14 @@
 
 \makeatletter
 \newcounter{wordcounter}
-\setcounter{wordcounter}{6513}
+\setcounter{wordcounter}{6566}
 
 \newcounter{tablecounter}
 \setcounter{tablecounter}{3}
 
 \newcounter{totalwordcounter}
 \newcommand{\totalwordcount}{%
-  \setcounter{totalwordcounter}{6513}
+  \setcounter{totalwordcounter}{6566}
   \addtocounter{totalwordcounter}{\numexpr250*3}
   \number\value{totalwordcounter}% Output the number
 	\renewcommand{\totalwordcount}{\number\value{totalwordcounter}}
@@ -123,20 +123,6 @@
 \newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{#1}\break}
 \newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
 
-\usepackage{booktabs}
-\usepackage{longtable}
-\usepackage{array}
-\usepackage{multirow}
-\usepackage{wrapfig}
-\usepackage{float}
-\usepackage{colortbl}
-\usepackage{pdflscape}
-\usepackage{tabu}
-\usepackage{threeparttable}
-\usepackage{threeparttablex}
-\usepackage[normalem]{ulem}
-\usepackage{makecell}
-\usepackage{xcolor}
 \usepackage{rotating}
 \usepackage{orcidlink}
 \definecolor{mypink}{RGB}{219, 48, 122}
@@ -239,7 +225,7 @@ appear to be a significant factor in forecasting traffic volumes using
 transportation demand models.
 \end{abstract}
 \newpage
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, frame hidden, enhanced, interior hidden, borderline west={3pt}{0pt}{shadecolor}, breakable, sharp corners]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, frame hidden, borderline west={3pt}{0pt}{shadecolor}, boxrule=0pt, interior hidden, enhanced, breakable]}{\end{tcolorbox}}\fi
 
 \bookmarksetup{startatroot}
 
@@ -392,19 +378,19 @@ error using multiple years of analysis. This technique is a way to
 reduce the bias of an estimator and permits the estimation of confidence
 intervals to produce variance estimates. They found that the longer the
 forecasting period was, the larger the uncertainty. Generally the model
-forecasted within 10-15\%, reaching higher percentage ranges for
-variables with small values or small sample sizes.
+forecast within 10-15\%, reaching higher percentage ranges for variables
+with small values or small sample sizes.
 
-(\emph{12}) compared actual and forecasted traffic values for 25 toll
-and 25 toll free roads in Norway. They evaluated the accuracy of
-Norwegian transportation planning models over the years. Generally
-traffic models overestimate traffic. This study found that toll
-projects, on average, overestimated traffic, but only by an average of
-2.5\%. Toll free projects, however, underestimated traffic by an average
-of 19\%. They concluded that Norwegian toll projects have been fairly
-accurate, with a probable cause coming from the scrutiny that planners
-get when developing a toll project. A similar scrutiny should then also
-be placed on toll free projects as they are significantly less accurate.
+(\emph{12}) compared actual and forecast traffic values for 25 toll and
+25 toll free roads in Norway. They evaluated the accuracy of Norwegian
+transportation planning models over the years. Generally traffic models
+overestimate traffic. This study found that toll projects, on average,
+overestimated traffic, but only by an average of 2.5\%. Toll free
+projects, however, underestimated traffic by an average of 19\%. They
+concluded that Norwegian toll projects have been fairly accurate, with a
+probable cause coming from the scrutiny that planners get when
+developing a toll project. A similar scrutiny should then also be placed
+on toll free projects as they are significantly less accurate.
 
 These articles show that models have errors which effects traffic
 projections by a significant amount. These articles identified that
@@ -565,7 +551,7 @@ forecasts for decision and policy makers. An inaccurate model or large
 output variance could change what decisions are made and when
 (\emph{17}). There is also a research need within uncertainty for both
 activity-based models, and destination and transport mode choice model
-components. In this research, I investigated the variance in forecasted
+components. In this research, I investigated the variance in forecast
 traffic volumes resulting from varying the mode and destination choice
 parameters in an advanced trip-based travel demand model, using combined
 mode and destination choice models, coupled with highway assignment.
@@ -1106,19 +1092,19 @@ destination choice probabilities appears to be constrained by the
 limitations of the highway network assignment.
 
 There are several limitations that must be mentioned in this research,
-however. First, I did not attempt to address the statistical uncertainty
-in trip rate estimates; these may play a substantially larger role than
-destination and mode choice parameters, given that lower trip rates may
-lead to lower traffic volumes globally, which could not be ``corrected''
-by the static user equilibrium assignment. And the assignment itself
-might have been aided in this case by the RVTPO's relatively simplistic
-highway network: if only two major highways exist the number of
-realistic lowest cost path choices between regions is somewhat
-constrained. It may be that in a larger network with more path
+however. First, we did not attempt to address the statistical
+uncertainty in trip rate estimates; these may play a substantially
+larger role than destination and mode choice parameters, given that
+lower trip rates may lead to lower traffic volumes globally, which could
+not be ``corrected'' by the static user equilibrium assignment. And the
+assignment itself might have been aided in this case by the RVTPO's
+relatively simplistic highway network: if only two major highways exist
+the number of realistic lowest cost path choices between regions is
+somewhat constrained. It may be that in a larger network with more path
 redundancies, the assignment may not have been as helpful in
-constraining the forecasted volumes.
+constraining the forecast volumes.
 
-In this research I had only the estimates of the statistical
+In this research we had only the estimates of the statistical
 coefficients, and therefore had to assume a coefficient of variation to
 derive variation in the sampling procedure. It would be better if model
 user and development documentation more regularly provided estimates of
@@ -1142,6 +1128,21 @@ constrained models emphasizing precise spatial detail and strict
 behavioral constraints. This might allow forecasts to be made with an
 ensemble approach (\emph{20}), identifying preferred policies as the
 consensus of multiple plausible model specifications.
+
+\bookmarksetup{startatroot}
+
+\hypertarget{author-contribution-statement}{%
+\section*{Author Contribution
+Statement}\label{author-contribution-statement}}
+\addcontentsline{toc}{section}{Author Contribution Statement}
+
+\markboth{Author Contribution Statement}{Author Contribution Statement}
+
+The authors confirm contribution to the paper as follows: study
+conception and design: GS Macfarlane, NM Gray; data collection: NM Gray;
+analysis and interpretation of results: GS Macfarlane, NM Gray; draft
+manuscript preparation: NM Gray, GS Macfarlane. All authors reviewed the
+results and approved the final version of the manuscript.
 
 \bookmarksetup{startatroot}
 

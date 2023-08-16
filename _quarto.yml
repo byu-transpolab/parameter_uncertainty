@@ -54,7 +54,7 @@ format:
   html:
     theme: cosmo
   trb-pdf:
-    wordcount: 6513
+    wordcount: 6566
     tablecount: 3
     include-in-header:
       - file: packages.tex

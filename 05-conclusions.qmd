@@ -60,3 +60,6 @@ spatial detail and strict behavioral constraints. This might allow
 forecasts to be made with an ensemble approach [@wu2021],
 identifying preferred policies as the consensus of multiple plausible
 model specifications.
+
+# Author Contribution Statement {.unnumbered}
+The authors confirm contribution to the paper as follows: study conception and design: GS Macfarlane, NM Gray; data collection: NM Gray; analysis and interpretation of results: GS Macfarlane, NM Gray; draft manuscript preparation: NM Gray, GS Macfarlane. All authors reviewed the results and approved the final version of the manuscript.
