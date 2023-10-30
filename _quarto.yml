@@ -49,13 +49,15 @@ book:
     traffic volumes using transportation demand models.
     
 bibliography: book.bib
+csl: apa.csl
 
 format:
   html:
     theme: cosmo
-  trb-pdf:
-    wordcount: 6566
-    tablecount: 3
+  elsevier-pdf:
+    journal: 
+      name: 'Transportation Research Part A: Policy and Practice'
+    cite-method: citeproc
     include-in-header:
       - file: packages.tex
     keep-tex: true
