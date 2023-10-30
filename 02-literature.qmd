@@ -5,7 +5,13 @@ library(tidyverse)
 library(kableExtra)
 ```
 
-Uncertainty has been examined in various ways over the last two decades, and is becoming increasingly important for researchers. This review looks at why uncertainty is important to evaluate in transportation demand models, and research that has been done to evaluate uncertainty. @rasouli2012 has an extensive literature review on this topic. An overview of the literature and which source of uncertainty they evaluate can be found in @tbl-authors.
+Uncertainty has been examined in various ways over the last two decades,
+and is becoming increasingly important for researchers. This review
+looks at why uncertainty is important to evaluate in transportation
+demand models, and research that has been done to evaluate uncertainty.
+@rasouli2012 has an extensive literature review on this topic. An
+overview of the literature and which source of uncertainty they evaluate
+can be found in @tbl-authors.
 
 ```{r authors, echo = FALSE, results = 'asis', warning = FALSE}
 #| label: tbl-authors
@@ -41,30 +47,208 @@ kbl(authors_source,
   kable_styling()
 ```
 
-Model accuracy is the basis for why uncertainty of input data and/or parameter estimates are important to study. Travel forecasters have always been cognizant of the uncertainty in their forecasts, especially as project decisions are made using these models, often with high financial impacts. @flyvbjerg2005, @armoogum2009, and @welde2011planners looked at forecasting uncertainty in transportation models. 
+Model accuracy is the basis for why uncertainty of input data and/or
+parameter estimates are important to study. Travel forecasters have
+always been cognizant of the uncertainty in their forecasts, especially
+as project decisions are made using these models, often with high
+financial impacts. @flyvbjerg2005, @armoogum2009, and @welde2011planners
+looked at forecasting uncertainty in transportation models.
 
-@flyvbjerg2005 collected data from various forecasting traffic models with an emphasis on rail projects. They used the forecast data for a given year and the actual value that was collected for the same year. Their study found that there is a statistical significance in the difference of the estimated and actual values. Rail projects are generally overestimating passenger forecasts by 106%, and half of road projects have a traffic forecast difference of plus or minus 20%. They did not identify where this inaccuracy came from, but they identified that it was important for future research.
+@flyvbjerg2005 collected data from various forecasting traffic models
+with an emphasis on rail projects. They used the forecast data for a
+given year and the actual value that was collected for the same year.
+Their study found that there is a statistical significance in the
+difference of the estimated and actual values. Rail projects are
+generally overestimating passenger forecasts by 106%, and half of road
+projects have a traffic forecast difference of plus or minus 20%. They
+did not identify where this inaccuracy came from, but they identified
+that it was important for future research.
 
-@armoogum2009 looked at uncertainty within a forecasting model for the Paris and Montreal metropolitan regions. The sources of uncertainty analysed were calibration of the model, behavior of future generations, and demographic projections. A jackknife technique, rather than sampling methods, was used to estimated confidence intervals for each source of error using multiple years of analysis. This technique is a way to reduce the bias of an estimator and permits the estimation of confidence intervals to produce variance estimates. They found that the longer the forecasting period was, the larger the uncertainty. Generally the model forecast within 10-15%, reaching higher percentage ranges for variables with small values or small sample sizes.
+@armoogum2009 looked at uncertainty within a forecasting model for the
+Paris and Montreal metropolitan regions. The sources of uncertainty
+analysed were calibration of the model, behavior of future generations,
+and demographic projections. A jackknife technique, rather than sampling
+methods, was used to estimated confidence intervals for each source of
+error using multiple years of analysis. This technique is a way to
+reduce the bias of an estimator and permits the estimation of confidence
+intervals to produce variance estimates. They found that the longer the
+forecasting period was, the larger the uncertainty. Generally the model
+forecast within 10-15%, reaching higher percentage ranges for variables
+with small values or small sample sizes.
 
-@welde2011planners compared actual and forecast traffic values for 25 toll and 25 toll free roads in Norway. They evaluated the accuracy of Norwegian transportation planning models over the years. Generally traffic models overestimate traffic. This study found that toll projects, on average, overestimated traffic, but only by an average of 2.5%. Toll free projects, however, underestimated traffic by an average of 19%. They concluded that Norwegian toll projects have been fairly accurate, with a probable cause coming from the scrutiny that planners get when developing a toll project. A similar scrutiny should then also be placed on toll free projects as they are significantly less accurate.
+@welde2011planners compared actual and forecast traffic values for 25
+toll and 25 toll free roads in Norway. They evaluated the accuracy of
+Norwegian transportation planning models over the years. Generally
+traffic models overestimate traffic. This study found that toll
+projects, on average, overestimated traffic, but only by an average of
+2.5%. Toll free projects, however, underestimated traffic by an average
+of 19%. They concluded that Norwegian toll projects have been fairly
+accurate, with a probable cause coming from the scrutiny that planners
+get when developing a toll project. A similar scrutiny should then also
+be placed on toll free projects as they are significantly less accurate.
 
-These articles show that models have errors which effects traffic projections by a significant amount. These articles identified that error existed but did not quantitatively identify the source of the error. The most researched error source has been on model form but that research has mostly been excluded in this review as it is not the main focus of this research. The second most researched form has been on input data. Chronologically,  @rodier2002uncertain, @zhao2002, @clay2005univariate, @duthie2010highway, @yang2013, @manzo2015, and @petrik2016measuring have all researched input error, with all but the first also looking at parameter estimate error as well. Parameter estimation error has been the least researched source of uncertainty, where there have been no studies focused only on that source of error. @petrik2020uncertainty looked at parameter estimates, but with a focus also on model form error. The details of each study are described below in chronological order.
+These articles show that models have errors which effects traffic
+projections by a significant amount. These articles identified that
+error existed but did not quantitatively identify the source of the
+error. The most researched error source has been on model form but that
+research has mostly been excluded in this review as it is not the main
+focus of this research. The second most researched form has been on
+input data. Chronologically, @rodier2002uncertain, @zhao2002,
+@clay2005univariate, @duthie2010highway, @yang2013, @manzo2015, and
+@petrik2016measuring have all researched input error, with all but the
+first also looking at parameter estimate error as well. Parameter
+estimation error has been the least researched source of uncertainty,
+where there have been no studies focused only on that source of error.
+@petrik2020uncertainty looked at parameter estimates, but with a focus
+also on model form error. The details of each study are described below
+in chronological order.
 
-@rodier2002uncertain looked at uncertainty in socioeconomic projections (population and employment, household income, and petroleum prices) at the county-level for the Sacramento, California region. They wanted to know if the uncertainty in the range of plausible socioeconomic values was a significant source of error in the projection of future travel patterns and vehicle emissions. They identified ranges for population and employment, household income, and petroleum price for two scenario years (2005 and 2015). The ranges varied based on the scenario year and the socioeconomic variable. They changed one variable at a time for a total of 19 iterations of the model run for 2005 and 21 iterations for 2015. Their results indicated that the error in projections for household income and petroleum prices is not a significant source of uncertainty, but error ranges for population and employment projections are a significant source for changes in travel and emissions. The input data of population and employment were a significant factor to the model result uncertainty.
+@rodier2002uncertain looked at uncertainty in socioeconomic projections
+(population and employment, household income, and petroleum prices) at
+the county-level for the Sacramento, California region. They wanted to
+know if the uncertainty in the range of plausible socioeconomic values
+was a significant source of error in the projection of future travel
+patterns and vehicle emissions. They identified ranges for population
+and employment, household income, and petroleum price for two scenario
+years (2005 and 2015). The ranges varied based on the scenario year and
+the socioeconomic variable. They changed one variable at a time for a
+total of 19 iterations of the model run for 2005 and 21 iterations for
+2015. Their results indicated that the error in projections for
+household income and petroleum prices is not a significant source of
+uncertainty, but error ranges for population and employment projections
+are a significant source for changes in travel and emissions. The input
+data of population and employment were a significant factor to the model
+result uncertainty.
 
-@zhao2002 looked at the propagation of uncertainty through each step of a trip-based travel model from variation among inputs and parameters. This analysis used a traditional four-step urban transportation planning process (trip generation, trip attraction, mode split, and trip assignment) on a 25-zone sub-model of the Dallas-Fort Worth metropolitan region. Monte Carlo simulation was used to vary the input and parameter values. These values were all ranged using a coefficient of variation ($c_v$) of 0.30. The four-step model was run 100 times with 100 different sets of input and parameter values. The results of these runs showed that uncertainty increased in the first three steps of the model and the final assignment step reduced the compounded uncertainty, although not below the levels of input uncertainty. The authors determined that uncertainty propagation was significant from changes in inputs and parameters, but the final step nearly stabilizes the uncertainty to the same amount as assumed (0.30 $c_v$ assumption with a 0.31 $c_v$ in the results of trip assignment).
+@zhao2002 looked at the propagation of uncertainty through each step of
+a trip-based travel model from variation among inputs and parameters.
+This analysis used a traditional four-step urban transportation planning
+process (trip generation, trip attraction, mode split, and trip
+assignment) on a 25-zone sub-model of the Dallas-Fort Worth metropolitan
+region. Monte Carlo simulation was used to vary the input and parameter
+values. These values were all ranged using a coefficient of variation
+($c_v$) of 0.30. The four-step model was run 100 times with 100
+different sets of input and parameter values. The results of these runs
+showed that uncertainty increased in the first three steps of the model
+and the final assignment step reduced the compounded uncertainty,
+although not below the levels of input uncertainty. The authors
+determined that uncertainty propagation was significant from changes in
+inputs and parameters, but the final step nearly stabilizes the
+uncertainty to the same amount as assumed (0.30 $c_v$ assumption with a
+0.31 $c_v$ in the results of trip assignment).
 
-Another study that looked at input data uncertainty was @clay2005univariate. These researchers varied three inputs and one parameter to analyze uncertainty of outputs on a fully integrated land use and travel demand model of six counties in the Sacramento, California region. The variables used for analysis were productions, commercial trip generation rates, perceived out-of-pocket costs of travel for single occupant vehicles, and concentration parameter. Exogenous production, commercial trip generation rates, and the concentration parameter were varied by plus or minus 10, 25 and 50%, while the cash cost of driving was varied by plus or minus 50 and 100%. This resulted in 23 model runs, one for each changed variable and one for the base scenario. Their research found that any uncertainty in the inputs resulted in large difference in the vehicle miles traveled output, although this difference was a lower percentage than the uncertainty in the input.
+Another study that looked at input data uncertainty was
+@clay2005univariate. These researchers varied three inputs and one
+parameter to analyze uncertainty of outputs on a fully integrated land
+use and travel demand model of six counties in the Sacramento,
+California region. The variables used for analysis were productions,
+commercial trip generation rates, perceived out-of-pocket costs of
+travel for single occupant vehicles, and concentration parameter.
+Exogenous production, commercial trip generation rates, and the
+concentration parameter were varied by plus or minus 10, 25 and 50%,
+while the cash cost of driving was varied by plus or minus 50 and 100%.
+This resulted in 23 model runs, one for each changed variable and one
+for the base scenario. Their research found that any uncertainty in the
+inputs resulted in large difference in the vehicle miles traveled
+output, although this difference was a lower percentage than the
+uncertainty in the input.
 
-@duthie2010highway evaluated uncertainty at a different level. They use a small generic gravity-based land use model with the traditional four steps, using a coefficient of variation of 0.3 from @zhao2002 for input and parameters, although using antithetic sampling. In this sampling method, pairs of negatively correlated realizations of the uncertain parameters are used to obtain an estimate of the expected value of the function. The uncertainty was evaluated on the rankings of various transportation improvement projects. They found that there are a few significant differences that arise when changing the input and parameter values that result in different project rankings, and thus neglecting uncertainty can lead to suboptimal network improvement decisions. 
+@duthie2010highway evaluated uncertainty at a different level. They use
+a small generic gravity-based land use model with the traditional four
+steps, using a coefficient of variation of 0.3 from @zhao2002 for input
+and parameters, although using antithetic sampling. In this sampling
+method, pairs of negatively correlated realizations of the uncertain
+parameters are used to obtain an estimate of the expected value of the
+function. The uncertainty was evaluated on the rankings of various
+transportation improvement projects. They found that there are a few
+significant differences that arise when changing the input and parameter
+values that result in different project rankings, and thus neglecting
+uncertainty can lead to suboptimal network improvement decisions.
 
-@yang2013 evaluated a quantitative uncertainty analysis of a combined travel demand model. They looked at input and parameter uncertainty *also* using a coefficient of variation of 0.30. Rather than using a random sampling method for choices they used a systematic framework with a variance-covariance matrix. Their research found that the coefficient of variation of the outputs are similar to the coefficient of variation of the inputs, and that the effect of parameter uncertainty on output uncertainty is generally higher than that of input uncertainty. This finding contradicts the finding of @zhao2002. The authors concluded that improving the accuracy of parameter estimation is more effective that that of improving input estimation as they found that in most steps of the model, the impact of parameter uncertainty was more important that that of input uncertainty.
+@yang2013 evaluated a quantitative uncertainty analysis of a combined
+travel demand model. They looked at input and parameter uncertainty
+*also* using a coefficient of variation of 0.30. Rather than using a
+random sampling method for choices they used a systematic framework with
+a variance-covariance matrix. Their research found that the coefficient
+of variation of the outputs are similar to the coefficient of variation
+of the inputs, and that the effect of parameter uncertainty on output
+uncertainty is generally higher than that of input uncertainty. This
+finding contradicts the finding of @zhao2002. The authors concluded that
+improving the accuracy of parameter estimation is more effective that
+that of improving input estimation as they found that in most steps of
+the model, the impact of parameter uncertainty was more important that
+that of input uncertainty.
 
-@manzo2015 looked at uncertainty on model input and parameters for a trip-based transportation demand model in a small Danish town. They used a triangular distribution with LHS to create the range in parameters, and using the information from @zhao2002 they also used a coefficient of variation of 0.30 and 100 draws, choosing these values at they had been previously used. Their addition to the research of uncertainty, was by examining uncertainty under different levels of congestion. Their research found that there is an impact on the model output from the change in input and parameter uncertainty and requires attention when planning. Also, model output uncertainty was not sensitive to the level of congestion.
+@manzo2015 looked at uncertainty on model input and parameters for a
+trip-based transportation demand model in a small Danish town. They used
+a triangular distribution with LHS to create the range in parameters,
+and using the information from @zhao2002 they also used a coefficient of
+variation of 0.30 and 100 draws, choosing these values at they had been
+previously used. Their addition to the research of uncertainty, was by
+examining uncertainty under different levels of congestion. Their
+research found that there is an impact on the model output from the
+change in input and parameter uncertainty and requires attention when
+planning. Also, model output uncertainty was not sensitive to the level
+of congestion.
 
-@petrik2016measuring evaluated uncertainty in mode shift predictions due to uncertainty from input parameters, socioeconomic data, and alternative specific constants. This study was based on a high-speed rail project in Portugal as a component of the Trans-European Transport Network. They collected survey data and developed discrete choice models. The authors created their own parameter values from the collected data, obtaining the mean or "best" value from the surveys and the corresponding t-statistic. With these they generated 10,000 samples each of parameter values, socioeconomic inputs, and mode-specific constants, using bootstrap re-sampling, Monte Carlo sampling, and triangular distribution methods respectively. The authors found that variance in alternative specific attributes is the major contributor to output uncertainty in comparison to parameter variance or socioeconomic variance. Socioeconomic data had the least contribution to overall output variance, and there was a relatively insignificant mode shift due to variability in parameters.
+@petrik2016measuring evaluated uncertainty in mode shift predictions due
+to uncertainty from input parameters, socioeconomic data, and
+alternative specific constants. This study was based on a high-speed
+rail project in Portugal as a component of the Trans-European Transport
+Network. They collected survey data and developed discrete choice
+models. The authors created their own parameter values from the
+collected data, obtaining the mean or "best" value from the surveys and
+the corresponding t-statistic. With these they generated 10,000 samples
+each of parameter values, socioeconomic inputs, and mode-specific
+constants, using bootstrap re-sampling, Monte Carlo sampling, and
+triangular distribution methods respectively. The authors found that
+variance in alternative specific attributes is the major contributor to
+output uncertainty in comparison to parameter variance or socioeconomic
+variance. Socioeconomic data had the least contribution to overall
+output variance, and there was a relatively insignificant mode shift due
+to variability in parameters.
 
-@petrik2020uncertainty used an activity based microsimulation travel demand model for Singapore to evaluate model form and parameter uncertainty. This model has 22 sub-models and 817 parameters. The authors determined which of the 817 parameters the sub-models were most sensitive to and applied a full sensitivity analysis of the top 100 of the parameters, preserving correlations. Using the mean parameter value and the standard deviations they had for all of them they used Latin hypercube sampling with 100 draws to look at the outcomes of the change in each parameter value. Different sized samples of the model population were also considered in their research. They found that of the 100 most sensitive parameter values, the outcome coefficient of variation varied from 3% to 49%. The variance of the parameter variables did not exceed 19%, and thus the results from the parameter uncertainty were higher than the variance in the parameters. They also found that the results of the parameter uncertainty was higher than simulation uncertainty.
+@petrik2020uncertainty used an activity based microsimulation travel
+demand model for Singapore to evaluate model form and parameter
+uncertainty. This model has 22 sub-models and 817 parameters. The
+authors determined which of the 817 parameters the sub-models were most
+sensitive to and applied a full sensitivity analysis of the top 100 of
+the parameters, preserving correlations. Using the mean parameter value
+and the standard deviations they had for all of them they used Latin
+hypercube sampling with 100 draws to look at the outcomes of the change
+in each parameter value. Different sized samples of the model population
+were also considered in their research. They found that of the 100 most
+sensitive parameter values, the outcome coefficient of variation varied
+from 3% to 49%. The variance of the parameter variables did not exceed
+19%, and thus the results from the parameter uncertainty were higher
+than the variance in the parameters. They also found that the results of
+the parameter uncertainty was higher than simulation uncertainty.
 
-In transportation demand models, when uncertainty is analysed, most error research to this point has focused on input uncertainty or model forms, rather than parameter estimate uncertainty [@rasouli2012]. In this literature review 12 articles have been included. Of those 12, two look at input data as the only focus of their uncertainty research, three focus on model form uncertainty, one looks at both model form and parameter estimate uncertainty, and six focus on both input data and parameter estimate uncertainty. No researchers have looked at parameter estimate uncertainty as the only source of error in their models. This is a gap in uncertainty research and is why that for this study, the parameter estimates within the model uncertainty is of the most immediate concern. When parameter uncertainty has been examined in literature it is often in conjunction with input errors, or on relatively small and impractical models. No researchers have used real models for their analyses. There have also been some conflicting conclusions on how parameter variance impacts output uncertainty. There is a research need within uncertainty analyses to have additional and repetitive studies that can confirm the outcome of previous research, since it is a relatively new topic of discussion. Uncertainty research is needed as transportation demand models provide estimates and forecasts for decision and policy makers. An inaccurate model or large output variance could change what decisions are made and when [@aep50_2023]. There is also a research need within uncertainty for both activity-based models, and destination and transport mode choice model components. In this research, I investigated the variance in forecast traffic volumes resulting from varying the mode and destination choice parameters in an advanced trip-based travel demand model, using combined mode and destination choice models, coupled with highway assignment.
+In transportation demand models, when uncertainty is analysed, most
+error research to this point has focused on input uncertainty or model
+forms, rather than parameter estimate uncertainty [@rasouli2012]. In
+this literature review 12 articles have been included. Of those 12, two
+look at input data as the only focus of their uncertainty research,
+three focus on model form uncertainty, one looks at both model form and
+parameter estimate uncertainty, and six focus on both input data and
+parameter estimate uncertainty. No researchers have looked at parameter
+estimate uncertainty as the only source of error in their models. This
+is a gap in uncertainty research and is why that for this study, the
+parameter estimates within the model uncertainty is of the most
+immediate concern. When parameter uncertainty has been examined in
+literature it is often in conjunction with input errors, or on
+relatively small and impractical models. No researchers have used real
+models for their analyses. There have also been some conflicting
+conclusions on how parameter variance impacts output uncertainty. There
+is a research need within uncertainty analyses to have additional and
+repetitive studies that can confirm the outcome of previous research,
+since it is a relatively new topic of discussion. Uncertainty research
+is needed as transportation demand models provide estimates and
+forecasts for decision and policy makers. An inaccurate model or large
+output variance could change what decisions are made and when
+[@aep50_2023]. There is also a research need within uncertainty for both
+activity-based models, and destination and transport mode choice model
+components. In this research, I investigated the variance in forecast
+traffic volumes resulting from varying the mode and destination choice
+parameters in an advanced trip-based travel demand model, using combined
+mode and destination choice models, coupled with highway assignment.
