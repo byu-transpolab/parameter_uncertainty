@@ -1,9 +1,9 @@
 # Model Design and Methodology {#sec-methods}
 
 ```{r packages, include = FALSE}
-some_packages <- c("tidyverse", "bookdown", "omxr", "nhts2017", "rgdal", "sf", 
-                   "ggthemes", "lhs", "foreign", "imputeTS", "targets", "readxl", "knitr", "gridExtra", "ggspatial", "kableExtra")
-lapply(some_packages, library, character.only=TRUE)
+library(tidyverse)
+library(targets)
+library(kableExtra)
 ```
 
 This section describes the process by which a transportation demand model has been created and developed for the purposes of this uncertainty analysis. A method for how to evaluate uncertainty was also described and a decision is made for how to use them to evaluate model uncertainty.
