@@ -17,18 +17,18 @@ can be found in @tbl-authors.
 #| label: tbl-authors
 #| tbl-cap: Studies of Forecasting Uncertainty
 authors_source <- tibble("Reference" = c(
-  "Rodier et al. @rodier2002uncertain",  
-  'Zhao and Kockelman @zhao2002',  
-  'Clay and Jonson @clay2005univariate',  
-  'Flyvbjerg et al. @flyvbjerg2005',  
-  'Armoogum et al. @armoogum2009',  
-  'Duthie et al. @duthie2010highway',  
-  'Welde and Odeck @welde2011planners',  
-  'Yang et al. @yang2013',  
-  'Manzo et al. @manzo2015',  
-  'Petrik et al. @petrik2016measuring',  
-  'Petrik et al. @petrik2020uncertainty', 
-  'Hoque et al. @hoque2021'), 
+  "@rodier2002uncertain",  
+  '@zhao2002',  
+  '@clay2005univariate',  
+  '@flyvbjerg2005',  
+  '@armoogum2009',  
+  '@duthie2010highway',  
+  '@welde2011planners',  
+  '@yang2013',  
+  '@manzo2015',  
+  '@petrik2016measuring',  
+  '@petrik2020uncertainty', 
+  '@hoque2021'), 
   "Uncertainty Source(s) Evaluated" = c(
     "Input Data",  
     "Input Data & Parameter Estimates",  
@@ -51,8 +51,7 @@ Model accuracy is the basis for why uncertainty of input data and/or
 parameter estimates are important to study. Travel forecasters have
 always been cognizant of the uncertainty in their forecasts, especially
 as project decisions are made using these models, often with high
-financial impacts. @flyvbjerg2005, @armoogum2009, and @welde2011planners
-looked at forecasting uncertainty in transportation models.
+financial impacts. 
 
 @flyvbjerg2005 collected data from various forecasting traffic models
 with an emphasis on rail projects. They used the forecast data for a

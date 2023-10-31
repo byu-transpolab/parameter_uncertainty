@@ -57,6 +57,7 @@ format:
   elsevier-pdf:
     journal: 
       name: 'Transportation Research Part A: Policy and Practice'
+      cite-style: authoryear
     cite-method: citeproc
     include-in-header:
       - file: packages.tex
