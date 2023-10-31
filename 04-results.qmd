@@ -1,10 +1,12 @@
 # Sensitivity Analysis Results {#sec-results}
 
-```{r packages, include = FALSE}
-some_packages <- c("tidyverse", "sf", "ggthemes", "lhs", "foreign",
-                   "targets", "readxl", "gridExtra", "ggspatial", 
-                   "kableExtra", "scales")
-lapply(some_packages, library, character.only=TRUE)
+```{r packages, file = "R/chapter_start.R", include = FALSE, cache=FALSE}
+library(sf)
+library(ggthemes)
+library(ggspatial)
+library(lhs)
+library(foreign)
+library(scales)
 ```
 
 Each of the 100 LHS parameter draws was applied to the RVTPO model,
@@ -226,7 +228,7 @@ on a road with 40,000 total vehicles corresponds to a small variation
 tar_load(networks)
 
 invisible(
-base <- read.dbf("data/sensitivity_out/BASE_LOADED.DBF") %>%
+base <- foreign::read.dbf("data/sensitivity_out/BASE_LOADED.DBF") %>%
   mutate(link = paste(A, B, sep = "_"))
 )
 
@@ -249,16 +251,16 @@ base_total <- merge(base, links_total, by = "link") %>%
                                   FACTYPE == 9 ~ "Ramp",
                                   FACTYPE == 10 ~ "Ramp",))
 
-shape <- st_read("data/sensitivity_out/BASE_LOADED.shp", crs = 4326)
+shape <- sf::st_read("data/sensitivity_out/BASE_LOADED.shp", crs = 4326)
 
 modified_shp <- shape %>%
   left_join(base_total, by = c("A" = "A", "B" = "B")) %>%
   filter(mean > 0)
 
 ggplot() +
-  annotation_map_tile("cartolight", zoom = 11) +
+  ggspatial::annotation_map_tile("cartolight", zoom = 11) +
   geom_sf(data = modified_shp, aes(color = sd, linewidth = mean), alpha = 0.5) +
-  theme_map() +
+  ggthemes::theme_map() +
   scale_colour_gradientn(colours=rainbow(4)) +
   labs(color = "Standard Deviation",
        linewidth = "Average Total Volume") +
@@ -280,14 +282,16 @@ in the model show no variation at all; these are presumably links near
 the edges of the model region where the only traffic is to and from
 external zones, trips which were held constant in this framework.
 
-```{r totalvolume, echo = FALSE, warning = FALSE, out.width="80%"}
+```{r totalvolume, echo = FALSE, warning = FALSE}
 #| label: fig-totalvolume
 #| fig-cap: Coefficient of variation in daily link volume by facility type for a random sample of highway links.
+#| out-width: 100%
 set.seed(1)
+
 
 tar_load(networks)
 
-base <- read.dbf("data/sensitivity_out/BASE_LOADED.DBF") %>%
+base <- foreign::read.dbf("data/sensitivity_out/BASE_LOADED.DBF") %>%
   mutate(link = paste(A, B, sep = "_"))
 
 ## Total Volume
@@ -383,9 +387,10 @@ for trips changes between zone pairs, the realities of the highway
 capacity, volume-delay, and static user equilibrium procedures may be
 limiting the possibilities for forecast highway volumes.
 
-```{r densityplots, warning = FALSE, echo = FALSE, message = FALSE, fig.align="center", out.width="80%"}
+```{r densityplots, warning = FALSE, echo = FALSE, message = FALSE}
 #| fig-cap: Density plot of forecast volume on selected links, with default parameter results marked in red, and AAWDT values in green.
 #| label: fig-densityplots
+#| out.width: "100%"
 set.seed(109)
 
 tar_load(networks)

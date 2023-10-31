@@ -18,3 +18,4 @@ _book/
 rosm.cache/
 rosm.cache/
 .DS_Store
+*tikzDictionary

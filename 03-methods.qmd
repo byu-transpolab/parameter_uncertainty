@@ -1,6 +1,7 @@
 # Model Design and Methodology {#sec-methods}
 
-```{r packages, include = FALSE}
+
+```{r packages, file = "R/chapter_start.R", include = FALSE, cache = FALSE}
 library(tidyverse)
 library(targets)
 library(kableExtra)
@@ -189,13 +190,13 @@ discrepancies for the MC generated parameters. These Figures show that
 LHS is likely to estimate the full variance of the results with fewer
 draws.
 
-```{r parameter100, echo = FALSE, out.width = "100%"}
+```{r parameter100, echo = FALSE, out.width = "80%"}
 #| label: fig-parameter
 #| fig-cap: "Sampled mode and destination choice parameters for HBW trip purpose."
 #| fig-subcap:
 #|   - "100 draws"
 #|   - "600 draws"
-#| layout-ncol: 2
+#| layout-nrow: 2
 tar_load(hbw_mc_coeff_lists_100)
 list100 <- hbw_mc_coeff_lists_100
 
