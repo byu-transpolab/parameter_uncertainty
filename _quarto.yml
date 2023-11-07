@@ -24,7 +24,7 @@ book:
           city: Provo
           state: UT
           postal-code: 84602
-  date: "7/3/2023"
+  date: "10/31/2023"
   chapters:
     - index.qmd
     - 02-literature.qmd
@@ -41,12 +41,15 @@ book:
     resulting from varying the mode and destination choice parameters in an 
     advanced trip-based travel demand model. Using Latin hypercube sampling to 
     construct several hundred combinations of parameters across the plausible 
-    parameter space, we introduce substantial changes to implied impedances and modal
+    parameter space, we introduce substantial changes to implied travel impedances and modal
     utilities. However, the aggregate effects of of these 
     changes on forecasted traffic volumes is small, with a variance of 
-    approximately 1 percent on high-volume facilities. Thus, parameter 
-    uncertainty does not appear to be a significant factor in forecasting 
-    traffic volumes using transportation demand models.
+    approximately 1 percent on high-volume facilities. It is likely that in this 
+    example --- and perhaps in others --- the static network assignment 
+    places constraints on the possible volume solutions and limits the practical
+    impacts of parameter uncertainty. Further research should examine the robustness
+    of this finding to other less constrained networks and to activity-based travel
+    model frameworks.
     
 bibliography: book.bib
 csl: apa.csl

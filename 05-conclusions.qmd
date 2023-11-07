@@ -1,21 +1,9 @@
 # Conclusions {#sec-conclusions}
 
-The uncertainty and variance present in the model results are overall
-smaller than the variability introduced to the model through the
-parameters. Auto trips have less variance than transit or non-motorized
-trips, regardless of the number of trips in a given zone. When there is
-only two modes available auto trips have even lower variance. Higher
-volume roads have greater certainty than lower volume ones. Also,
-uncertainty that exists within the first three steps of the model
-appears to be corrected by the limitations of the highway network
-assignment. Overall there is a variance of approximately 1% in the model
-outputs, when a 10 percent variance was used for the parameter
-estimates.
-
 In general, this research has shown that statistical parameter
 uncertainty does not appear to be a significant factor in forecasting
-traffic volumes using transportation demand models. The result
-uncertainty is generally equally to or smaller than the input parameter
+traffic volumes using trip-based travel demand models. The result
+uncertainty is generally equal to or smaller than the input parameter
 variance. The uncertainty in parameter inputs appears to lead to
 variation in highway volumes that is lower than the error between the
 model forecast and the highway counts. Any variation in mode and
@@ -24,14 +12,14 @@ limitations of the highway network assignment.
 
 There are several limitations that must be mentioned in this research,
 however. First, we did not attempt to address the statistical uncertainty in
-trip rate estimates; these may play a substantially larger role than
+trip production estimates; these may play a substantially larger role than
 destination and mode choice parameters, given that lower trip rates may
 lead to lower traffic volumes globally, which could not be "corrected"
-by the static user equilibrium assignment. And the assignment itself
-might have been aided in this case by the RVTPO's relatively simplistic
-highway network: if only two major highways exist the number of
-realistic lowest cost path choices between regions is somewhat
-constrained. It may be that in a larger network with more path
+by the static user equilibrium assignment. Additionally, the relatively
+sparse network of the RVTPO model region --- lacking parallel high-capacity
+highway facilities --- may have meant that the static network assignment would
+converge to a similar solution point regardless of modest changes to the 
+trip matrix. It may be that in a larger network with more path
 redundancies, the assignment may not have been as helpful in
 constraining the forecast volumes.
 
@@ -44,15 +32,15 @@ variance-covariance matrices for the estimated models, enabling
 researchers to ensure that covariance relationships between sampled
 parameters are maintained.
 
-Notwithstanding these limitations, statistical parameter variance is not
-likely the largest source of uncertainty in travel forecasting. There
+Notwithstanding these limitations, statistical parameter variance does not
+appear to be the largest source of uncertainty in travel forecasting. There
 are likely more important factors at play that planners and government
 agencies should address. Research on all sources of uncertainty is
 somewhat limited, but in many ways has been hampered by the burdensome
 computational requirements of many modern travel models
 [@voulgaris2019]. This research methodology benefited from a
 lightweight travel model that could be repeatedly re-run with dozens of
-resampled choice parameters. Better understanding the other sources of
+sampled choice parameters. Better understanding the other sources of
 uncertainty -- model specification and input accuracy -- might also
 benefit from lightweight models constructed for transparency and
 flexibility rather than heavily constrained models emphasizing precise
