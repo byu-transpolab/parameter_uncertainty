@@ -40,7 +40,9 @@ somewhat limited, but in many ways has been hampered by the burdensome
 computational requirements of many modern travel models
 [@voulgaris2019]. This research methodology benefited from a
 lightweight travel model that could be repeatedly re-run with dozens of
-sampled choice parameters. Better understanding the other sources of
+sampled choice parameters. One strategy for applying this methodology to 
+larger models may be relatively recent TMIP-EMAT exploratory modeling toolkit 
+[@milkovits2019]. But a better understanding the other sources of
 uncertainty -- model specification and input accuracy -- might also
 benefit from lightweight models constructed for transparency and
 flexibility rather than heavily constrained models emphasizing precise
@@ -49,5 +51,17 @@ forecasts to be made with an ensemble approach [@wu2021],
 identifying preferred policies as the consensus of multiple plausible
 model specifications.
 
-# Author Contribution Statement {.unnumbered}
-The authors confirm contribution to the paper as follows: study conception and design: GS Macfarlane, NM Gray; data collection: NM Gray; analysis and interpretation of results: GS Macfarlane, NM Gray; draft manuscript preparation: NM Gray, GS Macfarlane. All authors reviewed the results and approved the final version of the manuscript.
+# Author Contribution Statement{.unnumbered}
+
+```{r contrib, results = 'asis', message=FALSE, echo=FALSE}
+library(CRediTas)
+# crt <- template_create(authors = c("Gregory S. Macfarlane",
+#                                    "Natalie M. Gray"))
+# fix(crt)
+# readr::write_csv(crt, "author_contributions.csv")
+crt <- readr::read_csv("author_contributions.csv", show_col_types = FALSE)
+```
+`r CRediTas::cras_write(crt, markdown = TRUE)`
+
+The authors have no competing interests in the publication of this article, and 
+the research received no external funding.

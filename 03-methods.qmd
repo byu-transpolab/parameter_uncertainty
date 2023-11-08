@@ -7,23 +7,17 @@ library(targets)
 library(kableExtra)
 ```
 
-This section describes the process by which a transportation demand
-model has been created and developed for the purposes of this
-uncertainty analysis. A method for how to evaluate uncertainty was also
-described and a decision is made for how to use them to evaluate model
-uncertainty.
-
 ## Model Design
 
-To examine the effects of parameter input sensitivity, I developed a
-trip-based travel demand model. The model was developed from the Roanoke
+To examine the effects of parameter input sensitivity, we adapted a
+trip-based travel demand model from the Roanoke
 Valley Transportation Planning Organization
-[(RVTPO)](https://github.com/xinwangvdot/rvtpo) Model. The RVTPO model
+[(RVTPO)](https://github.com/xinwangvdot/rvtpo). The RVTPO model
 provides an ideal testing environment for this research because it uses
 an integrated mode and destination choice framework common in more
 advanced trip-based models. At the same time, its small size
-(approximately 215 zones) means the entire model runs in a few minutes
-allowing for efficient testing of multiple model runs.
+(approximately 215 zones) means the entire model runs in a few minutes 
+and thus allows for efficient testing of multiple model runs.
 
 The total passenger trips $T$ traveling from zone $i$ to zone $j$ on the
 highway in a period $t$ is $$
@@ -69,6 +63,7 @@ obtained from the RVTPO model. These values are shown in
 tar_load(mc_coeff)
 tar_load(mc_const)
 tar_load(dc_coeff)
+
 
 coefficient_table <- bind_rows(
   mc_coeff |> mutate(model = "Mode choice") |> 
@@ -190,7 +185,7 @@ discrepancies for the MC generated parameters. These Figures show that
 LHS is likely to estimate the full variance of the results with fewer
 draws.
 
-```{r parameter100, echo = FALSE, out.width = "80%"}
+```{r parameter100, echo = FALSE}
 #| label: fig-parameter
 #| fig-cap: "Sampled mode and destination choice parameters for HBW trip purpose."
 #| fig-subcap:
@@ -202,11 +197,12 @@ list100 <- hbw_mc_coeff_lists_100
 
 Z100 <- bind_rows(list100) %>% 
   mutate(method = c("base", rep("MC", 100), rep("LHS", 100))) %>% 
-  mutate(vot = (ivtt/ccost) * (60/100)) %>%
+  mutate(vot = (ivtt/ccost) * (60/100),
+         ccost = 100 * ccost) %>%
   pivot_longer(cols = -c("method"))
 
 facet_names <- c('autocost' = "Auto operating cost",
-                 'ccost' = "Travel cost",
+                 'ccost' = "Travel cost (per $)",
                  "ivtt" = "In-vehicle travel time",
                  "vot" = "Value of Time",
                  "walk1" = "Walk distance")
@@ -222,21 +218,18 @@ z1 <- Z100 %>%
        x = "Value") +
   theme_bw() +
   theme(legend.position = "bottom") +
-  facet_wrap(vars(name), scales = "free", labeller = as_labeller(facet_names))
+  facet_wrap(vars(name), scales = "free", labeller = as_labeller(facet_names)) + 
+  scale_y_continuous(breaks = )
 
 tar_load(hbw_mc_coeff_lists_600)
 list600 <- hbw_mc_coeff_lists_600
 
 Z600 <- bind_rows(list600) %>% 
   mutate(method = c("base", rep("MC", 600), rep("LHS", 600))) %>%
-  mutate(vot = (ivtt/ccost) * (60/100)) %>%
+  mutate(vot = (ivtt/ccost) * (60/100),
+         ccost = 100 * ccost) %>%
   pivot_longer(cols = -c("method"))
 
-facet_names <- c('autocost' = "Auto operating cost",
-                 'ccost' = "Travel cost",
-                 "ivtt" = "In-vehicle travel time",
-                 "vot" = "Value of Time",
-                 "walk1" = "Walk distance")
 
 z6 <- Z600 %>%
   filter(!(method %in% "base")) %>%
@@ -272,17 +265,16 @@ across each iteration, and the cumulative standard deviation is used to
 show the 95% confidence interval of that mean. When the cumulative mean
 for the draws stabilizes, that shows that the amount of generated
 parameters has captured the possible variance of the results. This is
-shown for each of the three trip purposes in @fig-cm.
+shown for two of the three trip purposes in @fig-cm.
 
-```{r fig-cm, warning = FALSE, echo = FALSE, message = FALSE, out.width = "100%"}
+```{r fig-cm}
 #| label: fig-cm
-#| layout-ncol: 2
+#| layout-ncol: 1
 #| layout-nrow: 2
 #| fig-cap: Average mode choice logsum (impedance) cumulative mean and 95% confidence interval with 100 and 600 draws.
 #| fig-subcap: 
 #|   - "HBW"
 #|   - "HBO"
-#|   - "NHB"
 #| fig-env: sidewaysfigure
 
 ## HBW
@@ -354,7 +346,6 @@ nhb_cm <- nhb_stats %>%
 ## Plot
 hbw_cm
 hbo_cm
-nhb_cm
 ```
 
 For all three trip purposes, both sampling methods had a stabilized mean

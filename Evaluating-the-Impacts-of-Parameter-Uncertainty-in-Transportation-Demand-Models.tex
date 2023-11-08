@@ -3,32 +3,11 @@
 \PassOptionsToPackage{hyphens}{url}
 \PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
 %
-
 \documentclass[
   letterpaper,
-]{trb}
-
-\usepackage{fullpage}
-\usepackage[pagewise]{lineno}
-\linenumbers
-\usepackage{newtxtext}
-
-
-\makeatletter
-\newcounter{wordcounter}
-\setcounter{wordcounter}{6566}
-
-\newcounter{tablecounter}
-\setcounter{tablecounter}{3}
-
-\newcounter{totalwordcounter}
-\newcommand{\totalwordcount}{%
-  \setcounter{totalwordcounter}{6566}
-  \addtocounter{totalwordcounter}{\numexpr250*3}
-  \number\value{totalwordcounter}% Output the number
-	\renewcommand{\totalwordcount}{\number\value{totalwordcounter}}
-}
-\makeatother
+  authoryear,
+  review,
+  3p]{elsarticle}
 
 \usepackage{amsmath,amssymb}
 \usepackage{iftex}
@@ -123,9 +102,22 @@
 \newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{#1}\break}
 \newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
 
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
 \usepackage{rotating}
-\usepackage{orcidlink}
-\definecolor{mypink}{RGB}{219, 48, 122}
+\newpageafter{author}
 \makeatletter
 \makeatother
 \makeatletter
@@ -180,6 +172,7 @@
 \makeatother
 \makeatletter
 \makeatother
+\journal{Case Studies on Transport Policy}
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
@@ -188,26 +181,38 @@
 \urlstyle{same} % disable monospaced font for URLs
 \hypersetup{
   pdftitle={Evaluating the Impacts of Parameter Uncertainty in Transportation Demand Models},
-  pdfauthor={Gregory S. Macfarlane; Natalie Mae Gray},
+  pdfauthor={Natalie Mae Gray; Gregory S. Macfarlane},
+  pdfkeywords={Travel modeling, Uncertainty},
   colorlinks=true,
   linkcolor={blue},
   filecolor={Maroon},
   citecolor={Blue},
-  urlcolor={red},
+  urlcolor={Blue},
   pdfcreator={LaTeX via pandoc}}
 
+\setlength{\parindent}{6pt}
+\begin{document}
 
+\begin{frontmatter}
 \title{Evaluating the Impacts of Parameter Uncertainty in Transportation
 Demand Models}
-\author{
-Gregory S. Macfarlane\\Brigham Young University\\Civil and Construction
-Engineering\\\href{mailto:gregmacfarlane@byu.edu}{gregmacfarlane@byu.edu}\\ORCID: 0000-0003-3999-7584\\ \\ 
-Natalie Mae Gray\\Brigham Young
-University\\\\\href{mailto:nmgray@byu.edu}{nmgray@byu.edu}\\}
-\date{2023-07-03}
-\begin{document}
-\maketitle
-\newpage
+\author[1]{Natalie Mae Gray%
+%
+}
+ \ead{nmgray@byu.edu} 
+\author[1]{Gregory S. Macfarlane%
+\corref{cor1}%
+}
+ \ead{gregmacfarlane@byu.edu} 
+
+\affiliation[1]{organization={Brigham Young University, Civil and
+Construction Engineering},addressline={430
+EB},city={Provo},postcode={84602},postcodesep={}}
+
+\cortext[cor1]{Corresponding author}
+
+
+        
 \begin{abstract}
 The inherent uncertainty in travel forecasting models --- arising from
 potential and unkown errors in input data, parameter estimation, or
@@ -217,15 +222,27 @@ variance in forecasted traffic volumes resulting from varying the mode
 and destination choice parameters in an advanced trip-based travel
 demand model. Using Latin hypercube sampling to construct several
 hundred combinations of parameters across the plausible parameter space,
-we introduce substantial changes to implied impedances and modal
+we introduce substantial changes to implied travel impedances and modal
 utilities. However, the aggregate effects of of these changes on
 forecasted traffic volumes is small, with a variance of approximately 1
-percent on high-volume facilities. Thus, parameter uncertainty does not
-appear to be a significant factor in forecasting traffic volumes using
-transportation demand models.
+percent on high-volume facilities. It is likely that in this example ---
+and perhaps in others --- the static network assignment places
+constraints on the possible volume solutions and limits the practical
+impacts of parameter uncertainty. Further research should examine the
+robustness of this finding to other less constrained networks and to
+activity-based travel model frameworks.
 \end{abstract}
-\newpage
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, frame hidden, borderline west={3pt}{0pt}{shadecolor}, boxrule=0pt, interior hidden, enhanced, breakable]}{\end{tcolorbox}}\fi
+
+
+
+
+
+\begin{keyword}
+    Travel modeling \sep 
+    Uncertainty
+\end{keyword}
+\end{frontmatter}
+    \ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, frame hidden, enhanced, borderline west={3pt}{0pt}{shadecolor}, interior hidden, sharp corners, breakable]}{\end{tcolorbox}}\fi
 
 \bookmarksetup{startatroot}
 
@@ -236,7 +253,8 @@ The inherent accuracy and uncertainty in travel forecasting models is
 receiving increasing attention from the scholarly and practicing
 community. Given that such models are used in the allocation of billions
 of dollars of infrastructure financing each year, the financial risks
-for inaccurate or imprecise forecasts are high (\emph{1}, \emph{2}).
+for inaccurate or imprecise forecasts are high (Flyvbjerg et al., 2005;
+Voulgaris, 2019).
 
 Transportation demand forecasting models, like other
 mathematical-statistical models, might be abstracted to the following
@@ -248,7 +266,7 @@ y = f(X, \beta)
 moderated through a specific functional form \(f()\) and parameters
 \(\beta\). Three general sources of error may lead a forecast value
 \(\hat{y}\) to differ from the ``true'' or ``actual'' value of \(y\)
-(\emph{3}):
+(Rasouli \& Timmermans, 2012):
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -257,15 +275,15 @@ moderated through a specific functional form \(f()\) and parameters
   The input data \(X\) might contain errors, due to inaccuracies in the
   base year, or an inaccurate projection of land use, petroleum price,
   or other key input variable. This was among the primary issues
-  identified by (\emph{4}) in a historical analysis of the accuracy of
-  travel forecasts.
+  identified by Hoque et al. (2021) in a historical analysis of the
+  accuracy of travel forecasts.
 \item
   The model form \(f()\) may be improperly specified. Variables that
   play a major role in travel behavior may not be included due to lack
   of information, or the unobserved error components may have a
   different correlation than was assumed during model development. A
   detailed description of specifying mode choice model variables and
-  nesting of error structures is given by (\emph{5}).
+  nesting of error structures is given by Koppelman \& Bhat (2006).
 \item
   The parameter estimates \(\hat{\beta}\) of the ``true'' parameters
   \(\beta\) may have incorrect values. This may be because the
@@ -279,7 +297,8 @@ parameter estimates in a theoretical perspective address the parameter
 uncertainty question to a great degree. Yet even this source of
 uncertainty has been largely ignored in transportation forecasts, and
 model development documentation often elides the variance in these
-values completely (\emph{6}). (\emph{7}) examined the effects of this
+values completely (National Academies of Sciences, Engineering, and
+Medicine., 2012). Zhao \& Kockelman (2002) examined the effects of this
 parameter uncertainty in a trip-based model of a contrived 25 zone
 region, but a systemic analysis of this uncertainty in a practical model
 is not common.
@@ -310,87 +329,76 @@ Uncertainty has been examined in various ways over the last two decades,
 and is becoming increasingly important for researchers. This review
 looks at why uncertainty is important to evaluate in transportation
 demand models, and research that has been done to evaluate uncertainty.
-(\emph{3}) has an extensive literature review on this topic. An overview
-of the literature and which source of uncertainty they evaluate can be
-found in Table~\ref{tbl-authors}.
+Rasouli \& Timmermans (2012) has an extensive literature review on this
+topic. An overview of the literature and which source of uncertainty
+they evaluate can be found in Table~\ref{tbl-authors}.
 
 \hypertarget{tbl-authors}{}
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.5286}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.4714}}@{}}
+\begin{longtable}[]{@{}ll@{}}
 \caption{\label{tbl-authors}Studies of Forecasting
 Uncertainty}\tabularnewline
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Reference
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Uncertainty Source(s) Evaluated
-\end{minipage} \\
+Reference & Uncertainty Source(s) Evaluated \\
 \midrule\noalign{}
 \endfirsthead
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Reference
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Uncertainty Source(s) Evaluated
-\end{minipage} \\
+Reference & Uncertainty Source(s) Evaluated \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-Rodier et al. (\emph{8}) & Input Data \\
-Zhao and Kockelman (\emph{7}) & Input Data \& Parameter Estimates \\
-Clay and Jonson (\emph{9}) & Input Data \& Parameter Estimates \\
-Flyvbjerg et al. (\emph{1}) & Model Form \\
-Armoogum et al. (\emph{10}) & Model Form \\
-Duthie et al. (\emph{11}) & Input Data \& Parameter Estimates \\
-Welde and Odeck (\emph{12}) & Model Form \\
-Yang et al. (\emph{13}) & Input Data \& Parameter Estimates \\
-Manzo et al. (\emph{14}) & Input Data \& Parameter Estimates \\
-Petrik et al. (\emph{15}) & Input Data \& Parameter Estimates \\
-Petrik et al. (\emph{16}) & Model Form \& Parameter Estimates \\
-Hoque et al. (\emph{4}) & Input Data \\
+Rodier \& Johnston (2002) & Input Data \\
+Zhao \& Kockelman (2002) & Input Data \& Parameter Estimates \\
+Clay \& Johnston (2005) & Input Data \& Parameter Estimates \\
+Flyvbjerg et al. (2005) & Model Form \\
+Armoogum et al. (2009) & Model Form \\
+Duthie et al. (2010) & Input Data \& Parameter Estimates \\
+Welde \& Odeck (2011) & Model Form \\
+Yang et al. (2013) & Input Data \& Parameter Estimates \\
+Manzo et al. (2015) & Input Data \& Parameter Estimates \\
+Petrik et al. (2016) & Input Data \& Parameter Estimates \\
+Petrik et al. (2020) & Model Form \& Parameter Estimates \\
+Hoque et al. (2021) & Input Data \\
 \end{longtable}
 
 Model accuracy is the basis for why uncertainty of input data and/or
 parameter estimates are important to study. Travel forecasters have
 always been cognizant of the uncertainty in their forecasts, especially
 as project decisions are made using these models, often with high
-financial impacts. (\emph{1}), (\emph{10}), and (\emph{12}) looked at
-forecasting uncertainty in transportation models.
+financial impacts.
 
-(\emph{1}) collected data from various forecasting traffic models with
-an emphasis on rail projects. They used the forecast data for a given
-year and the actual value that was collected for the same year. Their
-study found that there is a statistical significance in the difference
-of the estimated and actual values. Rail projects are generally
-overestimating passenger forecasts by 106\%, and half of road projects
-have a traffic forecast difference of plus or minus 20\%. They did not
-identify where this inaccuracy came from, but they identified that it
-was important for future research.
+Flyvbjerg et al. (2005) collected data from various forecasting traffic
+models with an emphasis on rail projects. They used the forecast data
+for a given year and the actual value that was collected for the same
+year. Their study found that there is a statistical significance in the
+difference of the estimated and actual values. Rail projects are
+generally overestimating passenger forecasts by 106\%, and half of road
+projects have a traffic forecast difference of plus or minus 20\%. They
+did not identify where this inaccuracy came from, but they identified
+that it was important for future research.
 
-(\emph{10}) looked at uncertainty within a forecasting model for the
-Paris and Montreal metropolitan regions. The sources of uncertainty
-analysed were calibration of the model, behavior of future generations,
-and demographic projections. A jackknife technique, rather than sampling
-methods, was used to estimated confidence intervals for each source of
-error using multiple years of analysis. This technique is a way to
-reduce the bias of an estimator and permits the estimation of confidence
-intervals to produce variance estimates. They found that the longer the
-forecasting period was, the larger the uncertainty. Generally the model
-forecast within 10-15\%, reaching higher percentage ranges for variables
-with small values or small sample sizes.
+Armoogum et al. (2009) looked at uncertainty within a forecasting model
+for the Paris and Montreal metropolitan regions. The sources of
+uncertainty analysed were calibration of the model, behavior of future
+generations, and demographic projections. A jackknife technique, rather
+than sampling methods, was used to estimated confidence intervals for
+each source of error using multiple years of analysis. This technique is
+a way to reduce the bias of an estimator and permits the estimation of
+confidence intervals to produce variance estimates. They found that the
+longer the forecasting period was, the larger the uncertainty. Generally
+the model forecast within 10-15\%, reaching higher percentage ranges for
+variables with small values or small sample sizes.
 
-(\emph{12}) compared actual and forecast traffic values for 25 toll and
-25 toll free roads in Norway. They evaluated the accuracy of Norwegian
-transportation planning models over the years. Generally traffic models
-overestimate traffic. This study found that toll projects, on average,
-overestimated traffic, but only by an average of 2.5\%. Toll free
-projects, however, underestimated traffic by an average of 19\%. They
-concluded that Norwegian toll projects have been fairly accurate, with a
-probable cause coming from the scrutiny that planners get when
-developing a toll project. A similar scrutiny should then also be placed
-on toll free projects as they are significantly less accurate.
+Welde \& Odeck (2011) compared actual and forecast traffic values for 25
+toll and 25 toll free roads in Norway. They evaluated the accuracy of
+Norwegian transportation planning models over the years. Generally
+traffic models overestimate traffic. This study found that toll
+projects, on average, overestimated traffic, but only by an average of
+2.5\%. Toll free projects, however, underestimated traffic by an average
+of 19\%. They concluded that Norwegian toll projects have been fairly
+accurate, with a probable cause coming from the scrutiny that planners
+get when developing a toll project. A similar scrutiny should then also
+be placed on toll free projects as they are significantly less accurate.
 
 These articles show that models have errors which effects traffic
 projections by a significant amount. These articles identified that
@@ -398,53 +406,55 @@ error existed but did not quantitatively identify the source of the
 error. The most researched error source has been on model form but that
 research has mostly been excluded in this review as it is not the main
 focus of this research. The second most researched form has been on
-input data. Chronologically, (\emph{8}), (\emph{7}), (\emph{9}),
-(\emph{11}), (\emph{13}), (\emph{14}), and (\emph{15}) have all
+input data. Chronologically, Rodier \& Johnston (2002), Zhao \&
+Kockelman (2002), Clay \& Johnston (2005), Duthie et al. (2010), Yang et
+al. (2013), Manzo et al. (2015), and Petrik et al. (2016) have all
 researched input error, with all but the first also looking at parameter
 estimate error as well. Parameter estimation error has been the least
 researched source of uncertainty, where there have been no studies
-focused only on that source of error. (\emph{16}) looked at parameter
-estimates, but with a focus also on model form error. The details of
-each study are described below in chronological order.
+focused only on that source of error. Petrik et al. (2020) looked at
+parameter estimates, but with a focus also on model form error. The
+details of each study are described below in chronological order.
 
-(\emph{8}) looked at uncertainty in socioeconomic projections
-(population and employment, household income, and petroleum prices) at
-the county-level for the Sacramento, California region. They wanted to
-know if the uncertainty in the range of plausible socioeconomic values
-was a significant source of error in the projection of future travel
-patterns and vehicle emissions. They identified ranges for population
-and employment, household income, and petroleum price for two scenario
-years (2005 and 2015). The ranges varied based on the scenario year and
-the socioeconomic variable. They changed one variable at a time for a
-total of 19 iterations of the model run for 2005 and 21 iterations for
-2015. Their results indicated that the error in projections for
-household income and petroleum prices is not a significant source of
-uncertainty, but error ranges for population and employment projections
-are a significant source for changes in travel and emissions. The input
-data of population and employment were a significant factor to the model
-result uncertainty.
+Rodier \& Johnston (2002) looked at uncertainty in socioeconomic
+projections (population and employment, household income, and petroleum
+prices) at the county-level for the Sacramento, California region. They
+wanted to know if the uncertainty in the range of plausible
+socioeconomic values was a significant source of error in the projection
+of future travel patterns and vehicle emissions. They identified ranges
+for population and employment, household income, and petroleum price for
+two scenario years (2005 and 2015). The ranges varied based on the
+scenario year and the socioeconomic variable. They changed one variable
+at a time for a total of 19 iterations of the model run for 2005 and 21
+iterations for 2015. Their results indicated that the error in
+projections for household income and petroleum prices is not a
+significant source of uncertainty, but error ranges for population and
+employment projections are a significant source for changes in travel
+and emissions. The input data of population and employment were a
+significant factor to the model result uncertainty.
 
-(\emph{7}) looked at the propagation of uncertainty through each step of
-a trip-based travel model from variation among inputs and parameters.
-This analysis used a traditional four-step urban transportation planning
-process (trip generation, trip attraction, mode split, and trip
-assignment) on a 25-zone sub-model of the Dallas-Fort Worth metropolitan
-region. Monte Carlo simulation was used to vary the input and parameter
-values. These values were all ranged using a coefficient of variation
-(\(c_v\)) of 0.30. The four-step model was run 100 times with 100
-different sets of input and parameter values. The results of these runs
-showed that uncertainty increased in the first three steps of the model
-and the final assignment step reduced the compounded uncertainty,
-although not below the levels of input uncertainty. The authors
-determined that uncertainty propagation was significant from changes in
-inputs and parameters, but the final step nearly stabilizes the
-uncertainty to the same amount as assumed (0.30 \(c_v\) assumption with
-a 0.31 \(c_v\) in the results of trip assignment).
+Zhao \& Kockelman (2002) looked at the propagation of uncertainty
+through each step of a trip-based travel model from variation among
+inputs and parameters. This analysis used a traditional four-step urban
+transportation planning process (trip generation, trip attraction, mode
+split, and trip assignment) on a 25-zone sub-model of the Dallas-Fort
+Worth metropolitan region. Monte Carlo simulation was used to vary the
+input and parameter values. These values were all ranged using a
+coefficient of variation (\(c_v\)) of 0.30. The four-step model was run
+100 times with 100 different sets of input and parameter values. The
+results of these runs showed that uncertainty increased in the first
+three steps of the model and the final assignment step reduced the
+compounded uncertainty, although not below the levels of input
+uncertainty. The authors determined that uncertainty propagation was
+significant from changes in inputs and parameters, but the final step
+nearly stabilizes the uncertainty to the same amount as assumed (0.30
+\(c_v\) assumption with a 0.31 \(c_v\) in the results of trip
+assignment).
 
-Another study that looked at input data uncertainty was (\emph{9}).
-These researchers varied three inputs and one parameter to analyze
-uncertainty of outputs on a fully integrated land use and travel demand
-model of six counties in the Sacramento, California region. The
+Another study that looked at input data uncertainty was Clay \& Johnston
+(2005). These researchers varied three inputs and one parameter to
+analyze uncertainty of outputs on a fully integrated land use and travel
+demand model of six counties in the Sacramento, California region. The
 variables used for analysis were productions, commercial trip generation
 rates, perceived out-of-pocket costs of travel for single occupant
 vehicles, and concentration parameter. Exogenous production, commercial
@@ -456,129 +466,114 @@ found that any uncertainty in the inputs resulted in large difference in
 the vehicle miles traveled output, although this difference was a lower
 percentage than the uncertainty in the input.
 
-(\emph{11}) evaluated uncertainty at a different level. They use a small
-generic gravity-based land use model with the traditional four steps,
-using a coefficient of variation of 0.3 from (\emph{7}) for input and
-parameters, although using antithetic sampling. In this sampling method,
-pairs of negatively correlated realizations of the uncertain parameters
-are used to obtain an estimate of the expected value of the function.
-The uncertainty was evaluated on the rankings of various transportation
-improvement projects. They found that there are a few significant
-differences that arise when changing the input and parameter values that
-result in different project rankings, and thus neglecting uncertainty
-can lead to suboptimal network improvement decisions.
+Duthie et al. (2010) evaluated uncertainty at a different level. They
+use a small generic gravity-based land use model with the traditional
+four steps, using a coefficient of variation of 0.3 from Zhao \&
+Kockelman (2002) for input and parameters, although using antithetic
+sampling. In this sampling method, pairs of negatively correlated
+realizations of the uncertain parameters are used to obtain an estimate
+of the expected value of the function. The uncertainty was evaluated on
+the rankings of various transportation improvement projects. They found
+that there are a few significant differences that arise when changing
+the input and parameter values that result in different project
+rankings, and thus neglecting uncertainty can lead to suboptimal network
+improvement decisions.
 
-(\emph{13}) evaluated a quantitative uncertainty analysis of a combined
-travel demand model. They looked at input and parameter uncertainty
-\emph{also} using a coefficient of variation of 0.30. Rather than using
-a random sampling method for choices they used a systematic framework
-with a variance-covariance matrix. Their research found that the
-coefficient of variation of the outputs are similar to the coefficient
-of variation of the inputs, and that the effect of parameter uncertainty
-on output uncertainty is generally higher than that of input
-uncertainty. This finding contradicts the finding of (\emph{7}). The
-authors concluded that improving the accuracy of parameter estimation is
-more effective that that of improving input estimation as they found
-that in most steps of the model, the impact of parameter uncertainty was
-more important that that of input uncertainty.
+Yang et al. (2013) evaluated a quantitative uncertainty analysis of a
+combined travel demand model. They looked at input and parameter
+uncertainty \emph{also} using a coefficient of variation of 0.30. Rather
+than using a random sampling method for choices they used a systematic
+framework with a variance-covariance matrix. Their research found that
+the coefficient of variation of the outputs are similar to the
+coefficient of variation of the inputs, and that the effect of parameter
+uncertainty on output uncertainty is generally higher than that of input
+uncertainty. This finding contradicts the finding of Zhao \& Kockelman
+(2002). The authors concluded that improving the accuracy of parameter
+estimation is more effective that that of improving input estimation as
+they found that in most steps of the model, the impact of parameter
+uncertainty was more important that that of input uncertainty.
 
-(\emph{14}) looked at uncertainty on model input and parameters for a
-trip-based transportation demand model in a small Danish town. They used
-a triangular distribution with LHS to create the range in parameters,
-and using the information from (\emph{7}) they also used a coefficient
-of variation of 0.30 and 100 draws, choosing these values at they had
-been previously used. Their addition to the research of uncertainty, was
-by examining uncertainty under different levels of congestion. Their
-research found that there is an impact on the model output from the
-change in input and parameter uncertainty and requires attention when
-planning. Also, model output uncertainty was not sensitive to the level
-of congestion.
+Manzo et al. (2015) looked at uncertainty on model input and parameters
+for a trip-based transportation demand model in a small Danish town.
+They used a triangular distribution with LHS to create the range in
+parameters, and using the information from Zhao \& Kockelman (2002) they
+also used a coefficient of variation of 0.30 and 100 draws, choosing
+these values at they had been previously used. Their addition to the
+research of uncertainty, was by examining uncertainty under different
+levels of congestion. Their research found that there is an impact on
+the model output from the change in input and parameter uncertainty and
+requires attention when planning. Also, model output uncertainty was not
+sensitive to the level of congestion.
 
-(\emph{15}) evaluated uncertainty in mode shift predictions due to
-uncertainty from input parameters, socioeconomic data, and alternative
-specific constants. This study was based on a high-speed rail project in
-Portugal as a component of the Trans-European Transport Network. They
-collected survey data and developed discrete choice models. The authors
-created their own parameter values from the collected data, obtaining
-the mean or ``best'' value from the surveys and the corresponding
-t-statistic. With these they generated 10,000 samples each of parameter
-values, socioeconomic inputs, and mode-specific constants, using
-bootstrap re-sampling, Monte Carlo sampling, and triangular distribution
-methods respectively. The authors found that variance in alternative
-specific attributes is the major contributor to output uncertainty in
-comparison to parameter variance or socioeconomic variance.
-Socioeconomic data had the least contribution to overall output
-variance, and there was a relatively insignificant mode shift due to
-variability in parameters.
+Petrik et al. (2016) evaluated uncertainty in mode shift predictions due
+to uncertainty from input parameters, socioeconomic data, and
+alternative specific constants. This study was based on a high-speed
+rail project in Portugal as a component of the Trans-European Transport
+Network. They collected survey data and developed discrete choice
+models. The authors created their own parameter values from the
+collected data, obtaining the mean or ``best'' value from the surveys
+and the corresponding t-statistic. With these they generated 10,000
+samples each of parameter values, socioeconomic inputs, and
+mode-specific constants, using bootstrap re-sampling, Monte Carlo
+sampling, and triangular distribution methods respectively. The authors
+found that variance in alternative specific attributes is the major
+contributor to output uncertainty in comparison to parameter variance or
+socioeconomic variance. Socioeconomic data had the least contribution to
+overall output variance, and there was a relatively insignificant mode
+shift due to variability in parameters.
 
-(\emph{16}) used an activity based microsimulation travel demand model
-for Singapore to evaluate model form and parameter uncertainty. This
-model has 22 sub-models and 817 parameters. The authors determined which
-of the 817 parameters the sub-models were most sensitive to and applied
-a full sensitivity analysis of the top 100 of the parameters, preserving
-correlations. Using the mean parameter value and the standard deviations
-they had for all of them they used Latin hypercube sampling with 100
-draws to look at the outcomes of the change in each parameter value.
-Different sized samples of the model population were also considered in
-their research. They found that of the 100 most sensitive parameter
-values, the outcome coefficient of variation varied from 3\% to 49\%.
-The variance of the parameter variables did not exceed 19\%, and thus
-the results from the parameter uncertainty were higher than the variance
-in the parameters. They also found that the results of the parameter
-uncertainty was higher than simulation uncertainty.
+Petrik et al. (2020) used an activity based microsimulation travel
+demand model for Singapore to evaluate model form and parameter
+uncertainty. This model has 22 sub-models and 817 parameters. The
+authors determined which of the 817 parameters the sub-models were most
+sensitive to and applied a full sensitivity analysis of the top 100 of
+the parameters, preserving correlations. Using the mean parameter value
+and the standard deviations they had for all of them they used Latin
+hypercube sampling with 100 draws to look at the outcomes of the change
+in each parameter value. Different sized samples of the model population
+were also considered in their research. They found that of the 100 most
+sensitive parameter values, the outcome coefficient of variation varied
+from 3\% to 49\%. The variance of the parameter variables did not exceed
+19\%, and thus the results from the parameter uncertainty were higher
+than the variance in the parameters. They also found that the results of
+the parameter uncertainty was higher than simulation uncertainty.
 
 In transportation demand models, when uncertainty is analysed, most
-error research to this point has focused on input uncertainty or model
-forms, rather than parameter estimate uncertainty (\emph{3}). In this
-literature review 12 articles have been included. Of those 12, two look
-at input data as the only focus of their uncertainty research, three
-focus on model form uncertainty, one looks at both model form and
-parameter estimate uncertainty, and six focus on both input data and
-parameter estimate uncertainty. No researchers have looked at parameter
-estimate uncertainty as the only source of error in their models. This
-is a gap in uncertainty research and is why that for this study, the
-parameter estimates within the model uncertainty is of the most
-immediate concern. When parameter uncertainty has been examined in
-literature it is often in conjunction with input errors, or on
-relatively small and impractical models. No researchers have used real
-models for their analyses. There have also been some conflicting
-conclusions on how parameter variance impacts output uncertainty. There
-is a research need within uncertainty analyses to have additional and
-repetitive studies that can confirm the outcome of previous research,
-since it is a relatively new topic of discussion. Uncertainty research
-is needed as transportation demand models provide estimates and
-forecasts for decision and policy makers. An inaccurate model or large
-output variance could change what decisions are made and when
-(\emph{17}). There is also a research need within uncertainty for both
-activity-based models, and destination and transport mode choice model
-components. In this research, I investigated the variance in forecast
-traffic volumes resulting from varying the mode and destination choice
-parameters in an advanced trip-based travel demand model, using combined
-mode and destination choice models, coupled with highway assignment.
+research to this point has focused on input uncertainty or model forms,
+rather than parameter estimate uncertainty (Rasouli \& Timmermans,
+2012). Of the 12 articles in this review, two look at input data as the
+only focus of their uncertainty research, three focus on model form
+uncertainty, one looks at both model form and parameter estimate
+uncertainty, and six focus on both input data and parameter estimate
+uncertainty. No researchers have looked at parameter estimate
+uncertainty as the only source of error in their models. When parameter
+uncertainty has been examined in existing literature, it is often in
+conjunction with input errors, or on small and non-practicing models. No
+studies that we could identify have used real models for their analyses.
+Uncertainty research is needed as transportation demand models provide
+estimates and forecasts for decision and policy makers. An inaccurate
+model or large output variance could change what decisions are made and
+when (AEP50 Committee on Transportation Demand Forecasting, 2023). Thus
+there is a critical research need for a detailed exploration of
+parameter estimation uncertainty in a practical travel model.
 
 \bookmarksetup{startatroot}
 
 \hypertarget{sec-methods}{%
 \section{Model Design and Methodology}\label{sec-methods}}
 
-This section describes the process by which a transportation demand
-model has been created and developed for the purposes of this
-uncertainty analysis. A method for how to evaluate uncertainty was also
-described and a decision is made for how to use them to evaluate model
-uncertainty.
-
 \hypertarget{model-design}{%
 \subsection{Model Design}\label{model-design}}
 
-To examine the effects of parameter input sensitivity, I developed a
-trip-based travel demand model. The model was developed from the Roanoke
-Valley Transportation Planning Organization
-\href{https://github.com/xinwangvdot/rvtpo}{(RVTPO)} Model. The RVTPO
-model provides an ideal testing environment for this research because it
-uses an integrated mode and destination choice framework common in more
+To examine the effects of parameter input sensitivity, we adapted a
+trip-based travel demand model from the Roanoke Valley Transportation
+Planning Organization
+\href{https://github.com/xinwangvdot/rvtpo}{(RVTPO)}. The RVTPO model
+provides an ideal testing environment for this research because it uses
+an integrated mode and destination choice framework common in more
 advanced trip-based models. At the same time, its small size
 (approximately 215 zones) means the entire model runs in a few minutes
-allowing for efficient testing of multiple model runs.
+and thus allows for efficient testing of multiple model runs.
 
 The total passenger trips \(T\) traveling from zone \(i\) to zone \(j\)
 on the highway in a period \(t\) is
@@ -662,12 +657,12 @@ MCLS_{ij} = \ln\left(\sum_{k \in K} e^{U_{ijk}}\right).
 non-motorized travel was excluded.
 
 This logsum value is then used as the primary impedance for a
-destination choice model (\emph{18}). Destination choice estimates
-travel patterns based on mode choice, trip generators (workers and
-households), and destination choice parameters. These parameter values
-are also shown in Table~\ref{tbl-choicecoeff}. The destination choice
-utility is the primary impedance (mode choice logsum value) plus the
-natural log of the size term, where the sized term is calculated as:
+destination choice model (Ben-Akiva \& Lerman, 1985). Destination choice
+estimates travel patterns based on mode choice, trip generators (workers
+and households), and destination choice parameters. These parameter
+values are also shown in Table~\ref{tbl-choicecoeff}. The destination
+choice utility is the primary impedance (mode choice logsum value) plus
+the natural log of the size term, where the sized term is calculated as:
 \begin{equation}\protect\hypertarget{eq-dcsizeterm}{}{
 A_j = \gamma_{hh} * \mathrm{HH} + \gamma_{off} * \mathrm{OFF} + \gamma_{ret} * \mathrm{RET} + \gamma_{oth} * \mathrm{OTH} + \\ \gamma_{oth+off} * \mathrm{OFFOTH}
 }\label{eq-dcsizeterm}\end{equation} HH is the total households in zone
@@ -703,10 +698,11 @@ possible range. Two common methods for parameter sampling include, Monte
 Carlo (MC) simulation and Latin hypercube sampling (LHS). MC simulation
 draws independently from multiple distributions, while LHS makes draws
 that cover the parameter space more efficiently and can capture the
-joint distribution between two or more parameter values (\emph{19}). As
-a result, LHS can reduce the number of draws needed to fully re-create
-the statistical variance in a model, but the amount of reduction is
-unknown and may not be universal to all problems (\emph{13}).
+joint distribution between two or more parameter values (Helton \&
+Davis, 2003). As a result, LHS can reduce the number of draws needed to
+fully re-create the statistical variance in a model, but the amount of
+reduction is unknown and may not be universal to all problems (Yang et
+al., 2013).
 
 With the trip-based model described above, MC and LHS methods were used
 to develop alternative parameter sets to evaluate uncertainty. To
@@ -716,15 +712,15 @@ the four mode choice coefficients and the destination choice parameters.
 The mode choice constants were kept the same across all iterations.
 Literature had identified a coefficient of variation of 0.30, but for
 this analysis that caused an unrealistic value of time, and thus it was
-changed to be 0.10 (\emph{7}). Value of time is a ratio in units of
-money per time that should be compared to the regional wage rate. Using
-a \(c_v\) of 0.30 the value of time range was from \(\$2\) to \(\$32\)
-/hr, whereas using a \(c_v\) of 0.10 the range was \(\$6\) to \(\$14\)
-/hr. The latter seemed more rational because it is related to wage rates
-and thus a \(c_v\) of 0.10 was used for our analysis. The standard
-deviation was equal to 0.10 multiplied by the mean, where the mean
-values in this situation are the base scenario parameters (as identified
-in Table~\ref{tbl-choicecoeff} ).
+changed to be 0.10 (Zhao \& Kockelman, 2002). Value of time is a ratio
+in units of money per time that should be compared to the regional wage
+rate. Using a \(c_v\) of 0.30 the value of time range was from \(\$2\)
+to \(\$32\) /hr, whereas using a \(c_v\) of 0.10 the range was \(\$6\)
+to \(\$14\) /hr. The latter seemed more rational because it is related
+to wage rates and thus a \(c_v\) of 0.10 was used for our analysis. The
+standard deviation was equal to 0.10 multiplied by the mean, where the
+mean values in this situation are the base scenario parameters (as
+identified in Table~\ref{tbl-choicecoeff} ).
 
 The MC random sampling uses the R function of \texttt{rnorm}. LHS uses
 the \texttt{lhs} package in R. Since this package only chooses variables
@@ -751,7 +747,7 @@ the results with fewer draws.
 
 \begin{figure}
 
-\begin{minipage}[t]{0.50\linewidth}
+\begin{minipage}[t]{\linewidth}
 
 {\centering 
 
@@ -765,8 +761,8 @@ the results with fewer draws.
 
 \subcaption{\label{fig-parameter-1}100 draws}
 \end{minipage}%
-%
-\begin{minipage}[t]{0.50\linewidth}
+\newline
+\begin{minipage}[t]{\linewidth}
 
 {\centering 
 
@@ -805,12 +801,12 @@ MCLS stabilizes across each iteration, and the cumulative standard
 deviation is used to show the 95\% confidence interval of that mean.
 When the cumulative mean for the draws stabilizes, that shows that the
 amount of generated parameters has captured the possible variance of the
-results. This is shown for each of the three trip purposes in
+results. This is shown for two of the three trip purposes in
 Figure~\ref{fig-cm}.
 
 \begin{figure}
 
-\begin{minipage}[t]{0.50\linewidth}
+\begin{minipage}[t]{\linewidth}
 
 {\centering 
 
@@ -824,8 +820,8 @@ Figure~\ref{fig-cm}.
 
 \subcaption{\label{fig-cm-1}HBW}
 \end{minipage}%
-%
-\begin{minipage}[t]{0.50\linewidth}
+\newline
+\begin{minipage}[t]{\linewidth}
 
 {\centering 
 
@@ -838,21 +834,6 @@ Figure~\ref{fig-cm}.
 }
 
 \subcaption{\label{fig-cm-2}HBO}
-\end{minipage}%
-\newline
-\begin{minipage}[t]{0.50\linewidth}
-
-{\centering 
-
-\raisebox{-\height}{
-
-\includegraphics{03-methods_files/figure-pdf/fig-cm-3.pdf}
-
-}
-
-}
-
-\subcaption{\label{fig-cm-3}NHB}
 \end{minipage}%
 
 \caption{\label{fig-cm}Average mode choice logsum (impedance) cumulative
@@ -904,12 +885,13 @@ and similar patterns can be seen in HBO and NHB. The results listed in
 the table show that the variation of the output trips - by mode and
 purpose - are less than the input variation (as all \(c_v\)'s are
 smaller than 0.10). This confirms previous research that the outcome
-variance is less than or near the parameters variance (\emph{7},
-\emph{9}). In all three purposes that were evaluated, the coefficient of
-variation in auto trips are lower than transit or non-motorized trips,
-meaning that there is greater confidence in the models accuracy to
-generate auto trips. The input parameter variability has a smaller
-effect on auto trips than on trips on the other modes.
+variance is less than or near the parameters variance (Clay \& Johnston,
+2005; Zhao \& Kockelman, 2002). In all three purposes that were
+evaluated, the coefficient of variation in auto trips are lower than
+transit or non-motorized trips, meaning that there is greater confidence
+in the models accuracy to generate auto trips. The input parameter
+variability has a smaller effect on auto trips than on trips on the
+other modes.
 
 \hypertarget{tbl-mctrips}{}
 \begin{table}
@@ -1019,7 +1001,7 @@ framework.
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{04-results_files/figure-pdf/fig-totalvolume-1.pdf}
+{\centering \includegraphics[width=1\textwidth,height=\textheight]{04-results_files/figure-pdf/fig-totalvolume-1.pdf}
 
 }
 
@@ -1054,7 +1036,7 @@ limiting the possibilities for forecast highway volumes.
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.8\textwidth,height=\textheight]{04-results_files/figure-pdf/fig-densityplots-1.pdf}
+{\centering \includegraphics[width=1\textwidth,height=\textheight]{04-results_files/figure-pdf/fig-densityplots-1.pdf}
 
 }
 
@@ -1069,22 +1051,10 @@ values in green.}
 \hypertarget{sec-conclusions}{%
 \section{Conclusions}\label{sec-conclusions}}
 
-The uncertainty and variance present in the model results are overall
-smaller than the variability introduced to the model through the
-parameters. Auto trips have less variance than transit or non-motorized
-trips, regardless of the number of trips in a given zone. When there is
-only two modes available auto trips have even lower variance. Higher
-volume roads have greater certainty than lower volume ones. Also,
-uncertainty that exists within the first three steps of the model
-appears to be corrected by the limitations of the highway network
-assignment. Overall there is a variance of approximately 1\% in the
-model outputs, when a 10 percent variance was used for the parameter
-estimates.
-
 In general, this research has shown that statistical parameter
 uncertainty does not appear to be a significant factor in forecasting
-traffic volumes using transportation demand models. The result
-uncertainty is generally equally to or smaller than the input parameter
+traffic volumes using trip-based travel demand models. The result
+uncertainty is generally equal to or smaller than the input parameter
 variance. The uncertainty in parameter inputs appears to lead to
 variation in highway volumes that is lower than the error between the
 model forecast and the highway counts. Any variation in mode and
@@ -1093,16 +1063,16 @@ limitations of the highway network assignment.
 
 There are several limitations that must be mentioned in this research,
 however. First, we did not attempt to address the statistical
-uncertainty in trip rate estimates; these may play a substantially
+uncertainty in trip production estimates; these may play a substantially
 larger role than destination and mode choice parameters, given that
 lower trip rates may lead to lower traffic volumes globally, which could
-not be ``corrected'' by the static user equilibrium assignment. And the
-assignment itself might have been aided in this case by the RVTPO's
-relatively simplistic highway network: if only two major highways exist
-the number of realistic lowest cost path choices between regions is
-somewhat constrained. It may be that in a larger network with more path
-redundancies, the assignment may not have been as helpful in
-constraining the forecast volumes.
+not be ``corrected'' by the static user equilibrium assignment.
+Additionally, the relatively sparse network of the RVTPO model region
+--- lacking parallel high-capacity highway facilities --- may have meant
+that the static network assignment would converge to a similar solution
+point regardless of modest changes to the trip matrix. It may be that in
+a larger network with more path redundancies, the assignment may not
+have been as helpful in constraining the forecast volumes.
 
 In this research we had only the estimates of the statistical
 coefficients, and therefore had to assume a coefficient of variation to
@@ -1113,21 +1083,24 @@ variance-covariance matrices for the estimated models, enabling
 researchers to ensure that covariance relationships between sampled
 parameters are maintained.
 
-Notwithstanding these limitations, statistical parameter variance is not
-likely the largest source of uncertainty in travel forecasting. There
-are likely more important factors at play that planners and government
-agencies should address. Research on all sources of uncertainty is
-somewhat limited, but in many ways has been hampered by the burdensome
-computational requirements of many modern travel models (\emph{2}). This
-research methodology benefited from a lightweight travel model that
-could be repeatedly re-run with dozens of resampled choice parameters.
-Better understanding the other sources of uncertainty -- model
-specification and input accuracy -- might also benefit from lightweight
-models constructed for transparency and flexibility rather than heavily
-constrained models emphasizing precise spatial detail and strict
-behavioral constraints. This might allow forecasts to be made with an
-ensemble approach (\emph{20}), identifying preferred policies as the
-consensus of multiple plausible model specifications.
+Notwithstanding these limitations, statistical parameter variance does
+not appear to be the largest source of uncertainty in travel
+forecasting. There are likely more important factors at play that
+planners and government agencies should address. Research on all sources
+of uncertainty is somewhat limited, but in many ways has been hampered
+by the burdensome computational requirements of many modern travel
+models (Voulgaris, 2019). This research methodology benefited from a
+lightweight travel model that could be repeatedly re-run with dozens of
+sampled choice parameters. One strategy for applying this methodology to
+larger models may be relatively recent TMIP-EMAT exploratory modeling
+toolkit (Milkovits et al., 2019). But a better understanding the other
+sources of uncertainty -- model specification and input accuracy --
+might also benefit from lightweight models constructed for transparency
+and flexibility rather than heavily constrained models emphasizing
+precise spatial detail and strict behavioral constraints. This might
+allow forecasts to be made with an ensemble approach (Wu \& Levinson,
+2021), identifying preferred policies as the consensus of multiple
+plausible model specifications.
 
 \bookmarksetup{startatroot}
 
@@ -1138,11 +1111,13 @@ Statement}\label{author-contribution-statement}}
 
 \markboth{Author Contribution Statement}{Author Contribution Statement}
 
-The authors confirm contribution to the paper as follows: study
-conception and design: GS Macfarlane, NM Gray; data collection: NM Gray;
-analysis and interpretation of results: GS Macfarlane, NM Gray; draft
-manuscript preparation: NM Gray, GS Macfarlane. All authors reviewed the
-results and approved the final version of the manuscript.
+\textbf{Gregory S. Macfarlane:} Conceptualization, Methodology, Writing
+- review \& editing, Supervision \textbf{Natalie M. Gray:} Methodology,
+Software, Formal Analysis, Investigation, Writing - original draft,
+Visualization
+
+The authors have no competing interests in the publication of this
+article, and the research received no external funding.
 
 \bookmarksetup{startatroot}
 
@@ -1153,147 +1128,124 @@ results and approved the final version of the manuscript.
 \markboth{References}{References}
 
 \hypertarget{refs}{}
-\begin{CSLReferences}{0}{0}
-\leavevmode\vadjust pre{\hypertarget{ref-flyvbjerg2005}{}}%
-\CSLLeftMargin{1. }%
-\CSLRightInline{Flyvbjerg, B., M. K. Skamris Holm, and S. L. Buhl. How
-({In})accurate {Are Demand Forecasts} in {Public Works Projects}?: {The
-Case} of {Transportation}. \emph{Journal of the American Planning
-Association}, Vol. 71, No. 2, 2005, pp. 131--146.
-\url{https://doi.org/10.1080/01944360508976688}.}
-
-\leavevmode\vadjust pre{\hypertarget{ref-voulgaris2019}{}}%
-\CSLLeftMargin{2. }%
-\CSLRightInline{Voulgaris, C. T. Crystal {Balls} and {Black Boxes}:
-{What Makes} a {Good Forecast}? \emph{Journal of Planning Literature},
-Vol. 34, No. 3, 2019, pp. 286--299.
-\url{https://doi.org/10.1177/0885412219838495}.}
-
-\leavevmode\vadjust pre{\hypertarget{ref-rasouli2012}{}}%
-\CSLLeftMargin{3. }%
-\CSLRightInline{Rasouli, S., and H. Timmermans. Uncertainty in Travel
-Demand Forecasting Models: Literature Review and Research Agenda.
-\emph{Transportation Letters}, Vol. 4, No. 1, 2012, pp. 55--73.
-\url{https://doi.org/10.3328/TL.2012.04.01.55-73}.}
-
-\leavevmode\vadjust pre{\hypertarget{ref-hoque2021}{}}%
-\CSLLeftMargin{4. }%
-\CSLRightInline{Hoque, J. M., G. D. Erhardt, D. Schmitt, M. Chen, and M.
-Wachs. Estimating the Uncertainty of Traffic Forecasts from Their
-Historical Accuracy. \emph{Transportation Research Part A: Policy and
-Practice}, Vol. 147, 2021, pp. 339--349.
-\url{https://doi.org/10.1016/j.tra.2021.03.015}.}
-
-\leavevmode\vadjust pre{\hypertarget{ref-koppelman2006}{}}%
-\CSLLeftMargin{5. }%
-\CSLRightInline{Koppelman, F. S., and C. Bhat. \emph{A {Self Instructing
-Course} in {Mode Choice Modeling}: {Multinomial} and {Nested Logit
-Models}}. {Federal Transit Administration}, 2006.}
-
-\leavevmode\vadjust pre{\hypertarget{ref-nationalacademiesofsciencesengineeringandmedicine.2012}{}}%
-\CSLLeftMargin{6. }%
-\CSLRightInline{National Academies of Sciences, Engineering, and
-Medicine. \emph{\href{https://doi.org/10.17226/14665}{Travel {Demand
-Forecasting}: {Parameters} and {Techniques}}}. Publication NCHRP 716.
-{National Academies Press}, {Washington, D.C.}, 2012.}
-
-\leavevmode\vadjust pre{\hypertarget{ref-zhao2002}{}}%
-\CSLLeftMargin{7. }%
-\CSLRightInline{Zhao, Y., and K. M. Kockelman. The Propagation of
-Uncertainty Through Travel Demand Models: {An} Exploratory Analysis.
-\emph{The Annals of Regional Science}, Vol. 36, No. 1, 2002, pp.
-145--163. \url{https://doi.org/10.1007/s001680200072}.}
-
-\leavevmode\vadjust pre{\hypertarget{ref-rodier2002uncertain}{}}%
-\CSLLeftMargin{8. }%
-\CSLRightInline{Rodier, C. J., and R. A. Johnston. Uncertain
-Socioeconomic Projections Used in Travel Demand and Emissions Models:
-Could Plausible Errors Result in Air Quality Nonconformity?
-\emph{Transportation Research Part A: Policy and Practice}, Vol. 36, No.
-7, 2002, pp. 613--631.}
-
-\leavevmode\vadjust pre{\hypertarget{ref-clay2005univariate}{}}%
-\CSLLeftMargin{9. }%
-\CSLRightInline{Clay, M. J., and R. A. Johnston. Univariate Uncertainty
-Analysis of an Integrated Land Use and Transportation Model: {MEPLAN}.
-\emph{Transportation Planning and Technology}, Vol. 28, No. 3, 2005, pp.
-149--165.}
+\begin{CSLReferences}{1}{0}
+\leavevmode\vadjust pre{\hypertarget{ref-aep50_2023}{}}%
+AEP50 Committee on Transportation Demand Forecasting. (2023).
+\emph{Uncertainty}. https://www.trbtravelforecasting.org/uncertainty.
 
 \leavevmode\vadjust pre{\hypertarget{ref-armoogum2009}{}}%
-\CSLLeftMargin{10. }%
-\CSLRightInline{Armoogum, J., J.-L. Madre, and Y. Bussiere. Measuring
-Uncertainty in Long-Term Travel Demand Forecasting from Demographic
-Modelling: {Case} Study of the {Paris} and {Montreal} Metropolitan
-Areas. \emph{IATSS research}, Vol. 33, No. 2, 2009, pp. 9--20.}
-
-\leavevmode\vadjust pre{\hypertarget{ref-duthie2010highway}{}}%
-\CSLLeftMargin{11. }%
-\CSLRightInline{Duthie, J., A. Voruganti, K. Kockelman, and S. T.
-Waller. Highway Improvement Project Rankings Due to Uncertain Model
-Inputs: {Application} of Traditional Transportation and Land Use Models.
-\emph{Journal of Urban Planning and Development}, Vol. 136, No. 4, 2010,
-pp. 294--302.}
-
-\leavevmode\vadjust pre{\hypertarget{ref-welde2011planners}{}}%
-\CSLLeftMargin{12. }%
-\CSLRightInline{Welde, M., and J. Odeck. Do Planners Get It Right? {The}
-Accuracy of Travel Demand Forecasting in {Norway}. \emph{European
-Journal of Transport and Infrastructure Research}, Vol. 11, No. 1,
-2011.}
-
-\leavevmode\vadjust pre{\hypertarget{ref-yang2013}{}}%
-\CSLLeftMargin{13. }%
-\CSLRightInline{Yang, C., A. Chen, X. Xu, and S. C. Wong.
-Sensitivity-Based Uncertainty Analysis of a Combined Travel Demand
-Model. \emph{Transportation Research Part B: Methodological}, Vol. 57,
-2013, pp. 225--244. \url{https://doi.org/10.1016/j.trb.2013.07.006}.}
-
-\leavevmode\vadjust pre{\hypertarget{ref-manzo2015}{}}%
-\CSLLeftMargin{14. }%
-\CSLRightInline{Manzo, S., O. A. Nielsen, and C. G. Prato. How
-Uncertainty in Input and Parameters Influences Transport Model: Output
-{A} Four-Stage Model Case-Study. \emph{Transport Policy}, Vol. 38, 2015,
-pp. 64--72.}
-
-\leavevmode\vadjust pre{\hypertarget{ref-petrik2016measuring}{}}%
-\CSLLeftMargin{15. }%
-\CSLRightInline{Petrik, O., F. Moura, and J. de A. e Silva. Measuring
-Uncertainty in Discrete Choice Travel Demand Forecasting Models.
-\emph{Transportation Planning and Technology}, Vol. 39, No. 2, 2016, pp.
-218--237.}
-
-\leavevmode\vadjust pre{\hypertarget{ref-petrik2020uncertainty}{}}%
-\CSLLeftMargin{16. }%
-\CSLRightInline{Petrik, O., M. Adnan, K. Basak, and M. Ben-Akiva.
-Uncertainty Analysis of an Activity-Based Microsimulation Model for
-{Singapore}. \emph{Future Generation Computer Systems}, Vol. 110, 2020,
-pp. 350--363.}
-
-\leavevmode\vadjust pre{\hypertarget{ref-aep50_2023}{}}%
-\CSLLeftMargin{17. }%
-\CSLRightInline{AEP50 Committee on Transportation Demand Forecasting.
-Uncertainty. https://www.trbtravelforecasting.org/uncertainty, 2023.}
+Armoogum, J., Madre, J.-L., \& Bussiere, Y. (2009). Measuring
+uncertainty in long-term travel demand forecasting from demographic
+modelling: {Case} study of the {Paris} and {Montreal} metropolitan
+areas. \emph{IATSS Research}, \emph{33}(2), 9--20.
 
 \leavevmode\vadjust pre{\hypertarget{ref-ben-akiva1985}{}}%
-\CSLLeftMargin{18. }%
-\CSLRightInline{Ben-Akiva, M., and S. R. Lerman.
-\emph{\href{https://www.jstor.org/stable/1391567}{Discrete {Choice
-Analysis}: {Theory} and {Applications} to {Travel Demand}}}. {MIT
-Press}, 1985.}
+Ben-Akiva, M., \& Lerman, S. R. (1985). \emph{Discrete {Choice
+Analysis}: {Theory} and {Applications} to {Travel Demand}}. {MIT Press}.
+\url{https://www.jstor.org/stable/1391567}
+
+\leavevmode\vadjust pre{\hypertarget{ref-clay2005univariate}{}}%
+Clay, M. J., \& Johnston, R. A. (2005). Univariate uncertainty analysis
+of an integrated land use and transportation model: {MEPLAN}.
+\emph{Transportation Planning and Technology}, \emph{28}(3), 149--165.
+
+\leavevmode\vadjust pre{\hypertarget{ref-duthie2010highway}{}}%
+Duthie, J., Voruganti, A., Kockelman, K., \& Waller, S. T. (2010).
+Highway improvement project rankings due to uncertain model inputs:
+{Application} of traditional transportation and land use models.
+\emph{Journal of Urban Planning and Development}, \emph{136}(4),
+294--302.
+
+\leavevmode\vadjust pre{\hypertarget{ref-flyvbjerg2005}{}}%
+Flyvbjerg, B., Skamris Holm, M. K., \& Buhl, S. L. (2005). How
+({In})accurate {Are Demand Forecasts} in {Public Works Projects}?: {The
+Case} of {Transportation}. \emph{Journal of the American Planning
+Association}, \emph{71}(2), 131--146.
+\url{https://doi.org/10.1080/01944360508976688}
 
 \leavevmode\vadjust pre{\hypertarget{ref-helton2003a}{}}%
-\CSLLeftMargin{19. }%
-\CSLRightInline{Helton, J. C., and F. J. Davis. Latin Hypercube Sampling
-and the Propagation of Uncertainty in Analyses of Complex Systems.
-\emph{Reliability Engineering \& System Safety}, Vol. 81, No. 1, 2003,
-pp. 23--69. \url{https://doi.org/10.1016/S0951-8320(03)00058-9}.}
+Helton, J. C., \& Davis, F. J. (2003). Latin hypercube sampling and the
+propagation of uncertainty in analyses of complex systems.
+\emph{Reliability Engineering \& System Safety}, \emph{81}(1), 23--69.
+\url{https://doi.org/10.1016/S0951-8320(03)00058-9}
+
+\leavevmode\vadjust pre{\hypertarget{ref-hoque2021}{}}%
+Hoque, J. M., Erhardt, G. D., Schmitt, D., Chen, M., \& Wachs, M.
+(2021). Estimating the uncertainty of traffic forecasts from their
+historical accuracy. \emph{Transportation Research Part A: Policy and
+Practice}, \emph{147}, 339--349.
+\url{https://doi.org/10.1016/j.tra.2021.03.015}
+
+\leavevmode\vadjust pre{\hypertarget{ref-koppelman2006}{}}%
+Koppelman, F. S., \& Bhat, C. (2006). \emph{A {Self Instructing Course}
+in {Mode Choice Modeling}: {Multinomial} and {Nested Logit Models}}.
+{Federal Transit Administration}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-manzo2015}{}}%
+Manzo, S., Nielsen, O. A., \& Prato, C. G. (2015). How uncertainty in
+input and parameters influences transport model: Output {A} four-stage
+model case-study. \emph{Transport Policy}, \emph{38}, 64--72.
+
+\leavevmode\vadjust pre{\hypertarget{ref-milkovits2019}{}}%
+Milkovits, M., Copperman, R. B., Newman, J., Lemp, J., Rossi, T., \&
+United States. Federal Highway Administration. (2019). \emph{{TMIP
+Exploratory Modeling} and {Analysis Tool} ({TMIP-EMAT}) {Beta Test
+Results}} (FHWA-HEP-20-015).
+
+\leavevmode\vadjust pre{\hypertarget{ref-nationalacademiesofsciencesengineeringandmedicine.2012}{}}%
+National Academies of Sciences, Engineering, and Medicine. (2012).
+\emph{Travel {Demand Forecasting}: {Parameters} and {Techniques}} (NCHRP
+716). {National Academies Press}. \url{https://doi.org/10.17226/14665}
+
+\leavevmode\vadjust pre{\hypertarget{ref-petrik2020uncertainty}{}}%
+Petrik, O., Adnan, M., Basak, K., \& Ben-Akiva, M. (2020). Uncertainty
+analysis of an activity-based microsimulation model for {Singapore}.
+\emph{Future Generation Computer Systems}, \emph{110}, 350--363.
+
+\leavevmode\vadjust pre{\hypertarget{ref-petrik2016measuring}{}}%
+Petrik, O., Moura, F., \& Silva, J. de A. e. (2016). Measuring
+uncertainty in discrete choice travel demand forecasting models.
+\emph{Transportation Planning and Technology}, \emph{39}(2), 218--237.
+
+\leavevmode\vadjust pre{\hypertarget{ref-rasouli2012}{}}%
+Rasouli, S., \& Timmermans, H. (2012). Uncertainty in travel demand
+forecasting models: Literature review and research agenda.
+\emph{Transportation Letters}, \emph{4}(1), 55--73.
+\url{https://doi.org/10.3328/TL.2012.04.01.55-73}
+
+\leavevmode\vadjust pre{\hypertarget{ref-rodier2002uncertain}{}}%
+Rodier, C. J., \& Johnston, R. A. (2002). Uncertain socioeconomic
+projections used in travel demand and emissions models: Could plausible
+errors result in air quality nonconformity? \emph{Transportation
+Research Part A: Policy and Practice}, \emph{36}(7), 613--631.
+
+\leavevmode\vadjust pre{\hypertarget{ref-voulgaris2019}{}}%
+Voulgaris, C. T. (2019). Crystal {Balls} and {Black Boxes}: {What Makes}
+a {Good Forecast}? \emph{Journal of Planning Literature}, \emph{34}(3),
+286--299. \url{https://doi.org/10.1177/0885412219838495}
+
+\leavevmode\vadjust pre{\hypertarget{ref-welde2011planners}{}}%
+Welde, M., \& Odeck, J. (2011). Do planners get it right? {The} accuracy
+of travel demand forecasting in {Norway}. \emph{European Journal of
+Transport and Infrastructure Research}, \emph{11}(1).
 
 \leavevmode\vadjust pre{\hypertarget{ref-wu2021}{}}%
-\CSLLeftMargin{20. }%
-\CSLRightInline{Wu, H., and D. Levinson. The Ensemble Approach to
-Forecasting: {A} Review and Synthesis. \emph{Transportation Research
-Part C: Emerging Technologies}, Vol. 132, 2021, p. 103357.
-\url{https://doi.org/10.1016/j.trc.2021.103357}.}
+Wu, H., \& Levinson, D. (2021). The ensemble approach to forecasting:
+{A} review and synthesis. \emph{Transportation Research Part C: Emerging
+Technologies}, \emph{132}, 103357.
+\url{https://doi.org/10.1016/j.trc.2021.103357}
+
+\leavevmode\vadjust pre{\hypertarget{ref-yang2013}{}}%
+Yang, C., Chen, A., Xu, X., \& Wong, S. C. (2013). Sensitivity-based
+uncertainty analysis of a combined travel demand model.
+\emph{Transportation Research Part B: Methodological}, \emph{57},
+225--244. \url{https://doi.org/10.1016/j.trb.2013.07.006}
+
+\leavevmode\vadjust pre{\hypertarget{ref-zhao2002}{}}%
+Zhao, Y., \& Kockelman, K. M. (2002). The propagation of uncertainty
+through travel demand models: {An} exploratory analysis. \emph{The
+Annals of Regional Science}, \emph{36}(1), 145--163.
+\url{https://doi.org/10.1007/s001680200072}
 
 \end{CSLReferences}
 

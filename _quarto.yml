@@ -5,25 +5,23 @@ project:
 book:
   title: "Evaluating the Impacts of Parameter Uncertainty in Transportation Demand Models"
   author:
-    - name: Gregory S. Macfarlane
-      orcid: 0000-0003-3999-7584
-      email: gregmacfarlane@byu.edu
-      affiliations:
-        - name: Brigham Young University
-          department: Civil and Construction Engineering
-          address: 430 EB
-          city: Provo
-          state: UT
-          postal-code: 84602
-    # to add additional authors, simply add another -name: tag 
     - name: Natalie Mae Gray
       email: nmgray@byu.edu
       affiliations:
-        - name: Brigham Young University
-          address: 430 EB
-          city: Provo
-          state: UT
-          postal-code: 84602
+        - ref: byu
+    - name: Gregory S. Macfarlane
+      orcid: 0000-0003-3999-7584
+      corresponding: true
+      email: gregmacfarlane@byu.edu
+      affiliations:
+      - id: byu
+        name: Brigham Young University
+        department: Civil and Construction Engineering
+        address: 430 EB
+        city: Provo
+        state: UT
+        postal-code: 84602
+        # to add additional authors, simply add another -name: tag 
   date: "10/31/2023"
   chapters:
     - index.qmd
@@ -53,14 +51,19 @@ book:
     
 bibliography: book.bib
 csl: apa.csl
+keywords: 
+  - Travel modeling
+  - Uncertainty
 
 format:
   html:
     theme: cosmo
   elsevier-pdf:
     journal: 
-      name: 'Transportation Research Part A: Policy and Practice'
+      name: 'Case Studies on Transport Policy'
       cite-style: authoryear
+      formatting: review
+      model: 3p
     cite-method: citeproc
     include-in-header:
       - file: packages.tex

@@ -224,30 +224,22 @@ than the variance in the parameters. They also found that the results of
 the parameter uncertainty was higher than simulation uncertainty.
 
 In transportation demand models, when uncertainty is analysed, most
-error research to this point has focused on input uncertainty or model
-forms, rather than parameter estimate uncertainty [@rasouli2012]. In
-this literature review 12 articles have been included. Of those 12, two
+research to this point has focused on input uncertainty or model
+forms, rather than parameter estimate uncertainty [@rasouli2012]. Of
+the 12 articles in this review, two
 look at input data as the only focus of their uncertainty research,
 three focus on model form uncertainty, one looks at both model form and
 parameter estimate uncertainty, and six focus on both input data and
 parameter estimate uncertainty. No researchers have looked at parameter
-estimate uncertainty as the only source of error in their models. This
-is a gap in uncertainty research and is why that for this study, the
-parameter estimates within the model uncertainty is of the most
-immediate concern. When parameter uncertainty has been examined in
-literature it is often in conjunction with input errors, or on
-relatively small and impractical models. No researchers have used real
-models for their analyses. There have also been some conflicting
-conclusions on how parameter variance impacts output uncertainty. There
-is a research need within uncertainty analyses to have additional and
-repetitive studies that can confirm the outcome of previous research,
-since it is a relatively new topic of discussion. Uncertainty research
+estimate uncertainty as the only source of error in their models. 
+When parameter uncertainty has been examined in existing literature,
+it is often in conjunction with input errors, or on
+small and non-practicing models. No studies that we could identify have used
+real models for their analyses. 
+Uncertainty research
 is needed as transportation demand models provide estimates and
 forecasts for decision and policy makers. An inaccurate model or large
 output variance could change what decisions are made and when
-[@aep50_2023]. There is also a research need within uncertainty for both
-activity-based models, and destination and transport mode choice model
-components. In this research, I investigated the variance in forecast
-traffic volumes resulting from varying the mode and destination choice
-parameters in an advanced trip-based travel demand model, using combined
-mode and destination choice models, coupled with highway assignment.
+[@aep50_2023]. Thus there is a critical research need for
+a detailed exploration of parameter estimation uncertainty in a practical travel
+model.
