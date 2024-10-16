@@ -15,7 +15,12 @@ _book/
 *.spl
 *.nlo
 *.aux
+*.fdb_latexmk
 rosm.cache/
 rosm.cache/
 .DS_Store
 *tikzDictionary
+elsarticle-num.bst
+elsarticle-harv.bst
+elsarticle.cls
+/.luarc.json

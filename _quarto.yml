@@ -3,7 +3,8 @@ project:
 
 # This defines the .qmd files that are in your document
 book:
-  title: "Evaluating the Impacts of Parameter Uncertainty in Transportation Demand Models"
+  output-file: "sensitivity-uncertainty"
+  title: "Evaluating the Impacts of Parameter Uncertainty in a Practical Transportation Demand Model"
   author:
     - name: Natalie Mae Gray
       email: nmgray@byu.edu
@@ -23,6 +24,7 @@ book:
         postal-code: 84602
         # to add additional authors, simply add another -name: tag 
   date: "10/31/2023"
+  downloads: pdf
   chapters:
     - index.qmd
     - 02-literature.qmd
@@ -31,23 +33,7 @@ book:
     - 05-conclusions.qmd
     - 06-references.qmd
   abstract: | 
-    The inherent uncertainty in travel forecasting models — arising from potential and 
-    unkown errors 
-    in input data, parameter   estimation, or model formulation — is receiving 
-    increasing attention from the scholarly and practicing community. 
-    In this research, we investigate the variance in forecasted traffic volumes 
-    resulting from varying the mode and destination choice parameters in an 
-    advanced trip-based travel demand model. Using Latin hypercube sampling to 
-    construct several hundred combinations of parameters across the plausible 
-    parameter space, we introduce substantial changes to implied travel impedances and modal
-    utilities. However, the aggregate effects of of these 
-    changes on forecasted traffic volumes is small, with a variance of 
-    approximately 1 percent on high-volume facilities. It is likely that in this 
-    example --- and perhaps in others --- the static network assignment 
-    places constraints on the possible volume solutions and limits the practical
-    impacts of parameter uncertainty. Further research should examine the robustness
-    of this finding to other less constrained networks and to activity-based travel
-    model frameworks.
+    The inherent uncertainty in travel forecasting models — arising from potential and  unkown errors  in input data, parameter   estimation, or model formulation — is receiving  increasing attention from the scholarly and practicing community.  In this research, we investigate the variance in forecasted traffic volumes  resulting from varying the mode and destination choice parameters in an  advanced trip-based travel demand model. Using Latin hypercube sampling to  construct several hundred combinations of parameters across the plausible  parameter space, we introduce substantial changes to implied travel impedances and modal utilities. However, the aggregate effects of of these  changes on forecasted traffic volumes is small, with a variance of  approximately 1 percent on high-volume facilities. It is likely that in this  example --- and perhaps in others --- the static network assignment  places constraints on the possible volume solutions and limits the practical impacts of parameter uncertainty. Further research should examine the robustness of this finding to other less constrained networks and to activity-based travel model frameworks.
     
 bibliography: book.bib
 csl: apa.csl
@@ -60,10 +46,10 @@ format:
     theme: cosmo
   elsevier-pdf:
     journal: 
-      name: 'Case Studies on Transport Policy'
-      cite-style: authoryear
+      name: 'Transport Research Part A: Policy and Practice'
       formatting: review
       model: 3p
+      natbib: false
     cite-method: citeproc
     include-in-header:
       - file: packages.tex
