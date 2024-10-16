@@ -139,7 +139,7 @@ possible range. Two common methods for parameter sampling include, Monte
 Carlo (MC) simulation and Latin hypercube sampling (LHS). MC simulation
 draws independently from multiple distributions, while LHS makes draws
 that cover the parameter space more efficiently and can capture the
-joint distribution between two or more parameter values [@helton2003a].
+joint distribution between two or more parameter values [@helton2003].
 As a result, LHS can reduce the number of draws needed to fully
 re-create the statistical variance in a model, but the amount of
 reduction is unknown and may not be universal to all problems
