@@ -4,26 +4,31 @@ project:
 # This defines the .qmd files that are in your document
 book:
   output-file: "sensitivity-uncertainty"
-  title: "Evaluating the Impacts of Parameter Uncertainty in a Practical Transportation Demand Model"
+  title: Evaluating the Impacts of Parameter Uncertainty in a Practical Transportation Demand Model
   author:
-    - name: Natalie Mae Gray
-      email: nmgray@byu.edu
+    - name: Natalie Gibbons
+      email: natalie.gibbons@kimley-horn.com
       affiliations:
-        - ref: byu
+      - id: 1
+        name: Kimley-Horn Associates
+        department: Traffic Engineering
+        address:
+        city: Sarasota
+        state: FL
     - name: Gregory S. Macfarlane
       orcid: 0000-0003-3999-7584
       corresponding: true
       email: gregmacfarlane@byu.edu
       affiliations:
-      - id: byu
-        name: Brigham Young University
+      - id: 2
+        name: Civil and Construction Engineering, Brigham Young University
         department: Civil and Construction Engineering
         address: 430 EB
         city: Provo
         state: UT
         postal-code: 84602
         # to add additional authors, simply add another -name: tag 
-  date: "10/31/2023"
+  date: "10/26/2024"
   downloads: pdf
   chapters:
     - index.qmd
@@ -36,7 +41,7 @@ book:
     The inherent uncertainty in travel forecasting models — arising from potential and  unkown errors  in input data, parameter   estimation, or model formulation — is receiving  increasing attention from the scholarly and practicing community.  In this research, we investigate the variance in forecasted traffic volumes  resulting from varying the mode and destination choice parameters in an  advanced trip-based travel demand model. Using Latin hypercube sampling to  construct several hundred combinations of parameters across the plausible  parameter space, we introduce substantial changes to implied travel impedances and modal utilities. However, the aggregate effects of of these  changes on forecasted traffic volumes is small, with a variance of  approximately 1 percent on high-volume facilities. It is likely that in this  example --- and perhaps in others --- the static network assignment  places constraints on the possible volume solutions and limits the practical impacts of parameter uncertainty. Further research should examine the robustness of this finding to other less constrained networks and to activity-based travel model frameworks.
     
 bibliography: book.bib
-csl: apa.csl
+csl: elsevier-harvard.csl
 keywords: 
   - Travel modeling
   - Uncertainty
