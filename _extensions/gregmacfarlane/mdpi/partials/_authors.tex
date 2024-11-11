@@ -1,0 +1,42 @@
+$-- You can use as many custom partials as you need. Convention is to prefix name with '_'
+$-- It can be useful to use such template to split some template parts in smaller pieces, which is easier to reuse. 
+$-- This '_custom.tex' is used on 'title.tex' as example.
+$-- See other existing format in quarto-journals/ organisation.
+$-- %%%% TODO %%%%%
+$-- Use it if you need to insert content at this specific place of the main Pandoc's template. Otherwise, remove it.
+$-- Here we are using it to format the authors part of the template.
+$-- %%%%%%%%%%%%%%%
+
+% this solution came from ihrke/mdpi
+$for(by-author/pairs)$
+$if(it.value.orcid)$
+\newcommand{\orcidauthor$it.key/alpha/uppercase$}{$it.value.orcid$} 
+$endif$
+$endfor$
+
+\Author{$if(by-author/allbutlast)$
+$for(by-author/allbutlast/pairs)$
+$it.value.name.literal$$$^{$for(it.value.affiliations)$$it.id$$sep$,$endfor$}$$$if(it.value.orcid)$\orcid$it.key/alpha/uppercase${}$endif$$sep$, 
+$endfor$
+~and~$for(by-author/last)$$it.name.literal$$$^{$for(it.affiliations)$$it.id$$sep$,$endfor$}$$$if(it.orcid)$\orcid${ author/length/alpha/uppercase }{}$endif$$endfor$
+$else$
+${ by-author.name.literal } $if(by-author.orcid)$$$^{$for(by-author.affiliations)$$it.id$$sep$,$endfor$}$$\orcidA{}$endif$
+$endif$}
+
+\AuthorNames{$for(by-author)$ $by-author.name.literal$$sep$, $endfor$}
+
+% address for the affiliations
+\address$if(by-affiliation/allbutlast)$ $else$[1]$endif${%
+$for(by-affiliation)$
+$$^{$it.id$}$$ \quad $it.name$\\
+$endfor$}
+
+
+\newcommand\getfirst[1]{\getfirstaux#1\relax} \def\getfirstaux#1#2\relax{#1}
+\AuthorCitation{$for(by-author)$$by-author.name.family$, \getfirst{$by-author.name.given$}.$sep$; $endfor$}
+% Contact information of the corresponding author
+$for(by-author)$
+$if(it.attributes.corresponding)$
+\corres{Correspondence: $it.email$}
+$endif$
+$endfor$

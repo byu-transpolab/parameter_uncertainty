@@ -24,3 +24,5 @@ elsarticle-num.bst
 elsarticle-harv.bst
 elsarticle.cls
 /.luarc.json
+/Definitions/*
+index.log

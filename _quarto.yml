@@ -1,6 +1,7 @@
 project:
   type: book
 
+
 # This defines the .qmd files that are in your document
 book:
   output-file: "sensitivity-uncertainty"
@@ -49,18 +50,13 @@ keywords:
 format:
   html:
     theme: cosmo
-  elsevier-pdf:
-    journal: 
-      name: 'Transport Research Part A: Policy and Practice'
-      formatting: review
-      model: 3p
-      natbib: false
+  mdpi-pdf:
+    journal: futuretransp
+    moreauthors: true
     cite-method: citeproc
-    include-in-header:
-      - file: packages.tex
     keep-tex: true
     top-level-division: section
-    toc: false
-    
+
+
 execute: 
   cache: true

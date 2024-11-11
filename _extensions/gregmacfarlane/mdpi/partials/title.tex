@@ -1,0 +1,29 @@
+$-- Provides configuration of document metadata for writing the title block.
+$-- Note that in addition to these templates and partials, Quarto will also make normalized authors and affiliations data available to the template,
+$-- making is easy to write custom title blocks against a standard schema.
+$--
+$-- %%%% TODO %%%%%
+$-- Customize is needed, like below for printing the authors. Otherwise remove this partials to use Quarto default one.
+$-- %%%%%%%%%%%%%%%%
+
+
+%=================================================================
+% Full title of the paper (Capitalized)
+$if(title)$
+\Title{$title$}
+$endif$
+
+% MDPI internal command: Title for citation in the left column
+$if(titlecitation)$
+\TitleCitation{$titlecitation$}
+$else$
+\TitleCitation{$title$}
+$endif$
+
+$if(abstract)$
+\abstract{$abstract$}
+$endif$
+$if(keywords)$
+\keyword{$for(keywords/allbutlast)$$keywords$;$endfor$
+$for(keywords/last)$$keywords$$endfor$}
+$endif$

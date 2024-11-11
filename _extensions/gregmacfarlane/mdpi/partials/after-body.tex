@@ -1,0 +1,33 @@
+$-- Placed at the end of the body, after 'include-after' content
+$-- %%%% TODO %%%%%
+$-- Use it if you need to insert content at this specific place of the main Pandoc's template. Otherwise, remove it.
+$-- %%%%%%%%%%%%%%%
+
+
+$if(authorcontributions)$
+\authorcontributions{$authorcontributions$}
+$endif$
+
+$if(studyfunding)$
+\funding{$studyfunding$}
+$endif$
+
+$if(institutionalreview)$
+\institutionalreview{$institutionalreview$}
+$endif$
+
+$if(informedconsent)$
+\informedconsent{$informedconsent$}
+$endif$
+
+$if(dataavailability)$
+\dataavailability{$dataavailability$}
+$endif$
+
+$if(acknowledgments)$
+\acknowledgments{$acknowledgments$}
+$endif$
+
+$if(conflictsofinterest)$
+\conflictsofinterest{$conflictsofinterest$}
+$endif$

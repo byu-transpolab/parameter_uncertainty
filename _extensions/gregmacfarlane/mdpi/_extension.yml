@@ -1,0 +1,39 @@
+title: MDPI
+author: Greg Macfarlane
+version: 0.1.0
+contributes:
+  formats:
+    common:
+      # define below YAML configuration common to all formats
+      filters:
+        # You can include here Lua filters from your extension format 
+        - color-text.lua
+      shortcodes:
+        # You can include here Lua filters defining shortcodes from your extension
+        - shortcodes.lua
+      knitr:
+        opts_chunk:
+          echo: false
+    pdf:
+      # define default configuration for the pdf version of your format
+      documentclass: mdpi
+      colorlinks: true
+      urlcolor: red
+      template: mdpitemplate.tex
+      template-partials:
+        # Add here the partials your format is using
+        - "partials/doc-class.tex"
+        - "partials/title.tex"
+        - "partials/pandoc.tex"
+        - "partials/_authors.tex"
+        - "partials/after-body.tex"
+      format-resources:
+        # Add here the resources required for the PDF rendering
+        - Definitions/
+    html:
+      # define default configuration for the html version of your format
+      number-sections: true
+      toc: true
+      theme: custom.scss
+      # Use a CSL file to style (https://www.zotero.org/styles/)
+      csl: https://www.zotero.org/styles/journal-of-institutional-and-theoretical-economics
