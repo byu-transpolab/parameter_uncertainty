@@ -20,9 +20,11 @@ advanced trip-based models. At the same time, its small size
 and thus allows for efficient testing of multiple model runs.
 
 The total passenger trips $T$ traveling from zone $i$ to zone $j$ on the
-highway in a period $t$ is $$
+highway in a period $t$ is 
+$$
 T_{ijt} = P_i * \mathcal{P}_{\mathrm{auto}}(\beta, C_{ijt}) * \mathcal{P}_j(\gamma, A_j, MCLS_{ijt}) * \Delta_t 
-$$ {#eq-trips} where $P$ is the productions at zone $i$;
+$$ {#eq-trips} 
+where $P$ is the productions at zone $i$;
 $\mathcal{P}_{\mathrm{car}}$ is the car mode choice probability
 determined by utility parameters $\beta$ and the travel costs $C$
 between $i$ and $j$ at time period $t$; $\mathcal{P}_{j}$ is the
@@ -89,15 +91,19 @@ kbl(coefficient_table, booktabs = TRUE,
 
 ```
 
-The utility equations for the mode choice model are as follows: $$
+The utility equations for the mode choice model are as follows: 
+$$
 \begin{aligned}
 U_{auto} &= \beta_{ivtt} * X_{auto} + \beta_{tc} * \beta_{ac} * X_{dist}\\
 U_{nmot} &= k_{nmot} + 20 * \beta_{wd}*X_{nmot}\\
 U_{trn} &= k_{trn} + \beta_{ivtt} * X_{trn}
 \end{aligned}
-$$ These utilities are used to calculate the MCLS by: $$
+$$ 
+These utilities are used to calculate the MCLS by: 
+$$
 MCLS_{ij} = \ln\left(\sum_{k \in K} e^{U_{ijk}}\right).
-$$ {#eq-mcls} If the distance was greater than 2 miles, non-motorized
+$$ {#eq-mcls}
+If the distance was greater than 2 miles, non-motorized
 travel was excluded.
 
 This logsum value is then used as the primary impedance for a
@@ -106,12 +112,15 @@ travel patterns based on mode choice, trip generators (workers and
 households), and destination choice parameters. These parameter values
 are also shown in @tbl-choicecoeff. The destination choice utility is
 the primary impedance (mode choice logsum value) plus the natural log of
-the size term, where the sized term is calculated as: $$
+the size term, where the sized term is calculated as: 
+$$
 A_j = \gamma_{hh} * \mathrm{HH} + \gamma_{off} * \mathrm{OFF} + \gamma_{ret} * \mathrm{RET} + \gamma_{oth} * \mathrm{OTH} + \\ \gamma_{oth+off} * \mathrm{OFFOTH}
-$$ {#eq-dcsizeterm} HH is the total households in zone $j$. OFF, RET,
+$$ {#eq-dcsizeterm} 
+HH is the total households in zone $j$. OFF, RET,
 and OTH are the jobs in zone $j$ by employment type office, retail, and
 other respectively. The destination choice utility is then transformed
-into a destination choice logsum value with: $$
+into a destination choice logsum value with: 
+$$
 DCLS = \ln \left(\sum_{j \in J} e^{\ln(A_j) + 1* MCLS_{ij}}\right)
 $$ {#eq-dcls}
 
