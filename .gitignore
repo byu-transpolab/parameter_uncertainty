@@ -26,3 +26,7 @@ elsarticle.cls
 /.luarc.json
 /Definitions/*
 index.log
+*.fls
+*.log
+*.out
+*.synctex.gz

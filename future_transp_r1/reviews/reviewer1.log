@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024/Homebrew) (preloaded format=pdflatex 2024.10.29)  13 JAN 2025 11:17
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024/Homebrew) (preloaded format=pdflatex 2024.10.29)  13 JAN 2025 20:39
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -655,7 +655,14 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 ) [1
 
-{/opt/homebrew/Cellar/texlive/20240312_3/share/texmf-dist/fonts/map/pdftex/updmap/pdftex.map}{/opt/homebrew/Cellar/texlive/20240312_3/share/texmf-dist/fonts/enc/dvips/base/8r.enc}] (./reviewer1.aux)
+{/opt/homebrew/Cellar/texlive/20240312_3/share/texmf-dist/fonts/map/pdftex/updmap/pdftex.map}{/opt/homebrew/Cellar/texlive/20240312_3/share/texmf-dist/fonts/enc/dvips/base/8r.enc}]
+Package mdframed Info: Not enough space on this page on input line 77.
+
+Overfull \hbox (4.34076pt too wide) in paragraph at lines 109--111
+|   []   |   []   |   []   |   []   |   []   |   []   |   []   |   []   |   []   |   []   |   []
+ []
+
+[2] (./reviewer1.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-02-20>
@@ -664,18 +671,18 @@ Package rerunfilecheck Info: File `reviewer1.out' has not changed.
 (rerunfilecheck)             Checksum: D0BDD203457CBC3B2F0429339D2D6CD4;791.
  ) 
 Here is how much of TeX's memory you used:
- 16920 strings out of 474116
- 279965 string characters out of 5732612
- 1935187 words of memory out of 5000000
- 38925 multiletter control sequences out of 15000+600000
- 588052 words of font info for 112 fonts, out of 8000000 for 9000
+ 16940 strings out of 474116
+ 280263 string characters out of 5732612
+ 1954187 words of memory out of 5000000
+ 38934 multiletter control sequences out of 15000+600000
+ 588508 words of font info for 119 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 94i,5n,131p,1081b,448s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</opt/homebrew/Cellar/texlive/20240312_3/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></opt/homebrew/Cellar/texlive/20240312_3/share/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></opt/homebrew/Cellar/texlive/20240312_3/share/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></opt/homebrew/Cellar/texlive/20240312_3/share/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></opt/homebrew/Cellar/texlive/20240312_3/share/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></opt/homebrew/Cellar/texlive/20240312_3/share/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on reviewer1.pdf (1 page, 70784 bytes).
+ 94i,5n,131p,1081b,589s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</opt/homebrew/Cellar/texlive/20240312_3/share/texmf-dist/fonts/type1/public/amsfonts/latxfont/lasy6.pfb></opt/homebrew/Cellar/texlive/20240312_3/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></opt/homebrew/Cellar/texlive/20240312_3/share/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></opt/homebrew/Cellar/texlive/20240312_3/share/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></opt/homebrew/Cellar/texlive/20240312_3/share/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></opt/homebrew/Cellar/texlive/20240312_3/share/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></opt/homebrew/Cellar/texlive/20240312_3/share/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on reviewer1.pdf (2 pages, 82518 bytes).
 PDF statistics:
- 71 PDF objects out of 1000 (max. 8388607)
- 55 compressed objects within 1 object stream
- 8 named destinations out of 1000 (max. 500000)
+ 80 PDF objects out of 1000 (max. 8388607)
+ 61 compressed objects within 1 object stream
+ 9 named destinations out of 1000 (max. 500000)
  34865 words of extra memory for PDF output out of 35830 (max. 10000000)
 

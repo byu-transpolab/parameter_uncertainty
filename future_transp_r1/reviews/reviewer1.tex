@@ -29,21 +29,105 @@
 \section{Reviewer \#1}
 
 \subsection{Introduction}
-\RC Introduction should more clearly state objectives of this study, especially the specific issues regarding impacts of parameter uncertainty in traffic demand model on prediction results. The current description is a bit vague, and it is recommended to add more explanations on the importance and practical significance of the study.
+\RC Introduction should more clearly state objectives of this study, especially
+the specific issues regarding impacts of parameter uncertainty in traffic demand
+model on prediction results. The current description is a bit vague, and it is
+recommended to add more explanations on the importance and practical
+significance of the study.
 
+\AR We have added the following sentences to the Introduction to clarify the relationship
+between uncertainty and prediction
+
+\begin{quote}
+    \DIFaddbegin \DIFadd{Systemic under- or over-prediction could lead to substantial
+    over- or under- investment in the highway network (Hoque et al., 2021).
+    }\DIFaddend 
+
+    \ldots
+
+    A detailed description of specifying mode choice model variables and nesting
+    of error structures is given by Koppelman and Bhat (2006)\DIFaddbegin
+    \DIFadd{. This category includes deeper uncertainty issues such as unforseen
+    shifts in behavior}\DIFaddend .
+\end{quote}
 
 \subsection{Application Context}
-\RC In literature review, authors are advised to cite relevant literature to expand the application context of traffic model. For example, doi.org/10.1016/j.physa.2024.12954.
+\RC In literature review, authors are advised to cite relevant literature to
+expand the application context of traffic model. For example,
+doi.org/10.1016/j.physa.2024.12954.
 
-\AR The DOI link supplied by the reviewer was malformed, and we are therefore unable to respond to this comment.
+\AR The DOI link supplied by the reviewer was malformed, and we are therefore
+unable to respond to this comment.
 
 \subsection{Model Design}
-\RC In Model Design and Methodology, author is advised to provide more detailed model construction process, assumptions, and specific application of the selected method (such as LHS).
+\RC In Model Design and Methodology, author is advised to provide more detailed
+model construction process, assumptions, and specific application of the
+selected method (such as LHS).
+
+\AR This is not a clear comment to us. We have provided a detailed description
+of approximately 1400 words with an accompanying full-source GitHub repository;
+and this comment is not specific enough to lead to a response action. We did, however, 
+note and correct a typo in an equation reference in this section.
+
+\begin{quote}
+ These PA trips are converted into origin
+destination (OD) trips by multiplying the trips by corresponding time of
+day factors (see \DIFdelbegin \DIFdel{\#eq-trips}\DIFdelend \DIFaddbegin \DIFadd{Equation 1}\DIFaddend ). These trips are calculated using Bentley's
+CUBE and the RVTPO model.
+\end{quote}
+
 
 \subsection{Sampling Methodology}
-\RC The authors selected the LHS and MC methods for uncertainty design, but did not describe the rationale and advantages of selecting these methods. It is recommended that the authors add a description of the study method selection process, including the consideration and rationale for the exclusion of other potential methods.
+\RC The authors selected the LHS and MC methods for uncertainty design, but did
+not describe the rationale and advantages of selecting these methods. It is
+recommended that the authors add a description of the study method selection
+process, including the consideration and rationale for the exclusion of other
+potential methods.
+
+\RC This is a reasonable point. We have addressed it in the Methodology with an additional
+reference,
+
+\begin{quote}
+    Two common methods for parameter sampling include \DIFdelbegin \DIFdel{, }\DIFdelend Monte
+Carlo (MC) simulation and Latin hypercube sampling (LHS)\DIFdelbegin \DIFdel{. }\DIFdelend \DIFaddbegin \DIFadd{;  
+In general, }\DIFaddend MC simulation
+draws independently from multiple distributions, while LHS makes draws
+that cover the parameter space more efficiently and can capture the
+joint distribution between two or more parameter values (Helton and
+Davis, 2003). As a result, LHS can reduce the number of draws needed to
+fully re-create the statistical variance in a model, but the amount of
+reduction is unknown and may not be universal to all problems (Yang et
+al., 2013).  \DIFaddbegin \DIFadd{And though more potential
+methods are being developed and employed in related research (e.g., Singh et al., 2024) 
+this research only considers these two.
+}\DIFaddend 
+
+
+\DIFadd{Singh, A., Mondal, S., Pandey, R., Jha, S. K. (2024). Assessing Fourier and
+Latin hypercube sampling methods as new multi-model methods for hydrological
+simulations. Stochastic Environmental Research and Risk Assessment, 38(4),
+1271–1295. }
+\DIFaddend 
+\end{quote}
+
+\RC and similarly in the limitations,
+
+\begin{quote}
+    
+    \DIFaddbegin \DIFadd{Second, a different
+    methodology of sampling might have produced a different result at the extremes than
+    the results of LHS.
+    }\DIFaddend 
+\end{quote}
+
 
 \subsection{Data collection}
-\RC The source and preprocessing process of the data used are not clearly stated in this paper. It is recommended to add a detailed description of the data collection, cleaning, and processing methods.
+\RC The source and preprocessing process of the data used are not clearly stated
+in this paper. It is recommended to add a detailed description of the data
+collection, cleaning, and processing methods.
+
+\AR We did not collect, clean, or process any data for this paper, and therefore the 
+the paper does not describe these processes. Rather, the paper generates its own data 
+Monte Carlo and Latin Hypercube Sampling, as described.
 
 \end{document}

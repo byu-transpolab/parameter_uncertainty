@@ -268,6 +268,7 @@ INPUT /opt/homebrew/Cellar/texlive/20240312_3/share/texmf-dist/fonts/tfm/adobe/t
 INPUT reviewer1.aux
 INPUT ./reviewer1.out
 INPUT ./reviewer1.out
+INPUT /opt/homebrew/Cellar/texlive/20240312_3/share/texmf-dist/fonts/type1/public/amsfonts/latxfont/lasy6.pfb
 INPUT /opt/homebrew/Cellar/texlive/20240312_3/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb
 INPUT /opt/homebrew/Cellar/texlive/20240312_3/share/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb
 INPUT /opt/homebrew/Cellar/texlive/20240312_3/share/texmf-dist/fonts/type1/urw/times/utmb8a.pfb
