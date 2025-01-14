@@ -223,7 +223,7 @@ assignment places constraints on the possible volume solutions and
 limits the practical impacts of parameter uncertainty. Further research
 should examine the robustness of this finding to other less constrained
 networks and to activity-based travel model frameworks.}
-\keyword{Travel modeling; Uncertainty}
+\keyword{Travel modeling; Uncertainty; Choice models; Trip-based models}
 
 
 % this solution came from ihrke/mdpi
@@ -254,7 +254,11 @@ University\\
 
 The inherent accuracy and uncertainty in travel forecasting models is
 receiving increasing attention from the scholarly and practicing
-community. Given that such models are used in the allocation of billions
+community. As an example of this attention, the Standing Committee on 
+Transport Forecasting of the Transportation Research Board has made uncertainty
+one of its primary research agenda issues (TRB AEP50, 2025), following a major report from 
+Federal Highway Administration on the topic (Lempert et al., 2022).
+Given that such models are used in the allocation of billions
 of dollars of infrastructure financing each year, the financial risks
 for inaccurate or imprecise forecasts are high (Flyvbjerg et al., 2005;
 Voulgaris, 2019). Systemic under- or over-prediction could lead to substantial
@@ -713,44 +717,35 @@ this research only considers these two.
 
 With the trip-based model described above, MC and LHS methods were used
 to develop alternative parameter sets to evaluate uncertainty. To
-identify a standard deviation for each parameter, a coefficient of
-variation was used. A set coefficient of variation of 0.10 was used for
-the four mode choice coefficients and the destination choice parameters.
-The mode choice constants were kept the same across all iterations.
+identify a standard deviation for each parameter, we asserted a coefficient of
+variation \(c_v = 0.10 \) the four mode choice coefficients and the destination
+choice parameters; the mode choice constants remained fixed across all iterations.
 Literature had identified a coefficient of variation of 0.30, but for
 this analysis that caused an unrealistic value of time, and thus it was
 changed to be 0.10 (Zhao and Kockelman, 2002). Value of time is a ratio
 in units of money per time that should be compared to the regional wage
-rate. Using a \(c_v\) of 0.30 the value of time range was from \(\$2\)
-to \(\$32\) /hr, whereas using a \(c_v\) of 0.10 the range was \(\$6\)
-to \(\$14\) /hr. The latter seemed more rational because it is related
-to wage rates and thus a \(c_v\) of 0.10 was used for our analysis. The
-standard deviation was equal to 0.10 multiplied by the mean, where the
-mean values in this situation are the base scenario parameters (as
-identified in Table~\ref{tbl-choicecoeff} ).
+rate. A \(c_v\) of 0.30 implied a value of time extending from \(\$2\)
+to \(\$32\) per hour, whereas a \(c_v\) of 0.10 implied values between \(\$6\)
+to \(\$14\) /hr, which we assess as more reasonable for this context.
+The standard deviation for sampling the parameters was therefore equal to 0.10
+multiplied by the mean, where the mean values in this situation are the base
+scenario parameters (as identified in Table~\ref{tbl-choicecoeff} ).
 
 The MC random sampling uses the R function of \texttt{rnorm}. LHS uses
-the \texttt{lhs} package in R. Since this package only chooses variables
-on a zero to one scale, the values given use a function to put the
-random sampling on the right scale needed for the given parameter. The
-full code for both methods can be found in a public
-\href{https://github.com/natmaegray/sensitivity_thesis}{GitHub
-repository}. One hundred and 600 draws of random samples for both
-methods are generated. With these generated parameters, the mode choice
-model step was run for every set of input parameters for each purpose.
-The average MCLS value for each run was determined to compare each
-continuous draw. This allowed us to see how many iterations of which
-sampling type would be sufficient to show a full range of possible
-outcomes.
+the \texttt{lhs} package in R.  The full code for both methods can be found in a
+public \href{https://github.com/natmaegray/sensitivity_thesis}{GitHub
+repository}. We wish to ensure in our simulations first, that we explore the
+full parameter uncertainty space of the model, and second that we run a
+sufficient number of simulations that outlying and extreme draws do not overly
+influence our analysis. We therefore designed and present a short experiment to
+evaluate the average mode choice logsum in the model determined by 100 and 600
+draws of parameters via both MC and LHS.
 
-The parameters generated were compared for both sampling methods.
-Figure~\ref{fig-parameter} shows the distributions for the HBW
-parameters when using 100 and 600 draws. These distributions show that
-LHS gives normally distributed parameters with fewer draws than MC
-sampling: at 100 draws LHS shows a nearly perfect normal distribution,
-where there are some discrepancies for the MC generated parameters.
-These Figures show that LHS is likely to estimate the full variance of
-the results with fewer draws.
+Figure~\ref{fig-parameter} shows the distributions of the HBW
+parameters when using 100 and 600 draws, including the distribution of implied 
+value of time, which is an indirect number based on two separate draws.
+These distributions show in general that LHS gives normally distributed parameters with fewer draws than MC
+sampling, as expected by theory (Helton and Davis, 2003).
 
 \begin{figure}
 
@@ -784,11 +779,11 @@ parameters for HBW trip purpose.}
 \end{figure}%
 
 To determine if LHS is effective at a reasonable amount of iterations,
-the cumulative mean and the cumulative standard deviation of the average
-MCLS value for every zone (see Equation~\ref{eq-mcls} ) was calculated
+the cumulative mean and the cumulative standard deviation of the mean 
+MCLS value for all zones (see Equation~\ref{eq-mcls} ) was calculated
 for each additional draw for both sampling methods. MCLS is an impedance
 term which is an important value for destination choice and region
-routing. The average MCLS, \(x\), was used as a measure of outcome
+routing. The mean MCLS, \(x\), was used as a measure of outcome
 possibilities to simplify a complex term as a single value to compare by
 across all iterations. The cumulative mean is calculated as:
 \begin{equation}\phantomsection\label{eq-cmclsmean}{
@@ -796,12 +791,9 @@ across all iterations. The cumulative mean is calculated as:
 }\end{equation} and the cumulative standard deviation is calculated as:
 \begin{equation}\phantomsection\label{eq-sdi}{
 SD_i = \sqrt{\frac{\sum (x_i - \mu_i)^2 }{n-1}}.
-}\end{equation} The cumulative mean shows how the average MCLS
-stabilizes across each iteration, and the cumulative standard deviation
-is used to show the 95\% confidence interval of that mean. When the
-cumulative mean for the draws stabilizes, that shows that the amount of
-generated parameters has captured the possible variance of the results.
-This is shown for two of the three trip purposes in Figure~\ref{fig-cm}.
+}\end{equation}  Figure~\ref{fig-cm} illustrates how the average MCLS
+stabilizes as the number of draws increases, and the cumulative standard deviation
+is used to show the 95\% confidence interval of that mean. 
 
 \begin{figure}
 
@@ -816,6 +808,7 @@ This is shown for two of the three trip purposes in Figure~\ref{fig-cm}.
 \subcaption{\label{fig-cm-1}HBW}
 
 \end{minipage}%
+\newline
 \newline
 \begin{minipage}{\linewidth}
 
@@ -834,17 +827,13 @@ mean and 95\% confidence interval with 100 and 600 draws.}
 
 \end{figure}%
 
-For all three trip purposes, both sampling methods had a stabilized mean
-by 100 draws. The LHS methods standard deviation ribbon was generally
+For these two trip purposes (as well as the third purpose which we do not show), 
+both sampling methods had a stabilized mean by 100 draws. 
+The LHS method's standard deviation ribbon was generally
 thinner than the MC method. From the narrowed cumulative standard
 deviation, and that the parameter values are better normally distributed
-when using LHS, that method of sampling was used for the assignment
-analysis of the model. Since LHS captures the possible variance at a
-small enough number of iterations, it can be used for large
-transportation demand models. From these results it was decided to use
-100 LHS samples parameters to evaluate uncertainty within each step of
-the model. The next chapter includes the results of applying these
-sampled parameters to the travel demand model.
+when using LHS, we determined to use 100 sets of parameters drawn via LHS to
+evaluate the effect of parameter uncertainty in our analysis.
 
 
 \section{Sensitivity Analysis Results}\label{sec-results}
@@ -1048,15 +1037,18 @@ values in green.}
 
 \section{Conclusions}\label{sec-conclusions}
 
-In general, this research has shown that statistical parameter
-uncertainty does not appear to be a significant factor in forecasting
-traffic volumes using trip-based travel demand models. The result
-uncertainty is generally equal to or smaller than the input parameter
-variance. The uncertainty in parameter inputs appears to lead to
-variation in highway volumes that is lower than the error between the
-model forecast and the highway counts. Any variation in mode and
+The results of this research show that despite large variations in 
+mode and destination choice parameters – and consequently large variations
+in accessibility, the impact of this variation on assigned highway volumes
+is limited. To our knowledge, this is the first systematic evaluation of 
+parameter uncertainty in a practical travel model in the literature, with prior
+research being limited to toy networks (e.g., Zhao and Kockelman, 2002).
+The resulting uncertainty in the output forecasts was shown to be generally smaller 
+than the input parameter variance, confirming the results of Petrik et al.
+(2020) in a different context.
+In this application at least, the variation in mode and
 destination choice probabilities appears to be constrained by the
-limitations of the highway network assignment.
+capacities and procedures of the highway network assignment.
 
 There are several limitations that must be mentioned in this research,
 however. First, we did not attempt to address the statistical
@@ -1070,17 +1062,19 @@ Additionally, the relatively sparse network of the RVTPO model region
 --- lacking parallel high-capacity highway facilities --- may have meant
 that the static network assignment would converge to a similar solution
 point regardless of modest changes to the trip matrix. It may be that in
-a larger network with more path redundancies, the assignment may not
-have been as helpful in constraining the forecast volumes.
+a larger network with more path redundancies or more alternative transit services
+the assignment may not have been as helpful in constraining the forecast
+volumes.
 
 In this research we had only the estimates of the statistical
 coefficients, and therefore had to assume a coefficient of variation to
 derive variation in the sampling procedure. It would be better if model
 user and development documentation more regularly provided estimates of
-the standard errors of model parameters. Even better would be
+the standard errors of model parameters. The ideal would be
 variance-covariance matrices for the estimated models, enabling
 researchers to ensure that covariance relationships between sampled
-parameters are maintained.
+parameters are maintained. Future research might reconsider the present 
+expermiment but allowing for correlation between parameter values.
 
 Notwithstanding these limitations, statistical parameter variance does
 not appear to be the largest source of uncertainty in travel
@@ -1168,6 +1162,12 @@ Koppelman, F.S., Bhat, C., 2006. A {Self Instructing Course} in {Mode
 Choice Modeling}: {Multinomial} and {Nested Logit Models}. Federal
 Transit Administration.
 
+\bibitem[\citeproctext]{ref-lempert2022}
+Lempert, R. J., Popper, S. W., Calvo Hernandez, C. (2022). Transportation
+Planning for Uncertain Times—A Practical Guide to Decision Making Under Deep
+Uncertainty for MPOs (FHWA-HEP-22-031). Federal Highway Administration.
+\url{https://www.fhwa.dot.gov/planning/tmip/publications/other_reports/fhwahep22031.pdf}
+
 \bibitem[\citeproctext]{ref-manzo2015}
 Manzo, S., Nielsen, O.A., Prato, C.G., 2015. How uncertainty in input
 and parameters influences transport model: Output {A} four-stage model
@@ -1213,32 +1213,34 @@ Latin hypercube sampling methods as new multi-model methods for hydrological
 simulations. Stochastic Environmental Research and Risk Assessment, 38(4),
 1271–1295. \url{https://doi.org/10.1007/s00477-023-02627-6}
 
-\bibitem[\citeproctext]{ref-voulgaris2019}
-Voulgaris, C.T., 2019. Crystal {Balls} and {Black Boxes}: {What Makes} a
-{Good Forecast}? Journal of Planning Literature 34, 286--299.
-\url{https://doi.org/10.1177/0885412219838495}
 
-\bibitem[\citeproctext]{ref-welde2011planners}
-Welde, M., Odeck, J., 2011. Do planners get it right? {The} accuracy of
-travel demand forecasting in {Norway}. European Journal of Transport and
-Infrastructure Research 11.
+\bibitem[\citeproctext]{ref-trbdmdu}
+TRB AEP50. (2025). Decision Making Under Deep Uncertainty.
+\url{https://www.trbtravelforecasting.org/dmdu}, accessed 14 January 2025.
 
-\bibitem[\citeproctext]{ref-wu2021}
-Wu, H., Levinson, D., 2021. The ensemble approach to forecasting: {A}
-review and synthesis. Transportation Research Part C: Emerging
-Technologies 132, 103357.
+
+\bibitem[\citeproctext]{ref-voulgaris2019} Voulgaris, C.T., 2019. Crystal
+{Balls} and {Black Boxes}: {What Makes} a {Good Forecast}? Journal of Planning
+Literature 34, 286--299.  \url{https://doi.org/10.1177/0885412219838495}
+
+\bibitem[\citeproctext]{ref-welde2011planners} Welde, M., Odeck, J., 2011. Do
+planners get it right? {The} accuracy of travel demand forecasting in {Norway}.
+European Journal of Transport and Infrastructure Research 11.
+
+\bibitem[\citeproctext]{ref-wu2021} Wu, H., Levinson, D., 2021. The ensemble
+approach to forecasting: {A} review and synthesis. Transportation Research Part
+C: Emerging Technologies 132, 103357.
 \url{https://doi.org/10.1016/j.trc.2021.103357}
 
-\bibitem[\citeproctext]{ref-yang2013}
-Yang, C., Chen, A., Xu, X., Wong, S.C., 2013. Sensitivity-based
-uncertainty analysis of a combined travel demand model. Transportation
-Research Part B: Methodological 57, 225--244.
+\bibitem[\citeproctext]{ref-yang2013} Yang, C., Chen, A., Xu, X., Wong, S.C.,
+2013. Sensitivity-based uncertainty analysis of a combined travel demand model.
+Transportation Research Part B: Methodological 57, 225--244.
 \url{https://doi.org/10.1016/j.trb.2013.07.006}
 
-\bibitem[\citeproctext]{ref-zhao2002}
-Zhao, Y., Kockelman, K.M., 2002. The propagation of uncertainty through
-travel demand models: {An} exploratory analysis. The Annals of Regional
-Science 36, 145--163. \url{https://doi.org/10.1007/s001680200072}
+\bibitem[\citeproctext]{ref-zhao2002} Zhao, Y., Kockelman, K.M., 2002. The
+propagation of uncertainty through travel demand models: {An} exploratory
+analysis. The Annals of Regional Science 36, 145--163.
+\url{https://doi.org/10.1007/s001680200072}
 
 \end{CSLReferences}
 
@@ -1252,5 +1254,4 @@ Science 36, 145--163. \url{https://doi.org/10.1007/s001680200072}
 
 
 
-\PublishersNote{}
-\end{document}
+\PublishersNote{} \end{document}
