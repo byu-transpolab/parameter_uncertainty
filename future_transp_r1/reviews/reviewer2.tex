@@ -1,0 +1,159 @@
+% An example for the ar2rc document class.
+% Copyright (C) 2017 Martin Schroen
+% Modifications Copyright (C) 2020 Kaishuo Zhang
+%
+% This program is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+%
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+%
+% You should have received a copy of the GNU General Public License
+% along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+\documentclass{ar2rc}
+
+\title{Evaluating the Impacts of Parameter Uncertainty in a Practical Transportation Demand Model}
+\author{G. Macfarlane}
+\journal{Future Transportation}
+\doi{futuretransp-3339770}
+
+\begin{document}
+
+\maketitle
+
+We are grateful for the reviewer's comments on this manuscript. We address each point in turn, with 
+\DIFaddbegin \DIFadd{text added to the manuscript in blue}\DIFaddend  and 
+\DIFdelbegin \DIFdel{text deleted from the manuscript in red}\DIFdelend.
+
+
+\section{Reviewer \#2}
+
+\subsection{Introduction}
+\RC This manuscript presents a detailed investigation into the impacts of parameter uncertainty
+in a practical, trip-based transportation demand model using the Roanoke Valley
+Transportation Planning Organization (RVTPO) model as a case study. By employing Latin
+Hypercube Sampling (LHS) to explore parameter variations and their impact on traffic
+forecasts, the research addresses a critical issue in transportation modelling: the
+robustness of parameter uncertainty in realistic scenarios. In sum, the study provides a
+clear methodology and robust results, showing that parameter uncertainty has a minimal
+effect on traffic volumes in this specific model. The findings contribute to the understanding
+of uncertainties in transportation demand forecasting and their implications for decision-
+making in infrastructure planning.
+From the point of view of relevance and originality, I think the paper tackles a timely topic,
+as accurate transportation demand forecasts are essential for policy and infrastructure
+planning. It particularly focuses on parameter uncertainty, a less explored but highly
+impactful area within transportation modelling literature.
+
+\AR We are grateful for the reviewer's positive comments on the originality and timeliness 
+of this research.
+
+\subsection{Literature Review}
+\RC While the literature review covers a broad range of studies, it could be more focused. For
+instance, the review mentions several papers that primarily address input data or model
+form uncertainties, which are less relevant to the paper’s primary focus on parameter
+uncertainty. A deeper dive into recent studies specifically addressing parameter
+uncertainty in trip-based models or activity-based frameworks would strengthen the
+contextual relevance.
+
+\AR We agree with this general point, but feel it is important to highlight that research 
+has largely been focused on things other than parameter uncertainty, which we identify in 
+the paper's Introduction as the only element of modeling addressed by classical statistics.
+
+This comment did, however, cause us to investigate some interesting modern research in the 
+application of Bayesian statistics to model development and calibration. We have added a brief
+discussion in the literature review,
+
+\begin{quote}
+
+\end{quote}
+
+\subsection{Methodology}
+\RC I also consider that the methodology employed by the authors to assess parameter
+uncertainty is comprehensive and adequate. Their use of Latin Hypercube Sampling (LHS)
+to construct hundreds of combinations of parameters across a plausible parameter space
+allows for a more efficient sampling of the parameter space compared to simple random
+sampling, ensuring that the entire range of possible values is explored. This is a notable
+strength, as well as their evaluation across multiple trip purposes and the inclusion of high-
+volume and low-volume network links, to provide a comprehensive sensitivity analysis. The
+authors also introduced substantial changes to implied travel impedances and modal
+utilities based on the sampled parameter combinations, allowing them to observe the
+effects on traffic volume forecasts.
+
+\AR We are glad that the reviewer found this to be a strength of the paper, and we agree that 
+it leads to the strongest contribution of the paper.
+
+
+\subsection{Results}
+\RC In my opinion the results are well-structured, with clear presentation in tables and graphs.
+The conclusion—that parameter uncertainty contributes minimally to forecast variation
+compared to network and model constraints—is supported by quantitative evidence. In
+fact, the study's findings suggest that efforts to address uncertainties in travel forecasting
+may be better spent on improving model specifications and input data accuracy rather than
+focusing solely on parameter uncertainty.
+
+\AR We are happy that the reviewer found our results persuasive in light of the evidence we submit.
+
+\subsection{Minor Comments}
+
+\subsubsection{Practical Impacts}
+\RC The abstract effectively summarizes the study, but including a line on the practical
+implications of the findings would enhance its appeal.
+
+\subsubsection{Coefficient of variation}
+\RC The paper assumes a coefficient of variation (CV) of 0.10 for parameter uncertainty.
+While the authors justify this with a rational range for value of time, the choice could be
+further validated with sensitivity tests or references to empirical studies. In Table 3, the
+coefficient of variation for non-motorized and transit trips is substantially higher than
+for auto trips. This observation could be highlighted and discussed in the results
+section to emphasize differences in confidence across modes.
+
+\subsubsection{Limitations}
+\RC The authors note that the RVTPO model's size and constraints may limit the
+generalizability of the findings. However, further discussion on how these limitations
+impact other models, especially in large urban or multimodal contexts, would add
+depth.
+
+\subsubsection{Future research}
+\RC The conclusion section could expand on how these findings might influence future
+research priorities or practical applications in urban transportation planning.
+
+\subsubsection{Equation and figure discussion}
+\RC Certain equations, such as those describing mode and destination choice, could
+benefit from additional explanation or context to ensure accessibility to readers
+unfamiliar with specific modelling practices. Figures, while generally effective, could
+include more explicit labels or annotations for non-specialist readers. Figure 3 on trip
+density by mode is insightful but could be paired with more textual analysis to discuss
+patterns by trip purpose or link volume.
+
+
+\subsubsection{Other sources of uncertainty}
+\RC The study primarily addresses uncertainty related to mode and destination
+choice parameters, without exploring the statistical uncertainty in trip
+production estimates. This omission could mean that other significant sources
+of uncertainty affecting traffic volumes are not adequately considered.
+
+\RC Finally, the paper does not delve deeply into other sources of uncertainty, such
+as input data inaccuracies or model specification errors, which could also
+significantly impact forecasting accuracy. A more comprehensive analysis of
+these factors could provide a fuller understanding of the uncertainties involved
+in transportation demand modelling.
+
+\subsubsection{Static assignment constraint}
+\RC The research suggests that the static network assignment may constrain the
+possible volume solutions, potentially limiting the practical impacts of
+parameter uncertainty. This raises questions about the generalizability of the
+findings to more dynamic or less constrained network scenarios.
+
+\subsubsection{Trip-based model}
+\RC The findings are based on a specific trip-based travel demand model, which
+may not be applicable to all contexts or regions. The results might vary
+significantly in different geographic areas or under different modelling
+frameworks, such as activity-based models.
+
+
+\end{document}
