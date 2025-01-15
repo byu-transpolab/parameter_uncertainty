@@ -29,7 +29,7 @@
 We are grateful for the reviewer's comments on this manuscript. We address each point in turn, with 
 \DIFaddbegin \DIFadd{text added to the manuscript in blue}\DIFaddend  and 
 \DIFdelbegin \DIFdel{text deleted from the manuscript in red}\DIFdelend.
-
+We address each 
 
 \section{Reviewer \#2}
 
@@ -64,13 +64,6 @@ contextual relevance.
 has largely been focused on things other than parameter uncertainty, which we identify in 
 the paper's Introduction as the only element of modeling addressed by classical statistics.
 
-This comment did, however, cause us to investigate some interesting modern research in the 
-application of Bayesian statistics to model development and calibration. We have added a brief
-discussion in the literature review,
-
-\begin{quote}
-
-\end{quote}
 
 \subsection{Methodology}
 \RC I also consider that the methodology employed by the authors to assess parameter
@@ -104,6 +97,24 @@ focusing solely on parameter uncertainty.
 \RC The abstract effectively summarizes the study, but including a line on the practical
 implications of the findings would enhance its appeal.
 
+\AR We welcome this advice and have revised the abstract,
+
+\begin{quote}
+     Using Latin hypercube sampling to
+construct several hundred combinations of parameters across the
+plausible parameter space, we introduce substantial changes to implied
+travel impedances and modal utilities\DIFaddbegin \DIFadd{, on the order of 10 percent variation}\DIFaddend .
+However, the aggregate effects of of these changes on forecasted traffic volumes
+is small, with a \DIFdelbegin \DIFdel{variance
+}\DIFdelend \DIFaddbegin \DIFadd{variation }\DIFaddend of approximately 1 percent on high-volume facilities.
+It is likely that in this example --- and perhaps in others --- the \DIFdelbegin \DIFdel{static }\DIFdelend network
+assignment places constraints on the possible volume solutions and limits the
+practical impacts of parameter uncertainty. \DIFaddbegin \DIFadd{Nevertheless, parameter uncertainty
+may not be the largest contributor to error in practical travel forecasts. }\DIFaddend Further
+research should examine the robustness of this finding to other less constrained
+networks and to activity-based travel model frameworks.
+\end{quote}
+
 \subsubsection{Coefficient of variation}
 \RC The paper assumes a coefficient of variation (CV) of 0.10 for parameter uncertainty.
 While the authors justify this with a rational range for value of time, the choice could be
@@ -112,15 +123,86 @@ coefficient of variation for non-motorized and transit trips is substantially hi
 for auto trips. This observation could be highlighted and discussed in the results
 section to emphasize differences in confidence across modes.
 
+\AR We unfortunately do not have the resources to conduct an additional
+sensitivity analysis, which we agree would be valuable. We have, however, revised this paragraph
+to include an additional external reference in the literature,
+
+\begin{quote}
+    With the trip-based model described above, MC and LHS methods were used
+    to develop alternative parameter sets to evaluate uncertainty. To
+    identify a standard deviation for each parameter, \DIFaddbegin \DIFadd{we asserted }\DIFaddend a coefficient of
+    variation \DIFdelbegin \DIFdel{was used. A set coefficient of variation of 0.10 was used for
+    }\DIFdelend \DIFaddbegin \DIFadd{\(c_v = 0.10 \) }\DIFaddend the four mode choice coefficients and the destination
+    choice parameters\DIFdelbegin \DIFdel{.
+    The }\DIFdelend \DIFaddbegin \DIFadd{; the }\DIFaddend mode choice constants \DIFdelbegin \DIFdel{were kept the same }\DIFdelend \DIFaddbegin \DIFadd{remained fixed }\DIFaddend across all iterations.
+    Literature had identified a coefficient of variation of 0.30 \DIFdelbegin \DIFdel{, }\DIFdelend \DIFaddbegin \DIFadd{(Zhao and Kockelman, 2002), }\DIFaddend but for
+    this analysis that caused an unrealistic value of time, and thus it was
+    changed to be 0.10\DIFdelbegin \DIFdel{(Zhao and Kockelman, 2002)}\DIFdelend . Value of time is a ratio
+    in units of money per time that should be compared to the regional wage
+    rate \DIFdelbegin \DIFdel{. Using a }\DIFdelend \DIFaddbegin \DIFadd{and was generally on the order of 10 dollars per hour in the early 2010's (Abrantes and
+    Wardman, 2011), when the RVTPO choice coefficients were
+    developed.
+     A }\DIFaddend \(c_v\) of 0.30 \DIFdelbegin \DIFdel{the }\DIFdelend \DIFaddbegin \DIFadd{implied a }\DIFaddend value of time
+    \DIFdelbegin \DIFdel{range was }\DIFdelend \DIFaddbegin \DIFadd{extending }\DIFaddend from \(\$2\)
+    to \(\$32\) \DIFdelbegin \DIFdel{/hr, whereas using }\DIFdelend \DIFaddbegin \DIFadd{per hour, whereas }\DIFaddend a \(c_v\) of 0.10 \DIFdelbegin \DIFdel{the range was }\DIFdelend \DIFaddbegin \DIFadd{implied values between }\DIFaddend \(\$6\)
+    to \(\$14\) /hr\DIFdelbegin \DIFdel{. The latter seemed more rational because it is related
+    to wage rates and thus a \(c_v\) of 0.10 was used for our analysis}\DIFdelend \DIFaddbegin \DIFadd{, which we assess as more reasonable for this context}\DIFaddend .
+    The standard deviation \DIFdelbegin \DIFdel{was }\DIFdelend \DIFaddbegin \DIFadd{for sampling the parameters was therefore }\DIFaddend equal to 0.10
+    multiplied by the mean, where the mean values in this situation are the base
+    scenario parameters (as identified in Table 2).
+\end{quote}
+
+\AR To be specific, the Abrantes and Wardman reference contains a meta-analysis of value of time studies
+conducted in the United Kingdom. Basically all mean values are concentrated 
+around 10 UK pence per minute, which is effectively equal to dollars per hour. Considering 
+\begin{equation}
+  1 \frac{\mathrm{pence}}{\mathrm{minute}} \times \frac{60\ \mathrm{minutes}}{\mathrm{hr}} 
+    \times \frac{\mathrm{pound\ sterling}}{100 \mathrm{\ pence}} \times \frac{1 \mathrm{\ USD}}{0.65 \mathrm{\ pound\ sterling}}
+\end{equation}
+where the equivalence between pounds and dollars is based on purchasing power parity (data from OECD).
+
 \subsubsection{Limitations}
 \RC The authors note that the RVTPO model's size and constraints may limit the
 generalizability of the findings. However, further discussion on how these limitations
 impact other models, especially in large urban or multimodal contexts, would add
 depth.
 
+\RC [moved up from below] The findings are based on a specific trip-based travel demand model, which
+may not be applicable to all contexts or regions. The results might vary
+significantly in different geographic areas or under different modelling
+frameworks, such as activity-based models.
+
+\AR We agree that an additional limitation is warranted, and we have added this to the conclusions,
+
+\begin{quote}
+    \DIFaddbegin \DIFadd{In general, these findings are based on a specific trip-based travel
+    demand model, which may not be applicable to all contexts or regions. The
+    results might vary significantly in different geographic areas or under
+    different modeling frameworks, such as activity-based models. Attempting this 
+    research again with a variety of models and geographic regions would be a valuable research
+    priority.
+    }\DIFaddend 
+\end{quote}
+
 \subsubsection{Future research}
 \RC The conclusion section could expand on how these findings might influence future
 research priorities or practical applications in urban transportation planning.
+
+\AR We have revised the conclusions section to address future research in this area,
+
+\begin{quote}
+    In this research we had only the estimates of the statistical
+coefficients, and therefore had to assume a coefficient of variation to
+derive variation in the sampling procedure. It would be better if model
+user and development documentation more regularly provided estimates of
+the standard errors of model parameters. \DIFdelbegin \DIFdel{Even better }\DIFdelend \DIFaddbegin \DIFadd{The ideal }\DIFaddend would be
+variance-covariance matrices for the estimated models, enabling
+researchers to ensure that covariance relationships between sampled
+parameters are maintained. \DIFaddbegin \DIFadd{Future research might reconsider the present 
+expermiment but allowing for correlation between parameter values.
+}\DIFaddend 
+
+\end{quote}
 
 \subsubsection{Equation and figure discussion}
 \RC Certain equations, such as those describing mode and destination choice, could
@@ -130,6 +212,43 @@ include more explicit labels or annotations for non-specialist readers. Figure 3
 density by mode is insightful but could be paired with more textual analysis to discuss
 patterns by trip purpose or link volume.
 
+\AR We attempted to re-word the description of the mode and destination choice
+sections to render them more generally understood,
+
+\begin{quote}
+    The utility equations for the mode choice model are as follows: \[
+\begin{aligned}
+U_{auto} &= \beta_{ivtt} * X_{auto} + \beta_{tc} * \beta_{ac} * X_{dist}\\
+U_{nmot} &= k_{nmot} + 20 * \beta_{wd}*X_{nmot}\\
+U_{trn} &= k_{trn} + \beta_{ivtt} * X_{trn}
+\end{aligned}
+\] \DIFdelbegin \DIFdel{These utilities are used to calculate the MCLS by:
+}\begin{displaymath}\DIFdel{\phantomsection%DIFDELCMD < \label{eq-mcls}%%%
+{
+MCLS_{ij} = \ln\left(\sum_{k \in K} e^{U_{ijk}}\right).
+}}\end{displaymath}%DIFAUXCMD
+%DIFDELCMD <  %%%
+\DIFdelend If the distance was greater than 2 miles, non-motorized
+travel was excluded \DIFdelbegin \DIFdel{.
+}%DIFDELCMD < 
+
+%DIFDELCMD < %%%
+\DIFdelend \DIFaddbegin \DIFadd{as an option. In general, modes with longer times receive lower probabilities and therefore lower proportions of trips.
+These utilities are used to calculate the MCLS by:
+}\begin{equation}\DIFadd{\phantomsection\label{eq-mcls}{
+MCLS_{ij} = \ln\left(\sum_{k \in K} e^{U_{ijk}}\right).
+}}\end{equation}  \DIFaddend This logsum value is then used as the primary impedance for a
+destination choice model (Ben-Akiva and Lerman, 1985). 
+\DIFdelbegin \DIFdel{Destination
+choice estimates travel patterns based on mode choice,
+trip generators
+(workers and households}\DIFdelend \DIFaddbegin 
+
+\DIFadd{The destination choice model estimates the numbers of trips between origin and
+destination pairs using the size of the destination (number of attractions),
+accessibility by multiple modes (in the MCLS}\DIFaddend ),
+\end{quote}
+
 
 \subsubsection{Other sources of uncertainty}
 \RC The study primarily addresses uncertainty related to mode and destination
@@ -137,11 +256,15 @@ choice parameters, without exploring the statistical uncertainty in trip
 production estimates. This omission could mean that other significant sources
 of uncertainty affecting traffic volumes are not adequately considered.
 
-\RC Finally, the paper does not delve deeply into other sources of uncertainty, such
+\AR This is correct, and has been noted as a limitation.
+
+\RC [moved up from below] Finally, the paper does not delve deeply into other sources of uncertainty, such
 as input data inaccuracies or model specification errors, which could also
 significantly impact forecasting accuracy. A more comprehensive analysis of
 these factors could provide a fuller understanding of the uncertainties involved
 in transportation demand modelling.
+
+\AR Again, we agree with this statement and have acknowledged it in the conclusion discussion. 
 
 \subsubsection{Static assignment constraint}
 \RC The research suggests that the static network assignment may constrain the
@@ -149,11 +272,29 @@ possible volume solutions, potentially limiting the practical impacts of
 parameter uncertainty. This raises questions about the generalizability of the
 findings to more dynamic or less constrained network scenarios.
 
-\subsubsection{Trip-based model}
-\RC The findings are based on a specific trip-based travel demand model, which
-may not be applicable to all contexts or regions. The results might vary
-significantly in different geographic areas or under different modelling
-frameworks, such as activity-based models.
+\AR While we did say this, the real constraint comes not from the particular static
+user equilibrium assignment but from the highway capacities themselves: there are 
+only so many routes one can use to drive through a city, regardless of where the trips
+are destined. We have expanded this in the conclusions,
+
+\begin{quote}
+    given that
+    lower trip rates may lead to lower traffic volumes globally, which could
+    not be ``corrected'' by the \DIFdelbegin \DIFdel{static user equilibrium assignment. }\DIFdelend \DIFaddbegin \DIFadd{traffic assignment. Second, a different
+    methodology of sampling might have produced a different result at the extremes than
+    the results of LHS.
+    }\DIFaddend Additionally, the relatively sparse network of the RVTPO model region
+    --- lacking parallel high-capacity highway facilities --- may have meant
+    that the \DIFdelbegin \DIFdel{static network assignment }\DIFdelend \DIFaddbegin \DIFadd{network assignment process }\DIFaddend would converge to a similar solution
+    point regardless of modest changes to the trip matrix. \DIFaddbegin \DIFadd{If the number of paths 
+    between nodes is limited and constrained by highway capacity, there are only so many 
+    solutions to any highway assignment process. }\DIFaddend It may be that in
+    a larger network with more path redundancies \DIFdelbegin \DIFdel{, }\DIFdelend \DIFaddbegin \DIFadd{or more alternative transit services
+    }\DIFaddend the assignment may not have been as helpful in constraining the forecast
+    volumes.
+\end{quote}
+
+
 
 
 \end{document}

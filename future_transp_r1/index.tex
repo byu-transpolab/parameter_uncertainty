@@ -215,13 +215,14 @@ varying the mode and destination choice parameters in an advanced
 trip-based travel demand model. Using Latin hypercube sampling to
 construct several hundred combinations of parameters across the
 plausible parameter space, we introduce substantial changes to implied
-travel impedances and modal utilities. However, the aggregate effects of
-of these changes on forecasted traffic volumes is small, with a variance
-of approximately 1 percent on high-volume facilities. It is likely that
-in this example --- and perhaps in others --- the static network
-assignment places constraints on the possible volume solutions and
-limits the practical impacts of parameter uncertainty. Further research
-should examine the robustness of this finding to other less constrained
+travel impedances and modal utilities, on the order of 10 percent variation.
+However, the aggregate effects of of these changes on forecasted traffic volumes
+is small, with a variation of approximately 1 percent on high-volume facilities.
+It is likely that in this example --- and perhaps in others --- the network
+assignment places constraints on the possible volume solutions and limits the
+practical impacts of parameter uncertainty. Nevertheless, parameter uncertainty
+may not be the largest contributor to error in practical travel forecasts. Further
+research should examine the robustness of this finding to other less constrained
 networks and to activity-based travel model frameworks.}
 \keyword{Travel modeling; Uncertainty; Choice models; Trip-based models}
 
@@ -593,11 +594,11 @@ utility parameters \(\gamma\), attractions \(A\), and the impedance as
 the mode choice model logsum \(MCLS_{ijt}\). A time-of-day and direction
 factor \(\Delta\) finalizes the total assigned trips.
 
-The productions \(P_i\), and attractions \(A_j\) were extracted from the
-RVTPO Model and held constant. The attractions are determined from the
-socioeconomic (SE) data. The SE data included information by TAZ for the
+The number of trip productions \(P_i\), and attractions \(A_j\) were extracted from the
+RVTPO Model and held constant. These values are determined from the
+socioeconomic (SE) data at a zonal level; the SE data included information by zone for the
 total population, number of households, total workers, and workers by
-employment type. The trip productions are organized by TAZ and trip
+employment type. The trip productions are organized by zone and trip
 purpose. The trip purposes used in this model are Home Based Work (HBW),
 Home Based Other (HBO), Non-Home Based (NHB), Commercial Vehicles (CV),
 Internal-External (IXXI), and External-External (XX). Only the first
@@ -606,13 +607,13 @@ CV, IXXI, and XX trips were kept fixed for this analysis.
 
 The two parameter vectors \(\beta\) and \(\gamma\) describe the mode
 choice model and destination choice model coefficients, respectively.
-Mode choice estimates how many trips from \(i\) to \(j\) will happen on
-each available mode \(k\).This model analyses three modes of
+The mode choice model estimates how many trips from \(i\) to \(j\) will happen on
+each available mode \(k\). This model analyses three modes of
 transportation: auto, non-motorized, and transit. The mode by which a
 trip is made is determined by calculated utilities for the three modes.
-These utilities take inputs from parameter values and time and distance
-skims \(X\). Skims are either the time or distance to travel between
-zone pairs. Travel time for auto used the single occupancy vehicle peak
+These utilities use parameter values as well as time and distance
+skims \(X\) for each mode. Skims are either the time or distance to travel between
+zone pairs in a period. Travel time for auto used the single occupancy vehicle peak period
 time, non-motorized travel time used the distance skim multiplied by a
 factor of average walking speed (3 mph), and transit time used the walk
 to bus peak time. The mode choice parameters (constants and
@@ -659,16 +660,17 @@ U_{auto} &= \beta_{ivtt} * X_{auto} + \beta_{tc} * \beta_{ac} * X_{dist}\\
 U_{nmot} &= k_{nmot} + 20 * \beta_{wd}*X_{nmot}\\
 U_{trn} &= k_{trn} + \beta_{ivtt} * X_{trn}
 \end{aligned}
-\] These utilities are used to calculate the MCLS by:
+\] If the distance was greater than 2 miles, non-motorized
+travel was excluded as an option. In general, modes with longer times receive lower probabilities and therefore lower proportions of trips.
+These utilities are used to calculate the MCLS by:
 \begin{equation}\phantomsection\label{eq-mcls}{
 MCLS_{ij} = \ln\left(\sum_{k \in K} e^{U_{ijk}}\right).
-}\end{equation} If the distance was greater than 2 miles, non-motorized
-travel was excluded.
+}\end{equation}  This logsum value is then used as the primary impedance for a
+destination choice model (Ben-Akiva and Lerman, 1985). 
 
-This logsum value is then used as the primary impedance for a
-destination choice model (Ben-Akiva and Lerman, 1985). Destination
-choice estimates travel patterns based on mode choice, trip generators
-(workers and households), and destination choice parameters. These
+The destination choice model estimates the numbers of trips between origin and
+destination pairs using the size of the destination (number of attractions),
+accessibility by multiple modes (in the MCLS), and destination choice parameters. These
 parameter values are also shown in Table~\ref{tbl-choicecoeff}. The
 destination choice utility is the primary impedance (mode choice logsum
 value) plus the natural log of the size term, where the sized term is
@@ -682,7 +684,7 @@ into a destination choice logsum value with:
 DCLS = \ln \left(\sum_{j \in J} e^{\ln(A_j) + 1* MCLS_{ij}}\right)
 }\end{equation}
 
-The probability of both the mode choice and destination choice are
+The probability of both mode choice and destination choice are
 calculated using the exponentiated utility divided by the corresponding
 logsum. These probabilities in conjunction with the trip productions can
 calculate the number of production-attraction (PA) trips between each
@@ -720,11 +722,15 @@ to develop alternative parameter sets to evaluate uncertainty. To
 identify a standard deviation for each parameter, we asserted a coefficient of
 variation \(c_v = 0.10 \) the four mode choice coefficients and the destination
 choice parameters; the mode choice constants remained fixed across all iterations.
-Literature had identified a coefficient of variation of 0.30, but for
+Literature had identified a coefficient of variation of 0.30 (Zhao and Kockelman, 2002), but for
 this analysis that caused an unrealistic value of time, and thus it was
-changed to be 0.10 (Zhao and Kockelman, 2002). Value of time is a ratio
+changed to be 0.10. Value of time is a ratio
 in units of money per time that should be compared to the regional wage
-rate. A \(c_v\) of 0.30 implied a value of time extending from \(\$2\)
+rate and was generally on the order of 10 dollars per hour in the early 2010's (Abrantes and
+Wardman, 2011), when the RVTPO choice coefficients were
+developed.
+ A \(c_v\) of 0.30 implied a value of time
+extending from \(\$2\)
 to \(\$32\) per hour, whereas a \(c_v\) of 0.10 implied values between \(\$6\)
 to \(\$14\) /hr, which we assess as more reasonable for this context.
 The standard deviation for sampling the parameters was therefore equal to 0.10
@@ -1055,16 +1061,23 @@ however. First, we did not attempt to address the statistical
 uncertainty in trip production estimates; these may play a substantially
 larger role than destination and mode choice parameters, given that
 lower trip rates may lead to lower traffic volumes globally, which could
-not be ``corrected'' by the static user equilibrium assignment. Second, a different
+not be ``corrected'' by the traffic assignment. Second, a different
 methodology of sampling might have produced a different result at the extremes than
 the results of LHS.
 Additionally, the relatively sparse network of the RVTPO model region
 --- lacking parallel high-capacity highway facilities --- may have meant
-that the static network assignment would converge to a similar solution
-point regardless of modest changes to the trip matrix. It may be that in
+that the network assignment process would converge to a similar solution
+point regardless of modest changes to the trip matrix. If the number of paths 
+between nodes is limited and constrained by highway capacity, there are only so many 
+solutions to any highway assignment process. It may be that in
 a larger network with more path redundancies or more alternative transit services
 the assignment may not have been as helpful in constraining the forecast
-volumes.
+volumes. In general, these findings are based on a specific trip-based travel
+demand model, which may not be applicable to all contexts or regions. The
+results might vary significantly in different geographic areas or under
+different modeling frameworks, such as activity-based models. Attempting this 
+research again with a variety of models and geographic regions would be a valuable research
+priority.
 
 In this research we had only the estimates of the statistical
 coefficients, and therefore had to assume a coefficient of variation to
@@ -1097,10 +1110,11 @@ plausible model specifications.
 
 
 
-\authorcontributions{\textbf{Gregory S. Macfarlane:} Conceptualization, Methodology, Writing
-- review \& editing, Supervision \textbf{Natalie M. Gray:} Methodology,
+\authorcontributions{
+\textbf{Natalie Gibbons:} Methodology,
 Software, Formal Analysis, Investigation, Writing - original draft,
-Visualization}
+Visualization \textbf{Gregory S. Macfarlane:} Conceptualization, Methodology, Writing
+- review \& editing, Supervision }
 
 \funding{This research received no external funding.}
 \institutionalreview{Not applicable.}
@@ -1114,6 +1128,12 @@ Visualization}
 
 \phantomsection\label{refs}
 \begin{CSLReferences}{1}{0}
+
+\bibitem[\citeproctext]{ref-abrantes2011}
+  Abrantes, P. A. L.,  Wardman, M. R. (2011). Meta-analysis of UK values of
+  travel time: An update. Transportation Research Part A: Policy and Practice,
+  45(1), 1–17. \url{https://doi.org/10.1016/j.tra.2010.08.003}
+
 \bibitem[\citeproctext]{ref-aep50_2023}
 AEP50 Committee on Transportation Demand Forecasting, 2023. Uncertainty.
 
