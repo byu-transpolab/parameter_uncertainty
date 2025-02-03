@@ -261,7 +261,8 @@ ggplot() +
   ggspatial::annotation_map_tile("cartolight", zoom = 11) +
   geom_sf(data = modified_shp, aes(color = sd, linewidth = mean), alpha = 0.5) +
   ggthemes::theme_map() +
-  scale_colour_gradientn(colours=rainbow(4)) +
+  scale_colour_gradientn(colours=rainbow(4), label = scales::comma) +
+  scale_linewidth(label = scales::comma) + 
   labs(color = "Standard Deviation",
        linewidth = "Average Total Volume") +
   theme(legend.position = "left")
@@ -354,7 +355,8 @@ base_plot <- base_total %>%
 ggplot(base_plot) +
   aes(x = TOTAL_VOL, y = cov, color = FacilityType) +
   geom_point(shape = "circle", size = 1.5, alpha = 0.5) +
-  theme_bw() + scale_y_log10(labels = scales::comma) +
+  theme_bw() + scale_y_log10() +
+  scale_x_continuous(label = scales::comma) +
   scale_color_manual(
     values = c(Freeway = "#E77D72", Collector = "#6DB134", 
                Local = "#ED6CB9", Ramp = "#A08BF8", Arterial = "#52B4E3")
