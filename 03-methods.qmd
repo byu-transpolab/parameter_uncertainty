@@ -215,6 +215,10 @@ facet_names <- c('autocost' = "Auto operating cost",
                  "ivtt" = "In-vehicle travel time",
                  "vot" = "Value of Time",
                  "walk1" = "Walk distance")
+label_trueminus <- function(x){
+  ifelse(sign(x) == -1, paste0("\u2212", abs(x)), x)
+}
+
 
 z1 <- Z100 %>%
   filter(!(method %in% "base")) %>%
@@ -228,7 +232,7 @@ z1 <- Z100 %>%
   theme_bw() +
   theme(legend.position = "bottom") +
   facet_wrap(vars(name), scales = "free", labeller = as_labeller(facet_names)) + 
-  scale_y_continuous(breaks = )
+  scale_x_continuous(labels = label_trueminus)
 
 tar_load(hbw_mc_coeff_lists_600)
 list600 <- hbw_mc_coeff_lists_600
@@ -247,6 +251,7 @@ z6 <- Z600 %>%
   aes(x = value, color = method, fill = method) +
   geom_density(alpha = 0.25) +
   scale_fill_hue(direction = 1) +
+  scale_x_continuous(labels = label_trueminus) +
   labs(y = "Density",
        x = "Value") +
   theme_bw() +
@@ -353,8 +358,8 @@ nhb_cm <- nhb_stats %>%
     facet_wrap(vars(ndraws), scales = "free_x")
 
 ## Plot
-hbw_cm
-hbo_cm
+hbw_cm + scale_y_continuous(labels = label_trueminus)
+hbo_cm + scale_y_continuous(labels = label_trueminus)
 ```
 
 For all three trip purposes, both sampling methods had a stabilized mean

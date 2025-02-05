@@ -74,8 +74,6 @@
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 \usepackage{longtable,booktabs,array}
 \usepackage{calc} % for calculating minipage widths
-\usepackage{rotating}
-
 % Correct order of tables after \paragraph or \subparagraph
 \usepackage{etoolbox}
 \makeatletter
@@ -87,15 +85,17 @@
 
 \usepackage{graphicx}
 \makeatletter
-\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
-\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
-\makeatother
-% Scale images if necessary, so that they will not overflow the page
-% margins by default, and it is still possible to overwrite the defaults
-% using explicit options in \includegraphics[width, height, ...]{}
-\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
 % Set default figure placement to htbp
-\makeatletter
 \def\fps@figure{htbp}
 \makeatother
 
@@ -143,12 +143,14 @@
 \usepackage{colortbl}
 \usepackage{pdflscape}
 \usepackage{tabu}
-\usepackage{caption}
 \usepackage{threeparttable}
 \usepackage{threeparttablex}
 \usepackage[normalem]{ulem}
 \usepackage{makecell}
 \usepackage{xcolor}
+\makeatletter
+\@ifpackageloaded{bookmark}{}{\usepackage{bookmark}}
+\makeatother
 \makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \AtBeginDocument{%
@@ -250,6 +252,7 @@ University\\
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
 
+\bookmarksetup{startatroot}
 
 \section{Introduction}\label{introduction}
 
@@ -324,6 +327,7 @@ in Chapter~\ref{sec-conclusions} with a summary of the key findings
 alongside a presentation of limitations and related indications for
 future research.
 
+\bookmarksetup{startatroot}
 
 \section{Literature Review}\label{literature-review}
 
@@ -344,20 +348,20 @@ they evaluate can be found in Table~\ref{tbl-authors}.
 \toprule
 Reference & Uncertainty Source(s) Evaluated\\
 \midrule
-Rodier \& Johnson (2002) & Input Data\\
-Zhao \& Kockelman (2002) & Input Data \& Parameter Estimates\\
-Clay \& Johnson (2005) & Input Data \& Parameter Estimates\\
-Flyvbjerg (2005) & Model Form\\
-Armoogum et al. (2009) & Model Form\\
+@rodier2002uncertain & Input Data\\
+@zhao2002 & Input Data \& Parameter Estimates\\
+@clay2005univariate & Input Data \& Parameter Estimates\\
+@flyvbjerg2005 & Model Form\\
+@armoogum2009 & Model Form\\
 \addlinespace
-Duthie et al. (2010) & Input Data \& Parameter Estimates\\
-Welde \& Odeck (2011) & Model Form\\
-Yang et al. (2013) & Input Data \& Parameter Estimates\\
-Manzo et al. (2015) & Input Data \& Parameter Estimates\\
-Petrik et al. (2016) & Input Data \& Parameter Estimates\\
+@duthie2010highway & Input Data \& Parameter Estimates\\
+@welde2011planners & Model Form\\
+@yang2013 & Input Data \& Parameter Estimates\\
+@manzo2015 & Input Data \& Parameter Estimates\\
+@petrik2016measuring & Input Data \& Parameter Estimates\\
 \addlinespace
-Petrik et al. (2020) & Model Form \& Parameter Estimates\\
-Hoque et al. (2021) & Input Data\\
+@petrik2020uncertainty & Model Form \& Parameter Estimates\\
+@hoque2021 & Input Data\\
 \bottomrule
 
 \end{longtable}
@@ -559,6 +563,7 @@ when (AEP50 Committee on Transportation Demand Forecasting, 2023). Thus
 there is a critical research need for a detailed exploration of
 parameter estimation uncertainty in a practical travel model.
 
+\bookmarksetup{startatroot}
 
 \section{Model Design and Methodology}\label{sec-methods}
 
@@ -753,7 +758,7 @@ the results with fewer draws.
 
 \centering{
 
-\includegraphics{03-methods_files/figure-pdf/fig-parameter-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{03-methods_files/figure-pdf/fig-parameter-1.pdf}}
 
 }
 
@@ -765,7 +770,7 @@ the results with fewer draws.
 
 \centering{
 
-\includegraphics{03-methods_files/figure-pdf/fig-parameter-2.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{03-methods_files/figure-pdf/fig-parameter-2.pdf}}
 
 }
 
@@ -798,13 +803,13 @@ cumulative mean for the draws stabilizes, that shows that the amount of
 generated parameters has captured the possible variance of the results.
 This is shown for two of the three trip purposes in Figure~\ref{fig-cm}.
 
-\begin{figure}
+\begin{sidewaysfigure}
 
 \begin{minipage}{\linewidth}
 
 \centering{
 
-\includegraphics{03-methods_files/figure-pdf/fig-cm-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{03-methods_files/figure-pdf/fig-cm-1.pdf}}
 
 }
 
@@ -816,7 +821,7 @@ This is shown for two of the three trip purposes in Figure~\ref{fig-cm}.
 
 \centering{
 
-\includegraphics{03-methods_files/figure-pdf/fig-cm-2.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{03-methods_files/figure-pdf/fig-cm-2.pdf}}
 
 }
 
@@ -827,7 +832,7 @@ This is shown for two of the three trip purposes in Figure~\ref{fig-cm}.
 \caption{\label{fig-cm}Average mode choice logsum (impedance) cumulative
 mean and 95\% confidence interval with 100 and 600 draws.}
 
-\end{figure}%
+\end{sidewaysfigure}%
 
 For all three trip purposes, both sampling methods had a stabilized mean
 by 100 draws. The LHS methods standard deviation ribbon was generally
@@ -841,6 +846,7 @@ transportation demand models. From these results it was decided to use
 the model. The next chapter includes the results of applying these
 sampled parameters to the travel demand model.
 
+\bookmarksetup{startatroot}
 
 \section{Sensitivity Analysis Results}\label{sec-results}
 
@@ -885,7 +891,7 @@ on the other modes.
 \tabularnewline
 
 \toprule
- & Base & Mean & SD & $c_v$\\
+ & Base & Mean & SD & \$c\_v\$\\
 \midrule
 \addlinespace[0.3em]
 \multicolumn{5}{l}{\textbf{HBW}}\\
@@ -931,18 +937,18 @@ spread of the graphic. This is also verified using
 Table~\ref{tbl-mctrips} as the \(c_v\) is largest for the non-motorized
 mode across all three purposes.
 
-\begin{figure}
-  \begin{adjustwidth}{-\extralength}{0cm}
+\begin{sidewaysfigure}
+
 \centering{
 
-\includegraphics{04-results_files/figure-pdf/fig-modechoicetrips-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{04-results_files/figure-pdf/fig-modechoicetrips-1.pdf}}
 
 }
-\end{adjustwidth}
+
 \caption{\label{fig-modechoicetrips}Trip density for coefficient of
 variation by mode for HBW trips.}
 
-\end{figure}%
+\end{sidewaysfigure}%
 
 \subsection{Link Volume}\label{link-volume}
 
@@ -958,20 +964,18 @@ volume of the road, the variation is in reality very small. A standard
 deviation of 400 vehicles on a road with 40,000 total vehicles
 corresponds to a small variation (1\%).
 
-\begin{figure}
-  \begin{adjustwidth}{-\extralength}{0cm}
+\begin{sidewaysfigure}
 
 \centering{
 
-\includegraphics{04-results_files/figure-pdf/fig-networksd-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{04-results_files/figure-pdf/fig-networksd-1.pdf}}
 
 }
-\end{adjustwidth}
 
 \caption{\label{fig-networksd}Standard deviation in daily forecast
 volume.}
 
-\end{figure}%
+\end{sidewaysfigure}%
 
 The highway assignment results can be grouped by facility type to show
 how the coefficient of variation compares to link volume.
@@ -993,7 +997,7 @@ framework.
 
 \centering{
 
-\includegraphics[width=1\textwidth,height=\textheight]{04-results_files/figure-pdf/fig-totalvolume-1.pdf}
+\includegraphics[width=1\linewidth,height=\textheight,keepaspectratio]{04-results_files/figure-pdf/fig-totalvolume-1.pdf}
 
 }
 
@@ -1030,7 +1034,7 @@ limiting the possibilities for forecast highway volumes.
 
 \centering{
 
-\includegraphics[width=1\textwidth,height=\textheight]{04-results_files/figure-pdf/fig-densityplots-1.pdf}
+\includegraphics[width=1\linewidth,height=\textheight,keepaspectratio]{04-results_files/figure-pdf/fig-densityplots-1.pdf}
 
 }
 
@@ -1040,6 +1044,7 @@ values in green.}
 
 \end{figure}%
 
+\bookmarksetup{startatroot}
 
 \section{Conclusions}\label{sec-conclusions}
 
@@ -1094,17 +1099,23 @@ allow forecasts to be made with an ensemble approach (Wu and Levinson,
 2021), identifying preferred policies as the consensus of multiple
 plausible model specifications.
 
+\bookmarksetup{startatroot}
 
+\section*{Author Contribution
+Statement}\label{author-contribution-statement}
+\addcontentsline{toc}{section}{Author Contribution Statement}
 
-\authorcontributions{\textbf{Gregory S. Macfarlane:} Conceptualization, Methodology, Writing
+\markboth{Author Contribution Statement}{Author Contribution Statement}
+
+\textbf{Gregory S. Macfarlane:} Conceptualization, Methodology, Writing
 - review \& editing, Supervision \textbf{Natalie M. Gray:} Methodology,
 Software, Formal Analysis, Investigation, Writing - original draft,
-Visualization}
+Visualization
 
-\funding{This research received no external funding.}
-\institutionalreview{Not applicable.}
-\dataavailability{The analysis code is available at \url{https://github.com/byu-transpolab/parameter_uncertainty/}}
-\conflictsofinterest{The authors declare no conflicts of interest.}
+The authors have no competing interests in the publication of this
+article, and the research received no external funding.
+
+\bookmarksetup{startatroot}
 
 \section*{References}\label{references}
 \addcontentsline{toc}{section}{References}

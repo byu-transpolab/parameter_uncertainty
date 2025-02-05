@@ -355,7 +355,7 @@ base_plot <- base_total %>%
 ggplot(base_plot) +
   aes(x = TOTAL_VOL, y = cov, color = FacilityType) +
   geom_point(shape = "circle", size = 1.5, alpha = 0.5) +
-  theme_bw() + scale_y_log10() +
+  theme_bw() + scale_y_log10(label = scales::comma) +
   scale_x_continuous(label = scales::comma) +
   scale_color_manual(
     values = c(Freeway = "#E77D72", Collector = "#6DB134", 
